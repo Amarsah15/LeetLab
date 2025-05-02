@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String?
+  email     String  @unique
+  password  String
+  image     String?
+  role      UserRole     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  problems  Problem[] // One-to-many relation with Problem
+}
+
+model Problem {
+  id        String   @id @default(uuid())
+  title     String
+  description String
+  difficulty Difficulty
+  tags      String[] // Array of tags associated with the problem
+  userId    String
+  examples  Json
+  constraints String
+  hints     String?
+  editorial String?
+
+  testCases Json // JSON object containing test cases
+  codeSnippets Json // JSON object containing code snippets
+  refernceSolutions Json // JSON object containing reference solutions
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user  User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
