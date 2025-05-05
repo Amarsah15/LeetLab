@@ -93,7 +93,7 @@ model TestCaseResult {
   id            String  @id @default(uuid())
   submissionId  String
   testCase      Int
-  passed        String // PASSED, FAILED
+  passed        Boolean // PASSED, FAILED
   stdout        String?
   expected      String
   stderr        String?
@@ -115,7 +115,6 @@ model ProblemSolved {
   id        String @id @default(uuid())
   userId    String
   problemId String
-  status    String // SOLVED, UNSOLVED
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
