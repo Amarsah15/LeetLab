@@ -4,6 +4,7 @@ import cokieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import problemRoutes from "./routes/problems.routes.js";
 import executionRoutes from "./routes/executeCode.routes.js";
+import submissionRoutes from "./routes/submission.routes.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(cokieParser());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/problems", problemRoutes);
 app.use("/api/v1/execute-code", executionRoutes);
+app.use("/api/v1/submission, submissionRoutes");
 
 app.get("/", (req, res) => {
   res.send("Hello guys welcome to LeetLab! 🔥");
