@@ -38,6 +38,7 @@ model User {
   problems       Problem[] // One-to-many relation with Problem\
   submissions    Submission[] // One-to-many relation with Submission
   problemsSolved ProblemSolved[] // One-to-many relation with ProblemSolved
+  playlists      Playlist[] // One-to-many relation with Playlist
 }
 
 model Problem {
@@ -60,9 +61,10 @@ model Problem {
   updatedAt DateTime @updatedAt
 
   // Relations
-  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  submissions Submission[] // One-to-many relation with Submission
-  solvedBy    ProblemSolved[] // One-to-many relation with ProblemSolved
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  submissions        Submission[] // One-to-many relation with Submission
+  solvedBy           ProblemSolved[] // One-to-many relation with ProblemSolved
+  problemInPlaylists ProblemInPlaylist[] // One-to-many relation with ProblemInPlaylist
 }
 
 model Submission {
@@ -124,4 +126,35 @@ model ProblemSolved {
   problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
   @@unique([userId, problemId])
+}
+
+model Playlist {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  userId      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  problems ProblemInPlaylist[] // One-to-many relation with Problem
+  // Relations
+  user     User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([name, userId])
+}
+
+model ProblemInPlaylist {
+  id         String @id @default(uuid())
+  playlistId String
+  problemId  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  playlist Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  problem  Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([playlistId, problemId])
 }
