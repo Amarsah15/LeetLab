@@ -6,11 +6,13 @@ import problemRoutes from "./routes/problems.routes.js";
 import executionRoutes from "./routes/executeCode.routes.js";
 import submissionRoutes from "./routes/submission.routes.js";
 import playlistRoutes from "./routes/playlist.routes.js";
+import cors from "cors";
 
 const app = express();
 
 const port = 8000;
 
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cokieParser());
