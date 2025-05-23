@@ -5,22 +5,18 @@ export const createPlaylist = async (req, res) => {
     const { name, description } = req.body;
     const userId = req.user.id;
 
-    // Validate input
-    if (!name) {
-      return res.status(400).json({ message: "Name field is required" });
-    }
-
     // Create a new playlist
-    const newPlaylist = await Playlist.create({
-      name,
-      description,
-      userId,
+    const playList = await db.playlist.create({
+      data: {
+        name,
+        description,
+        userId,
+      },
     });
-
-    res.status(201).json({
-      sucess: true,
+    res.status(200).json({
+      success: true,
       message: "Playlist created successfully",
-      newPlaylist,
+      playList,
     });
   } catch (error) {
     console.error("Error creating playlist:", error);
@@ -101,9 +97,10 @@ export const addProblemToPlaylist = async (req, res) => {
       return res.status(400).json({ message: "Problem IDs are required" });
     }
 
+    // Create records for each problem in the playlist
     const problemsInPlaylist = await db.problemInPlaylist.createMany({
       data: problemIds.map((problemId) => ({
-        playlistId,
+        playlistId, // ✅ match your Prisma field name exactly
         problemId,
       })),
     });
