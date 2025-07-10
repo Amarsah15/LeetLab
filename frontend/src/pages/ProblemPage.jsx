@@ -51,9 +51,7 @@ const ProblemPage = () => {
 
   useEffect(() => {
     if (problem) {
-      setCode(
-        problem.codeSnippets?.[selectedLanguage] || ""
-      );
+      setCode(problem.codeSnippets?.[selectedLanguage] || "");
       settestCases(
         problem.testCases?.map((tc) => ({
           input: tc.input,
@@ -257,9 +255,9 @@ const ProblemPage = () => {
 
       <div className="container mx-auto p-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body p-0">
-              <div className="tabs tabs-bordered">
+          <div className="card bg-base-100 shadow-xl h-[735px]">
+            <div className="card-body p-0 overflow-y-auto">
+              <div className="tabs tabs-bordered flex justify-between text-2xl">
                 <button
                   className={`tab gap-2 ${
                     activeTab === "description" ? "tab-active" : ""
@@ -302,7 +300,7 @@ const ProblemPage = () => {
             </div>
           </div>
 
-          <div className="card bg-base-100 shadow-xl">
+          <div className="card bg-base-100 shadow-xl h-[735px]">
             <div className="card-body p-0">
               <div className="tabs tabs-bordered flex justify-between">
                 <button className="tab tab-active gap-2">

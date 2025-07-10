@@ -18,11 +18,18 @@ const SubmissionsList = ({ submissions, isLoading }) => {
   };
 
   // Helper function to calculate average memory usage
+
   const calculateAverageMemory = (memoryData) => {
-    const memoryArray = safeParse(memoryData).map((m) =>
-      parseFloat(m.split(" ")[0])
-    );
+    const parsed = safeParse(memoryData);
+
+    if (!parsed || !Array.isArray(parsed)) {
+      return 0;
+    } // <- this prevents .map on null
+
+    const memoryArray = parsed.map((m) => parseFloat(m.split(" ")[0]));
+
     if (memoryArray.length === 0) return 0;
+
     return (
       memoryArray.reduce((acc, curr) => acc + curr, 0) / memoryArray.length
     );
@@ -30,11 +37,21 @@ const SubmissionsList = ({ submissions, isLoading }) => {
 
   // Helper function to calculate average runtime
   const calculateAverageTime = (timeData) => {
-    const timeArray = safeParse(timeData).map((t) =>
-      parseFloat(t.split(" ")[0])
-    );
+    const parsed = safeParse(timeData);
+
+    if (!parsed || !Array.isArray(parsed)) {
+      return 0;
+    }
+
+    const timeArray = parsed.map((t) => {
+      const value = parseFloat(t.split(" ")[0]);
+      return value;
+    });
+
     if (timeArray.length === 0) return 0;
-    return timeArray.reduce((acc, curr) => acc + curr, 0) / timeArray.length;
+
+    const total = timeArray.reduce((acc, curr) => acc + curr, 0);
+    return total / timeArray.length;
   };
 
   // Loading state
