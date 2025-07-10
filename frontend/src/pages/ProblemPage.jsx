@@ -307,7 +307,7 @@ const ProblemPage = () => {
                   <Terminal className="w-4 h-4" />
                   Code Editor
                 </button>
-                <button className="tab tab-active gap-2" onClick={formatCode}>
+                <button className="tab gap-2" onClick={formatCode}>
                   <AlignLeft className="w-4 h-4" />
                   Format Code
                 </button>
