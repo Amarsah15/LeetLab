@@ -28,7 +28,6 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     try {
       await login(data);
-      console.log("Login data", data);
     } catch (error) {
       console.error("Login error", error);
     }
@@ -134,7 +133,7 @@ const LoginPage = () => {
           <div className="text-center">
             <p className="text-base-content/60">
               Don't have an account?{" "}
-              <Link to="/singup" className="link link-primary">
+              <Link to="/signup" className="link link-primary">
                 Sign Up
               </Link>
             </p>

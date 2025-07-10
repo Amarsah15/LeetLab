@@ -566,13 +566,10 @@ const CreateProblemForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const onSubmit = async (value) => {
     try {
-      // stringify the data
       setIsLoading(true);
       const res = await axiosInstance.post("/problems/create-problem", value);
-
-      console.log(res.data);
-      toast.success(res.data.message);
-      navigation("/");
+      toast.success(res.data.message || "Problem created successfully");
+      navigation("/add-problem");
     } catch (error) {
       console.log("Error creating problem", error);
       toast.error("Error creating problem");
@@ -610,7 +607,7 @@ const CreateProblemForm = () => {
                   className={`btn join-item ${
                     sampleType === "DP" ? "btn-active" : ""
                   }`}
-                  onClick={() => setSampleType("array")}
+                  onClick={() => setSampleType("DP")}
                 >
                   DP Problem
                 </button>

@@ -137,7 +137,10 @@ export const check = async (req, res) => {
       message: "User is authenticated",
       user: {
         id: req.user.id,
+        name: req.user.name,
+        email: req.user.email,
         role: req.user.role,
+        image: req.user.image,
       },
     });
   } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import {
   Play,
@@ -8,13 +8,13 @@ import {
   Bookmark,
   Share2,
   Clock,
-  ChevronRight,
-  BookOpen,
   Terminal,
   Code2,
   Users,
   ThumbsUp,
   Home,
+  AlignLeft,
+  ChevronLeft,
 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { useProblemStore } from "../store/useProblemStore";
@@ -38,21 +38,21 @@ const ProblemPage = () => {
 
   const [code, setCode] = useState("");
   const [activeTab, setActiveTab] = useState("description");
-  const [selectedLanguage, setSelectedLanguage] = useState("javascript");
+  const [selectedLanguage, setSelectedLanguage] = useState("JAVASCRIPT");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [testCases, settestCases] = useState([]);
-
   const { executeCode, submission, isExecuting } = useExecutionStore();
+  const editorRef = useRef(null);
 
   useEffect(() => {
     getProblemById(id);
     getSubmissionCountForProblem(id);
-  }, [id]);
+  }, [id, getSubmissionCountForProblem, getProblemById]);
 
   useEffect(() => {
     if (problem) {
       setCode(
-        problem.codeSnippets?.[selectedLanguage] || submission?.sourceCode || ""
+        problem.codeSnippets?.[selectedLanguage] || ""
       );
       settestCases(
         problem.testCases?.map((tc) => ({
@@ -67,7 +67,7 @@ const ProblemPage = () => {
     if (activeTab === "submissions" && id) {
       getSubmissionForProblem(id);
     }
-  }, [activeTab, id]);
+  }, [activeTab, id, getSubmissionForProblem]);
 
   const handleLanguageChange = (e) => {
     const lang = e.target.value;
@@ -108,41 +108,39 @@ const ProblemPage = () => {
             {problem.examples && (
               <>
                 <h3 className="text-xl font-bold mb-4">Examples:</h3>
-                {Object.entries(problem.examples).map(
-                  ([lang, example], idx) => (
-                    <div
-                      key={lang}
-                      className="bg-base-200 p-6 rounded-xl mb-6 font-mono"
-                    >
-                      <div className="mb-4">
-                        <div className="text-indigo-300 mb-2 text-base font-semibold">
-                          Input:
-                        </div>
-                        <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white">
-                          {example.input}
-                        </span>
+                {Object.entries(problem.examples).map(([lang, example]) => (
+                  <div
+                    key={lang}
+                    className="bg-base-200 p-6 rounded-xl mb-6 font-mono"
+                  >
+                    <div className="mb-4">
+                      <div className="text-indigo-300 mb-2 text-base font-semibold">
+                        Input:
                       </div>
-                      <div className="mb-4">
-                        <div className="text-indigo-300 mb-2 text-base font-semibold">
-                          Output:
-                        </div>
-                        <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white">
-                          {example.output}
-                        </span>
-                      </div>
-                      {example.explanation && (
-                        <div>
-                          <div className="text-emerald-300 mb-2 text-base font-semibold">
-                            Explanation:
-                          </div>
-                          <p className="text-base-content/70 text-lg font-sem">
-                            {example.explanation}
-                          </p>
-                        </div>
-                      )}
+                      <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white">
+                        {example.input}
+                      </span>
                     </div>
-                  )
-                )}
+                    <div className="mb-4">
+                      <div className="text-indigo-300 mb-2 text-base font-semibold">
+                        Output:
+                      </div>
+                      <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white">
+                        {example.output}
+                      </span>
+                    </div>
+                    {example.explanation && (
+                      <div>
+                        <div className="text-emerald-300 mb-2 text-base font-semibold">
+                          Explanation:
+                        </div>
+                        <p className="text-base-content/70 text-lg font-sem">
+                          {example.explanation}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </>
             )}
 
@@ -192,13 +190,23 @@ const ProblemPage = () => {
     }
   };
 
+  const handleEditorDidMount = (editor) => {
+    editorRef.current = editor;
+  };
+
+  const formatCode = () => {
+    if (editorRef.current) {
+      editorRef.current.getAction("editor.action.formatDocument").run();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-base-300 to-base-200 max-w-7xl w-full">
       <nav className="navbar bg-base-100 shadow-lg px-4">
         <div className="flex-1 gap-2">
           <Link to={"/"} className="flex items-center gap-2 text-primary">
+            <ChevronLeft className="w-4 h-4" />
             <Home className="w-6 h-6" />
-            <ChevronRight className="w-4 h-4" />
           </Link>
           <div className="mt-2">
             <h1 className="text-xl font-bold">{problem.title}</h1>
@@ -296,10 +304,14 @@ const ProblemPage = () => {
 
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body p-0">
-              <div className="tabs tabs-bordered">
+              <div className="tabs tabs-bordered flex justify-between">
                 <button className="tab tab-active gap-2">
                   <Terminal className="w-4 h-4" />
                   Code Editor
+                </button>
+                <button className="tab tab-active gap-2" onClick={formatCode}>
+                  <AlignLeft className="w-4 h-4" />
+                  Format Code
                 </button>
               </div>
 
@@ -310,6 +322,7 @@ const ProblemPage = () => {
                   theme="vs-dark"
                   value={code}
                   onChange={(value) => setCode(value || "")}
+                  onMount={handleEditorDidMount}
                   options={{
                     minimap: { enabled: false },
                     fontSize: 20,
@@ -318,6 +331,8 @@ const ProblemPage = () => {
                     scrollBeyondLastLine: false,
                     readOnly: false,
                     automaticLayout: true,
+                    formatOnType: true,
+                    formatOnPaste: true,
                   }}
                 />
               </div>
