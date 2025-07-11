@@ -139,12 +139,10 @@ const ProfileSubmission = () => {
           </div>
         ) : (
           <div className="space-y-6">
-          
             {paginatedProblems.reverse().map((submission) => (
               <div
                 key={submission.id}
                 className="card bg-base-100 shadow-xl overflow-hidden transition-all duration-300"
-                
               >
                 <div
                   className="card-body p-0"
@@ -169,7 +167,6 @@ const ProfileSubmission = () => {
                         <Code size={16} />
                         <span className="font-medium">
                           {submission.language}
-                          {console.log(submission)}
                         </span>
                       </div>
 

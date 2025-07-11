@@ -199,7 +199,7 @@ const ProblemPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-base-300 to-base-200 max-w-7xl w-full">
+    <div className="min-h-screen bg-gradient-to-br from-base-300 to-base-200 w-full">
       <nav className="navbar bg-base-100 shadow-lg px-4">
         <div className="flex-1 gap-2">
           <Link to={"/"} className="flex items-center gap-2 text-primary">
@@ -336,19 +336,16 @@ const ProblemPage = () => {
               </div>
 
               <div className="p-4 border-t border-base-300 bg-base-200">
-                <div className="flex justify-between items-center">
+                <div className="flex justify-end items-center">
                   <button
-                    className={`btn btn-primary gap-2 ${
+                    className={`btn btn-color gap-2 text-[1.2rem] ${
                       isExecuting ? "loading" : ""
                     }`}
                     onClick={handleRunCode}
                     disabled={isExecuting}
                   >
-                    {!isExecuting && <Play className="w-4 h-4" />}
-                    Run Code
-                  </button>
-                  <button className="btn btn-success gap-2">
-                    Submit Solution
+                    {!isExecuting && <Play className="w-5 h-5" />}
+                    Submit
                   </button>
                 </div>
               </div>
