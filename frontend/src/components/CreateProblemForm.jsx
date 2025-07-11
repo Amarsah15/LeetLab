@@ -386,8 +386,8 @@ const sampleStringProblem = {
           # Write your code here
           pass
   
-  # Input parsing
-  if __name__ == "__main__":
+# Input parsing
+if __name__ == "__main__":
       import sys
       # Read the input string
       s = sys.stdin.readline().strip()
@@ -468,8 +468,8 @@ public class Main {
           # Check if it's a palindrome
           return filtered_chars == filtered_chars[::-1]
   
-  # Input parsing
-  if __name__ == "__main__":
+# Input parsing
+if __name__ == "__main__":
       import sys
       # Read the input string
       s = sys.stdin.readline().strip()
@@ -573,9 +573,9 @@ const CreateProblemForm = () => {
       navigation("/add-problem");
     } catch (error) {
       if (import.meta.env.MODE === "development") {
-      console.error("Create problem error:", error);
-    }
-    toast.error(getErrorMessage(error, "Could not create the problem."));
+        console.error("Create problem error:", error);
+      }
+      toast.error(getErrorMessage(error, "Could not create the problem."));
     } finally {
       setIsLoading(false);
     }
