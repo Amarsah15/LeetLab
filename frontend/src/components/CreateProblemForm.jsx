@@ -16,6 +16,7 @@ import { useState } from "react";
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { Navigate, useNavigate } from "react-router-dom";
+import { getErrorMessage } from "../utils/errorHandler.js";
 
 const problemSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -568,11 +569,13 @@ const CreateProblemForm = () => {
     try {
       setIsLoading(true);
       const res = await axiosInstance.post("/problems/create-problem", value);
-      toast.success(res.data.message || "Problem created successfully");
+      res.data.message;
       navigation("/add-problem");
     } catch (error) {
-      console.log("Error creating problem", error);
-      toast.error("Error creating problem");
+      if (import.meta.env.MODE === "development") {
+      console.error("Create problem error:", error);
+    }
+    toast.error(getErrorMessage(error, "Could not create the problem."));
     } finally {
       setIsLoading(false);
     }
