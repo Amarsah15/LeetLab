@@ -148,3 +148,41 @@ export const check = async (req, res) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 };
+
+export const forgetPassword = async (req, res) => {
+  try {
+    const { email, oldPassword, newPassword, confirmPassword } = req.body;
+    const user = await db.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+    if (newPassword !== confirmPassword) {
+      return res.status(401).json({ message: "Password and Confirm password are not match." });
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await db.user.update({
+      where: {
+        email,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+    return res
+      .status(200)
+      .json({
+        message: "Password updated successfully.  Login with new password",
+      });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Error updating password" });
+  }
+};

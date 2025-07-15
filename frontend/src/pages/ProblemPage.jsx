@@ -39,7 +39,6 @@ const ProblemPage = () => {
   const [code, setCode] = useState("");
   const [activeTab, setActiveTab] = useState("description");
   const [selectedLanguage, setSelectedLanguage] = useState("JAVASCRIPT");
-  const [isBookmarked, setIsBookmarked] = useState(false);
   const [testCases, settestCases] = useState([]);
   const { executeCode, submission, isExecuting } = useExecutionStore();
   const editorRef = useRef(null);
@@ -200,7 +199,7 @@ const ProblemPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-base-300 to-base-200 w-full">
-      <nav className="navbar bg-base-100 shadow-lg px-4">
+      <nav className="navbar bg-base-100 shadow-lg px-12 py-4 mt-4 rounded-3xl">
         <div className="flex-1 gap-2">
           <Link to={"/"} className="flex items-center gap-2 text-primary">
             <ChevronLeft className="w-4 h-4" />
@@ -208,7 +207,7 @@ const ProblemPage = () => {
           </Link>
           <div className="mt-2">
             <h1 className="text-xl font-bold">{problem.title}</h1>
-            <div className="flex items-center gap-2 text-sm text-base-content/70 mt-5">
+            <div className="flex items-center gap-2 text-sm text-base-content/70 mt-2">
               <Clock className="w-4 h-4" />
               <span>
                 Updated{" "}
@@ -228,17 +227,6 @@ const ProblemPage = () => {
           </div>
         </div>
         <div className="flex-none gap-4">
-          <button
-            className={`btn btn-ghost btn-circle ${
-              isBookmarked ? "text-primary" : ""
-            }`}
-            onClick={() => setIsBookmarked(!isBookmarked)}
-          >
-            <Bookmark className="w-5 h-5" />
-          </button>
-          <button className="btn btn-ghost btn-circle">
-            <Share2 className="w-5 h-5" />
-          </button>
           <select
             className="select select-bordered select-primary w-40"
             value={selectedLanguage}
@@ -257,7 +245,7 @@ const ProblemPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="card bg-base-100 shadow-xl h-[735px]">
             <div className="card-body p-0 overflow-y-auto">
-              <div className="tabs tabs-bordered flex justify-between text-2xl">
+              <div className="tabs tabs-bordered flex justify-around text-2xl">
                 <button
                   className={`tab gap-2 ${
                     activeTab === "description" ? "tab-active" : ""

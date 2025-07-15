@@ -49,4 +49,40 @@ export const useProblemStore = create((set) => ({
       toast.error("Error in getting solved problems");
     }
   },
+  deleteProblem: async (id) => {
+    try {
+      set({ isDeletingProblem: true });
+     const res = await axiosInstance.delete(`/problems/delete-problem/${id}`, {
+       withCredentials: true,
+     });
+      toast.success(res.data.message);
+    } catch (error) {
+      console.log("Error deleting problem", error);
+      toast.error("Error deleting problem");
+      
+    }
+    finally{
+      set({ isDeletingProblem: false });
+    }
+  },
+  updateProblem: async (id, data) => {
+    try {
+      set({ isUpdatingProblem: true });
+     const res = await axiosInstance.put(
+       `/problems/update-problem/${id}`,
+       data,
+       {
+         withCredentials: true,
+       }
+     );
+      toast.success(res.data.message);
+    } catch (error) {
+      console.log("Error updating problem", error);
+      toast.error("Error updating problem");
+      
+    }
+    finally{
+      set({ isUpdatingProblem: false });
+    }
+  },
 }));

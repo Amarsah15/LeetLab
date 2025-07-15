@@ -16,7 +16,6 @@ import { useState } from "react";
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { Navigate, useNavigate } from "react-router-dom";
-import { getErrorMessage } from "../utils/errorHandler.js";
 
 const problemSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -386,8 +385,8 @@ const sampleStringProblem = {
           # Write your code here
           pass
   
-# Input parsing
-if __name__ == "__main__":
+  # Input parsing
+  if __name__ == "__main__":
       import sys
       # Read the input string
       s = sys.stdin.readline().strip()
@@ -468,8 +467,8 @@ public class Main {
           # Check if it's a palindrome
           return filtered_chars == filtered_chars[::-1]
   
-# Input parsing
-if __name__ == "__main__":
+  # Input parsing
+  if __name__ == "__main__":
       import sys
       # Read the input string
       s = sys.stdin.readline().strip()
@@ -569,13 +568,11 @@ const CreateProblemForm = () => {
     try {
       setIsLoading(true);
       const res = await axiosInstance.post("/problems/create-problem", value);
-      res.data.message;
+      toast.success(res.data.message || "Problem created successfully");
       navigation("/add-problem");
     } catch (error) {
-      if (import.meta.env.MODE === "development") {
-        console.error("Create problem error:", error);
-      }
-      toast.error(getErrorMessage(error, "Could not create the problem."));
+      console.log("Error creating problem", error);
+      toast.error("Error creating problem");
     } finally {
       setIsLoading(false);
     }

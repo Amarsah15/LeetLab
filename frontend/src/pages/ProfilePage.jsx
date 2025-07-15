@@ -57,7 +57,6 @@ const ProfilePage = () => {
         <ProfileHeader
           user={{
             username: authUser.name,
-            avatarUrl: "https://avatar.iran.liara.run/public/boy",
             email: authUser.email,
             id: authUser.id,
           }}

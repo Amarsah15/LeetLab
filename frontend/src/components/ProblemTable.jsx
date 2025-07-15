@@ -2,15 +2,19 @@ import React, { useState, useMemo } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import { Bookmark, PencilIcon, Trash, TrashIcon, Plus } from "lucide-react";
-import { useActions } from "../store/useAction";
 import AddToPlaylistModal from "./AddToPlaylist";
 import CreatePlaylistModal from "./CreatePlaylistModal";
 import { usePlaylistStore } from "../store/usePlaylistStore";
+import { useProblemStore } from "../store/useProblemStore";
+import EditProblemModal from "./EditProblemModal";
 
 const ProblemsTable = ({ problems }) => {
+  const { deleteProblem } = useProblemStore();
   const { authUser } = useAuthStore();
-  const { onDeleteProblem } = useActions();
   const { createPlaylist } = usePlaylistStore();
+  const [showDeletedModel, setShowDeletedModel] = useState(false);
+  const [deletedProblemId, setDeletedProblemId] = useState(null);
+  const [editedProblemId, setEditedProblemId] = useState(null);
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("ALL");
   const [selectedTag, setSelectedTag] = useState("ALL");
@@ -19,6 +23,7 @@ const ProblemsTable = ({ problems }) => {
   const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] =
     useState(false);
   const [selectedProblemId, setSelectedProblemId] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // Extract all unique tags from problems
   const allTags = useMemo(() => {
@@ -55,9 +60,21 @@ const ProblemsTable = ({ problems }) => {
     );
   }, [filteredProblems, currentPage]);
 
-  const handleDelete = (id) => {
-    onDeleteProblem(id);
+   const handleDelete = (id) => {
+    setDeletedProblemId(id);
+    setShowDeletedModel(true);
   };
+  const handleSureDelete = async () => {
+    deleteProblem(deletedProblemId);
+    setShowDeletedModel(false);
+  };
+  const handleModalClose = () => setShowDeletedModel(false);
+
+  const handleEditProblem = (id) => {
+    setEditedProblemId(id);
+    setIsEditModalOpen(true);
+  };
+
 
   const handleCreatePlaylist = async (data) => {
     await createPlaylist(data);
@@ -188,11 +205,45 @@ const ProblemsTable = ({ problems }) => {
                             >
                               <TrashIcon className="w-4 h-4 text-white" />
                             </button>
-                            <button disabled className="btn btn-sm btn-warning">
-                              <PencilIcon className="w-4 h-4 text-white" />
+                            {showDeletedModel && (
+                              <div className="fixed inset-0 flex justify-center items-center  bg-gray-900/50">
+                                <div className=" p-4 rounded  shadow-md bg-base-100 ">
+                                  <h2 className=" p-2 font-bold">
+                                    Confirm Deletion
+                                  </h2>
+                                  <p className="p-2 text-sm">
+                                    Are you sure you want to delete this
+                                    problem?
+                                  </p>
+                                  <div className="flex gap-4 mt-5 mr-4 ml-4 items-center mb-3 justify-between">
+                                    <button
+                                      className="px-4 py-2 bg-primary/80 font-semibold rounded text-sm cursor-pointer"
+                                      onClick={() => {
+                                        handleSureDelete();
+                                        setShowDeletedModel(false);
+                                      }}
+                                    >
+                                      Yes, Delete
+                                    </button>
+                                    <button
+                                      className="px-4 py-2 outline rounded text-sm cursor-pointer"
+                                      onClick={handleModalClose}
+                                    >
+                                      Cancel
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                            <button
+                              className="btn btn-sm bg-base-200 outline-gray-50"
+                              onClick={() => handleEditProblem(problem.id)}
+                            >
+                              <PencilIcon className="w-4 h-4" />
                             </button>
                           </div>
                         )}
+
                         <button
                           className="btn btn-sm btn-outline flex gap-2 items-center"
                           onClick={() => handleAddToPlaylist(problem.id)}
@@ -219,7 +270,7 @@ const ProblemsTable = ({ problems }) => {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-center mt-6 gap-2">
+      <div className="flex justify-center mt-6 gap-2 py-4 mb-4">
         <button
           className="btn btn-sm"
           disabled={currentPage === 1}
@@ -250,6 +301,12 @@ const ProblemsTable = ({ problems }) => {
         isOpen={isAddToPlaylistModalOpen}
         onClose={() => setIsAddToPlaylistModalOpen(false)}
         problemId={selectedProblemId}
+      />
+
+      <EditProblemModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        problemId={editedProblemId} //sending data to backend
       />
     </div>
   );

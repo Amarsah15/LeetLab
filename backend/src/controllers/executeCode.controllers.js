@@ -7,6 +7,8 @@ import {
 
 export const executeCode = async (req, res) => {
   try {
+    console.log("Execute code url hit");
+    
     const { source_code, language_id, stdin, expected_outputs, problemId } =
       req.body;
 
@@ -28,6 +30,9 @@ export const executeCode = async (req, res) => {
       language_id,
       stdin: input,
     }));
+
+    console.log(submissions);
+    
 
     const submitResponse = await submitBatch(submissions);
 
