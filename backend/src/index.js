@@ -17,8 +17,8 @@ app.use(
   cors({
     origin:
       "http://localhost:5173" ||
-      "https://leetlab-60jrjsh8e-amarsah15s-projects.vercel.app/" ||
-      "leetlab-60jrjsh8e-amarsah15s-projects.vercel.app",
+      "https://leetlab-rho.vercel.app" ||
+      "leetlab-rho.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
