@@ -44,7 +44,7 @@ app.listen(port, (err) => {
     console.error("Failed to start server:", err);
     return;
   }
-  console.log(`Test server is running at http://localhost:${port}`);
+  console.log("server started at port for leetlab",process.env.PORT);
 });
 
 // Add error handling
