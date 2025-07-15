@@ -41,7 +41,6 @@ export const useAuthStore = create((set) => ({
     set({ isLoggingIn: true });
     try {
       const res = await axiosInstance.post("/auth/login", data);
-
       set({ authUser: res.data.user });
 
       toast.success(res.data.message);
@@ -67,10 +66,10 @@ export const useAuthStore = create((set) => ({
   forgotPassword: async (data) => {
     try {
       set({ isPasswordReset: true });
-      const res = await axiosInstance.post("/auth/forgot-password", data,{
+      const res = await axiosInstance.post("/auth/forgot-password", data, {
         withCredentials: true,
       });
-      
+
       toast.success(res.data.message);
       set({ resetSuccessfully: true });
     } catch (error) {
@@ -80,5 +79,4 @@ export const useAuthStore = create((set) => ({
       set({ isPasswordReset: false });
     }
   },
-
 }));

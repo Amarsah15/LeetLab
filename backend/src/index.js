@@ -16,8 +16,9 @@ const port = process.env.PORT;
 app.use(
   cors({
     origin:
+      "http://localhost:5173" ||
       "https://leetlab-60jrjsh8e-amarsah15s-projects.vercel.app/" ||
-      "http://localhost:5173",
+      "leetlab-60jrjsh8e-amarsah15s-projects.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],

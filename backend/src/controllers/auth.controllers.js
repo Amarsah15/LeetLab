@@ -165,7 +165,9 @@ export const forgetPassword = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
     if (newPassword !== confirmPassword) {
-      return res.status(401).json({ message: "Password and Confirm password are not match." });
+      return res
+        .status(401)
+        .json({ message: "Password and Confirm password are not match." });
     }
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await db.user.update({
@@ -176,11 +178,9 @@ export const forgetPassword = async (req, res) => {
         password: hashedPassword,
       },
     });
-    return res
-      .status(200)
-      .json({
-        message: "Password updated successfully.  Login with new password",
-      });
+    return res.status(200).json({
+      message: "Password updated successfully.  Login with new password",
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Error updating password" });
