@@ -8,18 +8,23 @@ This is a full-stack web application consisting of:
 ---
 
 ## 📚 Overview
+
 LeetLab is a platform designed to help users practice coding problems, learn algorithms, and improve their programming skills. It features a user-friendly interface, problem-solving capabilities, and integration with coding challenge APIs.
 
 <!-- 5 Screenshot -->
-![LeetLab Screenshot](![alt text](image.png))\n
-![LeetLab Screenshot](![alt text](image-1.png))\n
-![LeetLab Screenshot](![alt text](image-2.png))\n
-![LeetLab Screenshot](![alt text](image-3.png))\n
+
+![LeetLab Screenshot](![alt text](image.png))
+
+![LeetLab Screenshot](![alt text](image-1.png))
+
+![LeetLab Screenshot](![alt text](image-2.png))
+
+![LeetLab Screenshot](![alt text](image-3.png))
+
 ![LeetLab Screenshot](![alt text](image-4.png))
 
-
-
 ## 📖 Table of Contents
+
 - [🧩 Project Structure](#-project-structure)
 - [🚀 Getting Started](#-getting-started)
 - [🌐 Frontend Setup](#-frontend-setup)

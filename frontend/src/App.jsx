@@ -36,21 +36,11 @@ const App = () => {
             index
             element={authUser ? <ProblemsPage /> : <Navigate to={"/login"} />}
           />
-          
+
           <Route
             path="/problems"
             element={authUser ? <ProblemsPage /> : <Navigate to={"/login"} />}
           />
-          
-
-          
-
-          <Route element={<AdminRoute />}>
-            <Route
-              path="/add-problem"
-              element={authUser ? <AddProblem /> : <Navigate to={"/login"} />}
-            />
-          </Route>
 
           <Route
             path="/profile"
@@ -58,17 +48,23 @@ const App = () => {
           />
         </Route>
         <Route
-            path="/login"
-            element={!authUser ? <LoginPage /> : <Navigate to={"/"} />}
-          />
+          path="/login"
+          element={!authUser ? <LoginPage /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/signup"
+          element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/problem/:id"
+          element={authUser ? <ProblemPage /> : <Navigate to={"/login"} />}
+        />
+        <Route element={<AdminRoute />}>
           <Route
-            path="/signup"
-            element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />}
+            path="/add-problem"
+            element={authUser ? <AddProblem /> : <Navigate to={"/login"} />}
           />
-          <Route
-            path="/problem/:id"
-            element={authUser ? <ProblemPage /> : <Navigate to={"/login"} />}
-          />
+        </Route>
       </Routes>
     </div>
   );
