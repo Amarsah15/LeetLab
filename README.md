@@ -1,4 +1,8 @@
-- **Cookies**: To run this project, third-party cookies are required. Please enable them if prompted, or adjust your browser's settings to allow them.
+***
+
+**Please Note:** *To run this project, third-party cookies are required. Please enable them if prompted, or adjust your browser's settings to allow them.*
+
+***
 
 # LeetLab
 
