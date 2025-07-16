@@ -11,20 +11,28 @@ This is a full-stack web application consisting of:
 
 LeetLab is a platform designed to help users practice coding problems, learn algorithms, and improve their programming skills. It features a user-friendly interface, problem-solving capabilities, and integration with coding challenge APIs.
 
+- **Dynamic Code Editor**: Powered by Monaco Editor, allowing users to write and test code in real-time.
+- **Problem Descriptions**: Detailed problem descriptions, examples, constraints, and hints.
+- **Test Cases**: Predefined test cases for each problem to validate solutions.
+- **Multi-Language Support**: Write solutions in JavaScript, Python, or Java.
+- **Submission Tracking**: View submission history, memory usage, runtime, and status (Accepted, Wrong Answer, etc.).
+- **Responsive Design**: Built with modern UI/UX principles for a seamless experience on all devices.
+
 <!-- 5 Screenshot -->
 
-![LeetLab Screenshot](![alt text](image.png))
+![LeetLab Screenshot](![LeetLab Screenshot](/frontend/public/image.png))
 
-![LeetLab Screenshot](![alt text](image-1.png))
+![LeetLab Screenshot](![LeetLab Screenshot](/frontend/public/image-1.png))
 
-![LeetLab Screenshot](![alt text](image-2.png))
+![LeetLab Screenshot](![LeetLab Screenshot](/frontend/public/image-2.png))
 
-![LeetLab Screenshot](![alt text](image-3.png))
+![LeetLab Screenshot](![LeetLab Screenshot](/frontend/public/image-3.png))
 
-![LeetLab Screenshot](![alt text](image-4.png))
+![LeetLab Screenshot](![LeetLab Screenshot](/frontend/public/image-4.png))
 
 ## 📖 Table of Contents
 
+- [🚀 Features](#-features)
 - [🧩 Project Structure](#-project-structure)
 - [🚀 Getting Started](#-getting-started)
 - [🌐 Frontend Setup](#-frontend-setup)
@@ -33,6 +41,52 @@ LeetLab is a platform designed to help users practice coding problems, learn alg
 - [📦 Environment Variables](#-environment-variables)
 - [📝 License](#-license)
 - [✨ Author](#-author)
+
+## 🚀 Features
+
+### 1. **Interactive Code Editor**
+
+- Real-time syntax highlighting using the Monaco Editor.
+- Supports JavaScript, Python, and Java.
+
+### 2. **Dynamic Input Parsing**
+
+- Users can submit input dynamically via `readline` or predefined test cases.
+
+### 3. **Problem Details**
+
+- Each problem includes:
+  - Description
+  - Examples with inputs, outputs, and explanations
+  - Constraints
+  - Editorial (hints and optimal solutions)
+
+### 4. **Execution and Submission**
+
+- Run code directly in the browser and get instant feedback.
+- View execution results, including runtime, memory usage, and error messages.
+
+### 5. **User Authentication**
+
+- Secure login and registration for tracking user progress and submissions.
+
+### 6. **Admin Panel**
+
+- Admins can add new problems, manage submissions.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React.js, Tailwind CSS, Monaco Editor
+- **Backend**: Node.js, Express.js
+- **Database**: PostgreSQL (or Prisma ORM)
+- **Authentication**: JWT (JSON Web Tokens)
+- **Code Execution**: Judge0 API (for running and validating code submissions)
+- **State Management**: Zustand (React state management library)
+- **Version Control**: Git, GitHub
+
+---
 
 ## 🧩 Project Structure
 
