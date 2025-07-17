@@ -7,6 +7,8 @@ import executionRoutes from "./routes/executeCode.routes.js";
 import submissionRoutes from "./routes/submission.routes.js";
 import playlistRoutes from "./routes/playlist.routes.js";
 import cors from "cors";
+import healthcheckRoutes from "./routes/healthcheck.routes.js";
+import axios from "axios";
 
 dotenv.config();
 
@@ -36,6 +38,7 @@ app.use("/api/v1/problems", problemRoutes);
 app.use("/api/v1/execute-code", executionRoutes);
 app.use("/api/v1/submission", submissionRoutes);
 app.use("/api/v1/playlist", playlistRoutes);
+app.use("/api/v1/health-check", healthcheckRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello guys welcome to LeetLab! 🔥");
@@ -59,3 +62,21 @@ process.on("unhandledRejection", (err) => {
   console.error("Unhandled Rejection:", err);
   process.exit(1);
 });
+
+const keepAlive = () => {
+  setInterval(async () => {
+    try {
+      const res = await axios.get(
+        "https://leetlab-azp5.onrender.com/api/v1/health-check",
+        {
+          timeout: 4000,
+        }
+      );
+      console.log("✅ Ping successful:", res.status);
+    } catch (error) {
+      console.warn("⚠️ Ping failed:", error);
+    }
+  }, 1000 * 60 * 10); // every 10 minutes
+};
+
+keepAlive();
