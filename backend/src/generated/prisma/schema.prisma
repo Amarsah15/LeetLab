@@ -41,6 +41,14 @@ model User {
   playlists      Playlist[] // One-to-many relation with Playlist
 }
 
+model Otp {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  otp       String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
 model Problem {
   id          String     @id @default(uuid())
   title       String

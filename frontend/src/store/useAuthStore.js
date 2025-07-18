@@ -79,4 +79,42 @@ export const useAuthStore = create((set) => ({
       set({ isPasswordReset: false });
     }
   },
+  requestOtpForRegistration: async (name, email, password) => {
+    const response = await axiosInstance.post("/auth/request-otp-register", {
+      name,
+      email,
+      password,
+    });
+    return response.data;
+  },
+
+  verifyOtpAndRegister: async (name, email, password, otp) => {
+    const response = await axiosInstance.post("/auth/verify-otp-register", {
+      name,
+      email,
+      password,
+      otp,
+    });
+    return response.data;
+  },
+
+  requestPasswordResetOtp: async (email) => {
+    const response = await axiosInstance.post(
+      "/auth/request-password-reset-otp",
+      {
+        email,
+      }
+    );
+    return response.data;
+  },
+
+  resetPasswordWithOtp: async (email, otp, newPassword, confirmPassword) => {
+    const response = await axiosInstance.post("/auth/reset-password-with-otp", {
+      email,
+      otp,
+      newPassword,
+      confirmPassword,
+    });
+    return response.data;
+  },
 }));
