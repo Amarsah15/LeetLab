@@ -4,7 +4,7 @@ import { useState } from "react";
 import ChangePasswordPopup from "../profile/ChangePasswordPopup";
 
 const Profile = () => {
-  const { authUser, forgotPassword } = useAuthStore();
+  const { authUser, changePassword } = useAuthStore();
 
   const useProfile = (name = "Profile") => {
     const words = name.trim().split(" ");
@@ -16,7 +16,7 @@ const Profile = () => {
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(true);
   const handleChangePassword = async (data) => {
-    await forgotPassword(data);
+    await changePassword(data);
   };
 
   return (

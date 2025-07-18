@@ -1,7 +1,7 @@
 import express from "express";
 import {
+  changePassword,
   check,
-  forgetPassword,
   login,
   logout,
   register,
@@ -18,7 +18,7 @@ authRoutes.post("/logout", authMiddleware, logout);
 
 authRoutes.get("/check", authMiddleware, check);
 
-authRoutes.post("/forgot-password", authMiddleware, forgetPassword);
+authRoutes.post("/change-password", authMiddleware, changePassword);
 
 
 export default authRoutes;

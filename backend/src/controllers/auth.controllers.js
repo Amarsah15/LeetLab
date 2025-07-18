@@ -149,7 +149,7 @@ export const check = async (req, res) => {
   }
 };
 
-export const forgetPassword = async (req, res) => {
+export const changePassword = async (req, res) => {
   try {
     const { email, oldPassword, newPassword, confirmPassword } = req.body;
     const user = await db.user.findUnique({

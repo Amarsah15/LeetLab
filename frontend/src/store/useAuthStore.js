@@ -63,10 +63,10 @@ export const useAuthStore = create((set) => ({
       toast.error("Error logging out");
     }
   },
-  forgotPassword: async (data) => {
+  changePassword: async (data) => {
     try {
       set({ isPasswordReset: true });
-      const res = await axiosInstance.post("/auth/forgot-password", data, {
+      const res = await axiosInstance.post("/auth/change-password", data, {
         withCredentials: true,
       });
 
