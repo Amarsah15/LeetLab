@@ -1,4 +1,12 @@
-import { ArrowLeft, Mail, User, Shield, Image, EyeOff, Eye } from "lucide-react";
+import {
+  ArrowLeft,
+  Mail,
+  User,
+  Shield,
+  Image,
+  EyeOff,
+  Eye,
+} from "lucide-react";
 import { useAuthStore } from "../../store/useAuthStore";
 import { useState } from "react";
 import ChangePasswordPopup from "../profile/ChangePasswordPopup";
@@ -78,7 +86,7 @@ const Profile = () => {
                 <div className="stat-title flex items-center gap-2">
                   User ID
                 </div>
-                <div className="pt-2 stat-value text-sm break-all">
+                <div className="pt-2 stat-value text-sm break-all w-[18rem]">
                   {isHidden ? "********************************" : authUser.id}
                 </div>
               </div>
