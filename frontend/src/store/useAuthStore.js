@@ -47,7 +47,6 @@ export const useAuthStore = create((set) => ({
     } catch (error) {
       console.log("Error logging in", error);
       toast.error("Error logging in");
-      toast.error("Please allow cookies in your browser settings");
     } finally {
       set({ isLoggingIn: false });
     }

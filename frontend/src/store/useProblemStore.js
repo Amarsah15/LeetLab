@@ -19,6 +19,7 @@ export const useProblemStore = create((set) => ({
     } catch (error) {
       console.log("Error in getAllProblem", error);
       toast.error("Error in getting problems");
+      toast.error("Please allow cookies in your browser settings");
     } finally {
       set({ isProblemsLoading: false });
     }

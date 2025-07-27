@@ -19,6 +19,7 @@ export const useSubmissionStore = create((set) => ({
     } catch (error) {
       console.log("Error getting all submissions", error);
       toast.error("Error getting all submissions");
+      toast.error("Please allow cookies in your browser settings");
     } finally {
       set({ isLoading: false });
     }

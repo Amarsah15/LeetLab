@@ -39,6 +39,7 @@ export const usePlaylistStore = create((set, get) => ({
     } catch (error) {
       console.error("Error fetching playlists:", error);
       toast.error("Failed to fetch playlists");
+      toast.error("Please allow cookies in your browser settings");
     } finally {
       set({ isLoading: false });
     }
