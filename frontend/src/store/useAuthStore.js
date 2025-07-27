@@ -62,6 +62,7 @@ export const useAuthStore = create((set) => ({
     } catch (error) {
       console.log("Error logging out", error);
       toast.error("Error logging out");
+      toast.error("Please allow cookies in your browser settings");
     }
   },
   changePassword: async (data) => {
