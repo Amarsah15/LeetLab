@@ -13,7 +13,7 @@ This is a full-stack web application consisting of:
 
 # Demo
 
-You can view the live demo of the Weather App [here](https://leetlab-rho.vercel.app/).
+You can view the live demo [here](https://leetlab-rho.vercel.app/).
 
 ---
 
