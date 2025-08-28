@@ -11,6 +11,10 @@ This is a full-stack web application consisting of:
 - **Frontend** built with **Vite** + **React**, **Tailwind CSS** and **DaisyUI**
 - **Backend** using **Node.js**, **Express**, and **Prisma** ORM
 
+# Demo
+
+You can view the live demo [here](https://leetlab-rho.vercel.app/).
+
 ---
 
 ## 📚 Overview
