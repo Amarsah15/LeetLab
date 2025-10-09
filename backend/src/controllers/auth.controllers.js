@@ -5,64 +5,6 @@ import { UserRole } from "../generated/prisma/index.js";
 import { sendEmail } from "../libs/sendEmail.js";
 import { generateOTP } from "../libs/otpGenerator.js";
 
-export const register = async (req, res) => {
-  const { name, email, password } = req.body;
-
-  if (!name || !email || !password) {
-    return res.status(400).json({ error: "All fields are required" });
-  }
-
-  try {
-    // Check if user already exists
-    const existingUser = await db.user.findUnique({
-      where: {
-        email,
-      },
-    });
-
-    if (existingUser) {
-      return res.status(400).json({ error: "User already exists" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await db.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        role: UserRole.USER, // Default role
-      },
-    });
-
-    const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
-
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: true, // ✅ always true in Render (HTTPS)
-      sameSite: "None", // ✅ necessary for cross-origin
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
-    return res.status(201).json({
-      success: true,
-      error: "User created successfully",
-      user: {
-        id: newUser.id,
-        name: newUser.name,
-        email: newUser.email,
-        role: newUser.role,
-        image: newUser.image,
-      },
-    });
-  } catch (error) {
-    console.error("Error creating user:", error);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-};
-
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -233,24 +175,33 @@ export const requestOtpForRegistration = async (req, res) => {
 };
 
 export const verifyOtpAndRegister = async (req, res) => {
-  const { name, email, password, otp } = req.body;
-
-  if (!name || !email || !password || !otp) {
-    return res.status(400).json({ error: "All fields are required" });
-  }
-
   try {
-    const storedOtp = await db.otp.findUnique({
-      where: { email },
-    });
+    const { name, email, password, otp } = req.body;
 
-    if (!storedOtp || storedOtp.otp !== otp || new Date() > storedOtp.expiresAt) {
+    if (!name || !email || !password || !otp) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const storedOtp = await db.otp.findUnique({ where: { email } });
+    if (!storedOtp) {
+      return res
+        .status(400)
+        .json({ error: "OTP not found. Please request a new one." });
+    }
+
+    const isOtpExpired = new Date() > storedOtp.expiresAt;
+    const isOtpInvalid = storedOtp.otp !== otp;
+
+    if (isOtpInvalid || isOtpExpired) {
       return res.status(400).json({ error: "Invalid or expired OTP" });
     }
 
-    // OTP is valid, proceed with registration
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const existingUser = await db.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ error: "User already exists" });
+    }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await db.user.create({
       data: {
         name,
@@ -260,8 +211,34 @@ export const verifyOtpAndRegister = async (req, res) => {
       },
     });
 
-    // Delete the OTP after successful registration
     await db.otp.delete({ where: { email } });
+
+    sendEmail(
+      email,
+      "🎉 Welcome to LeetLab — Let’s Get Started!",
+      `Hi ${name},
+
+Your registration was successful! We're thrilled to have you join LeetLab — your personalized space to practice, learn, and grow.
+
+You can log in to your account anytime using the link below:
+${process.env.CLIENT_URL}
+
+Happy coding!
+— The LeetLab Team`,
+      `<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <h2>🎉 Welcome to LeetLab!</h2>
+        <p>Hi ${name},</p>
+        <p>Your registration was successful! We're thrilled to have you join <strong>LeetLab</strong> — your personalized space to practice, learn, and grow.</p>
+        <p style="margin-top: 20px;">
+          <a href="${process.env.CLIENT_URL}" 
+             style="background-color: #4f46e5; color: #fff; padding: 10px 20px; 
+                    border-radius: 6px; text-decoration: none; font-weight: bold;">
+            🔗 Log in to Your Account
+          </a>
+        </p>
+        <p style="margin-top: 30px;">Happy coding!<br>— The LeetLab Team</p>
+      </div>`
+    ).catch((err) => console.error("Email send failed:", err.message));
 
     const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
@@ -269,7 +246,7 @@ export const verifyOtpAndRegister = async (req, res) => {
 
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: true,
+      secure: true, // works on HTTPS (Render, Vercel)
       sameSite: "None",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -287,7 +264,9 @@ export const verifyOtpAndRegister = async (req, res) => {
     });
   } catch (error) {
     console.error("Error verifying OTP and registering user:", error);
-    res.status(500).json({ error: "Internal server error during registration" });
+    return res.status(500).json({
+      error: "Internal server error during OTP verification and registration",
+    });
   }
 };
 
@@ -355,7 +334,11 @@ export const resetPasswordWithOtp = async (req, res) => {
       where: { email },
     });
 
-    if (!storedOtp || storedOtp.otp !== otp || new Date() > storedOtp.expiresAt) {
+    if (
+      !storedOtp ||
+      storedOtp.otp !== otp ||
+      new Date() > storedOtp.expiresAt
+    ) {
       return res.status(400).json({ error: "Invalid or expired OTP" });
     }
 
@@ -377,9 +360,13 @@ export const resetPasswordWithOtp = async (req, res) => {
     // Delete the OTP after successful password reset
     await db.otp.delete({ where: { email } });
 
-    res.status(200).json({ success: true, message: "Password reset successfully." });
+    res
+      .status(200)
+      .json({ success: true, message: "Password reset successfully." });
   } catch (error) {
     console.error("Error resetting password with OTP:", error);
-    res.status(500).json({ error: "Internal server error during password reset" });
+    res
+      .status(500)
+      .json({ error: "Internal server error during password reset" });
   }
 };

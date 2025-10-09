@@ -24,10 +24,25 @@ export const useAuthStore = create((set) => ({
   signup: async (data) => {
     set({ isSigninUp: true });
     try {
-      const res = await axiosInstance.post("/auth/register", data);
+      const res = await axiosInstance.post("/auth/verify-otp-register", data);
 
       set({ authUser: res.data.user });
 
+      toast.success(res.data.message);
+    } catch (error) {
+      console.log("Error signing up", error);
+      toast.error("Error signing up");
+    } finally {
+      set({ isSigninUp: false });
+    }
+  },
+
+  // singup with otp
+  signupWithOtp: async (data) => {
+    set({ isSigninUp: true });
+    try {
+      const res = await axiosInstance.post("/auth/request-otp-register", data);
+      set({ authUser: res.data.user });
       toast.success(res.data.message);
     } catch (error) {
       console.log("Error signing up", error);
