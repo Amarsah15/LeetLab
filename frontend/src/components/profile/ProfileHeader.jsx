@@ -103,7 +103,7 @@ const Profile = () => {
               <ChangePasswordPopup
                 isOpen={isChangePasswordOpen} //value of clicked button
                 onClose={() => setIsChangePasswordOpen(false)}
-                onSubmit={handleChangePassword} //sending data to backend
+                onSubmit={handleChangePassword} //sending data to ChangePassword in authStore which will then send to backend
               />
             </div>
           </div>

@@ -79,12 +79,17 @@ export const useAuthStore = create((set) => ({
       toast.error("Please allow cookies in your browser settings");
     }
   },
+  
   changePassword: async (data) => {
     try {
       set({ isPasswordReset: true });
-      const res = await axiosInstance.post("/auth/change-password", data, {
-        withCredentials: true,
-      });
+      const res = await axiosInstance.post(
+        "/auth/reset-password-with-otp",
+        data,
+        {
+          withCredentials: true,
+        }
+      );
 
       toast.success(res.data.message);
       set({ resetSuccessfully: true });
@@ -95,42 +100,17 @@ export const useAuthStore = create((set) => ({
       set({ isPasswordReset: false });
     }
   },
-  requestOtpForRegistration: async (name, email, password) => {
-    const response = await axiosInstance.post("/auth/request-otp-register", {
-      name,
-      email,
-      password,
-    });
-    return response.data;
-  },
-
-  verifyOtpAndRegister: async (name, email, password, otp) => {
-    const response = await axiosInstance.post("/auth/verify-otp-register", {
-      name,
-      email,
-      password,
-      otp,
-    });
-    return response.data;
-  },
 
   requestPasswordResetOtp: async (email) => {
-    const response = await axiosInstance.post(
-      "/auth/request-password-reset-otp",
-      {
-        email,
-      }
-    );
-    return response.data;
-  },
-
-  resetPasswordWithOtp: async (email, otp, newPassword, confirmPassword) => {
-    const response = await axiosInstance.post("/auth/reset-password-with-otp", {
-      email,
-      otp,
-      newPassword,
-      confirmPassword,
-    });
-    return response.data;
+    try {
+      const response = await axiosInstance.post(
+        "/auth/request-password-reset-otp",
+        { email }
+      );
+      toast.success(response.data.message);
+    } catch (error) {
+      console.log("Error requesting password reset OTP", error);
+      toast.error("Error requesting password reset OTP");
+    }
   },
 }));

@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  changePassword,
   check,
   login,
   logout,
@@ -15,16 +14,20 @@ const authRoutes = express.Router();
 
 authRoutes.post("/login", login);
 
+authRoutes.post("/request-otp-register", requestOtpForRegistration);
+
+authRoutes.post("/verify-otp-register", verifyOtpAndRegister);
+
 authRoutes.post("/logout", authMiddleware, logout);
 
 authRoutes.get("/check", authMiddleware, check);
 
-authRoutes.post("/change-password", authMiddleware, changePassword);
-
-// New OTP related routes
-authRoutes.post("/request-otp-register", requestOtpForRegistration);
-authRoutes.post("/verify-otp-register", verifyOtpAndRegister);
 authRoutes.post("/request-password-reset-otp", requestPasswordResetOtp);
-authRoutes.post("/reset-password-with-otp", resetPasswordWithOtp);
+
+authRoutes.post(
+  "/reset-password-with-otp",
+  authMiddleware,
+  resetPasswordWithOtp
+);
 
 export default authRoutes;

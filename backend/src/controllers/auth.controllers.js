@@ -93,44 +93,6 @@ export const check = async (req, res) => {
   }
 };
 
-export const changePassword = async (req, res) => {
-  try {
-    const { email, oldPassword, newPassword, confirmPassword } = req.body;
-    const user = await db.user.findUnique({
-      where: {
-        email,
-      },
-    });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-    if (newPassword !== confirmPassword) {
-      return res
-        .status(401)
-        .json({ message: "Password and Confirm password are not match." });
-    }
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await db.user.update({
-      where: {
-        email,
-      },
-      data: {
-        password: hashedPassword,
-      },
-    });
-    return res.status(200).json({
-      message: "Password updated successfully.  Login with new password",
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Error updating password" });
-  }
-};
-
 export const requestOtpForRegistration = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -317,10 +279,16 @@ export const requestPasswordResetOtp = async (req, res) => {
 };
 
 export const resetPasswordWithOtp = async (req, res) => {
-  const { email, otp, newPassword, confirmPassword } = req.body;
+  const { email, otp, oldPassword, newPassword, confirmPassword } = req.body;
 
-  if (!email || !otp || !newPassword || !confirmPassword) {
+  if (!email || !otp || !oldPassword || !newPassword || !confirmPassword) {
     return res.status(400).json({ error: "All fields are required" });
+  }
+
+  if (oldPassword === newPassword) {
+    return res
+      .status(400)
+      .json({ message: "New password must be different from old password." });
   }
 
   if (newPassword !== confirmPassword) {
@@ -350,6 +318,12 @@ export const resetPasswordWithOtp = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
+    const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     await db.user.update({
@@ -359,6 +333,36 @@ export const resetPasswordWithOtp = async (req, res) => {
 
     // Delete the OTP after successful password reset
     await db.otp.delete({ where: { email } });
+
+    await sendEmail(
+      email,
+      "🔒 LeetLab Password Reset Successful",
+      `Hi there,
+
+Your LeetLab account password has been reset successfully. If you made this change, you can safely ignore this message.
+
+If you did NOT request a password reset, please secure your account immediately by resetting your password again from the link below:
+${process.env.CLIENT_URL}
+
+Stay secure,
+— The LeetLab Team
+`,
+      `<div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+    <h2 style="color: #4f46e5;">🔒 Password Reset Successful</h2>
+    <p>Hi there,</p>
+    <p>Your <strong>LeetLab</strong> account password has been reset successfully.</p>
+    <p>If you made this change, you can safely ignore this email.</p>
+    <p>If you <strong>did not</strong> request a password reset, please secure your account immediately by resetting your password again:</p>
+    <p style="margin: 20px 0;">
+      <a href="${process.env.CLIENT_URL}"
+         style="background-color: #4f46e5; color: #fff; padding: 10px 20px;
+                border-radius: 6px; text-decoration: none; font-weight: bold;">
+        Reset Password
+      </a>
+    </p>
+    <p>Stay secure,<br>— The <strong>LeetLab</strong> Team</p>
+  </div>`
+    );
 
     res
       .status(200)
