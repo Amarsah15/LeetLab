@@ -62,3 +62,36 @@ export const getAllTheSubmissionsForProblem = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch submissions" });
   }
 };
+
+export const getSuccessRate = async (req, res) => {
+  try {
+    const { problemId } = req.params;
+
+    const totalSubmissions = await db.submission.count({
+      where: {
+        problemId: problemId,
+      },
+    });
+
+    const acceptedSubmissions = await db.submission.count({
+      where: {
+        problemId: problemId,
+        status: "Accepted",
+      },
+    });
+
+    const successRate =
+      totalSubmissions > 0
+        ? ((acceptedSubmissions / totalSubmissions) * 100).toFixed(1)
+        : 0;
+
+    res.json({
+      totalSubmissions,
+      acceptedSubmissions,
+      successRate: parseFloat(successRate),
+    });
+  } catch (error) {
+    console.error("Error fetching success rate:", error);
+    res.status(500).json({ error: "Failed to fetch success rate" });
+  }
+};

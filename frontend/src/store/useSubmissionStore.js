@@ -7,6 +7,7 @@ export const useSubmissionStore = create((set) => ({
   submissions: [],
   submission: null,
   submissionCount: null,
+  successRate: 0,
 
   getAllSubmissions: async () => {
     try {
@@ -51,6 +52,21 @@ export const useSubmissionStore = create((set) => ({
     } catch (error) {
       console.log("Error getting submission count for problem", error);
       toast.error("Error getting submission count for problem");
+    }
+  },
+
+  getSuccessRate: async (problemId) => {
+    try {
+      const res = await axiosInstance.get(
+        `/submission/success-rate/${problemId}`
+      );
+      set({
+        submissionCount: res.data.totalSubmissions,
+        successRate: res.data.successRate,
+      });
+    } catch (error) {
+      console.error("Error fetching success rate:", error);
+      toast.error("Failed to fetch success rate");
     }
   },
 }));

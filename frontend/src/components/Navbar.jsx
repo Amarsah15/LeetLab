@@ -47,7 +47,7 @@ const Navbar = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          {theme === "light" ? (
+          {theme === "dark" ? (
             <>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -96,9 +96,10 @@ const Navbar = () => {
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 space-y-3"
           >
             {/* Common Options */}
-            <li>
-              <p className="text-base font-semibold">{authUser?.name}</p>
-              <hr className="border-gray-200/10" />
+            <li className=" border-gray-200/10 border-b-3">
+              <p className="text-base font-semibold mx-auto">
+                {authUser?.name}
+              </p>
             </li>
             <li>
               <Link

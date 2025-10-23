@@ -8,7 +8,7 @@ import submissionRoutes from "./routes/submission.routes.js";
 import playlistRoutes from "./routes/playlist.routes.js";
 import cors from "cors";
 import healthcheckRoutes from "./routes/healthcheck.routes.js";
-import axios from "axios";
+import aiRoutes from "./routes/ai.routes.js";
 
 dotenv.config();
 
@@ -39,6 +39,7 @@ app.use("/api/v1/execute-code", executionRoutes);
 app.use("/api/v1/submission", submissionRoutes);
 app.use("/api/v1/playlist", playlistRoutes);
 app.use("/api/v1/health-check", healthcheckRoutes);
+app.use("/api/v1/ai", aiRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello guys welcome to LeetLab! 🔥");
@@ -49,7 +50,7 @@ app.listen(port, (err) => {
     console.error("Failed to start server:", err);
     return;
   }
-  console.log("server started at port for leetlab", process.env.PORT);
+  console.log("Server started at port for leetlab", process.env.PORT);
 });
 
 // Add error handling

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
+import AIHelper from "../components/AIHelper";
 import {
   Play,
   FileText,
@@ -34,6 +35,8 @@ const ProblemPage = () => {
     getSubmissionForProblem,
     getSubmissionCountForProblem,
     submissionCount,
+    getSuccessRate,
+    successRate,
   } = useSubmissionStore();
 
   const [code, setCode] = useState("");
@@ -46,7 +49,22 @@ const ProblemPage = () => {
   useEffect(() => {
     getProblemById(id);
     getSubmissionCountForProblem(id);
-  }, [id, getSubmissionCountForProblem, getProblemById]);
+    getSuccessRate(id);
+  }, [id, getSubmissionCountForProblem, getProblemById, getSuccessRate]);
+
+  useEffect(() => {
+    if (submission) {
+      getSubmissionCountForProblem(id);
+      getSuccessRate(id);
+      getSubmissionForProblem(id);
+    }
+  }, [
+    submission,
+    id,
+    getSubmissionCountForProblem,
+    getSuccessRate,
+    getSubmissionForProblem,
+  ]);
 
   useEffect(() => {
     if (problem) {
@@ -204,7 +222,7 @@ const ProblemPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-base-300 to-base-200 w-full">
-      <nav className="navbar bg-base-100 shadow-lg px-12 py-4 mt-4 rounded-3xl">
+      <nav className="navbar bg-base-100 shadow-lg px-6 py-2">
         <div className="flex-1 gap-2">
           <Link to={"/"} className="flex items-center gap-2 text-primary">
             <ChevronLeft className="w-4 h-4" />
@@ -227,7 +245,10 @@ const ProblemPage = () => {
               <span>{submissionCount} Submissions</span>
               <span className="text-base-content/30">•</span>
               <ThumbsUp className="w-4 h-4" />
-              <span>95% Success Rate</span>
+              <span>
+                {" "}
+                {successRate > 0 ? `${successRate}%` : "N/A"} Success Rate
+              </span>
             </div>
           </div>
         </div>
@@ -378,6 +399,13 @@ const ProblemPage = () => {
           </div>
         </div>
       </div>
+
+      {/* AI Helper - Floating button and sidebar */}
+      <AIHelper
+        code={code}
+        problemDescription={problem.description}
+        language={selectedLanguage.toLowerCase()}
+      />
     </div>
   );
 };

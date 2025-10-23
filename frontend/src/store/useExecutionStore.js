@@ -15,7 +15,6 @@ export const useExecutionStore = create((set) => ({
   ) => {
     try {
       set({ isExecuting: true });
-      console.log("Execute url is hit");
       
       const res = await axiosInstance.post("/execute-code", {
         source_code,
@@ -24,7 +23,6 @@ export const useExecutionStore = create((set) => ({
         expected_outputs,
         problemId,
       });
-      console.log("Execute url send res",res);
       set({ submission: res.data.submission });
 
       toast.success(res.data.message);

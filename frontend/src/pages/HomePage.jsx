@@ -34,7 +34,7 @@ export default function Home() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {theme === "light" ? (
+            {theme === "dark" ? (
               <>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -50,7 +50,7 @@ export default function Home() {
                     d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
                   />
                 </svg>
-                Light
+                Dark
               </>
             ) : (
               <>

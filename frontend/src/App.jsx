@@ -67,12 +67,20 @@ const App = () => {
         {authUser ? (
           <Route element={<Layout />}>
             <Route path="/problems" element={<ProblemsPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/problem/:id" element={<ProblemPage />} />
           </Route>
         ) : (
           <>
             <Route path="/problems" element={<Navigate to="/" replace />} />
+          </>
+        )}
+
+        {authUser ? (
+          <>
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/problem/:id" element={<ProblemPage />} />
+          </>
+        ) : (
+          <>
             <Route path="/profile" element={<Navigate to="/" replace />} />
             <Route path="/problem/:id" element={<Navigate to="/" replace />} />
           </>

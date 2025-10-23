@@ -9,7 +9,7 @@ import { useProblemStore } from "../store/useProblemStore";
 import EditProblemModal from "./EditProblemModal";
 
 const ProblemsTable = ({ problems }) => {
-  const { deleteProblem } = useProblemStore();
+  const { deleteProblem, getAllProblems } = useProblemStore();
   const { authUser } = useAuthStore();
   const { createPlaylist } = usePlaylistStore();
   const [showDeletedModel, setShowDeletedModel] = useState(false);
@@ -37,8 +37,9 @@ const ProblemsTable = ({ problems }) => {
   const difficulties = ["EASY", "MEDIUM", "HARD"];
 
   // Filter problems based on search, difficulty, and tags
+  // Filter and sort problems: Demo tag first, then others
   const filteredProblems = useMemo(() => {
-    return (problems || [])
+    const filtered = (problems || [])
       .filter((problem) =>
         problem.title.toLowerCase().includes(search.toLowerCase())
       )
@@ -48,6 +49,19 @@ const ProblemsTable = ({ problems }) => {
       .filter((problem) =>
         selectedTag === "ALL" ? true : problem.tags?.includes(selectedTag)
       );
+
+    // Sort: Demo tag problems first
+    return filtered.sort((a, b) => {
+      const aHasDemo = a.tags?.includes("Demo");
+      const bHasDemo = b.tags?.includes("Demo");
+
+      // If a has Demo tag and b doesn't, a comes first
+      if (aHasDemo && !bHasDemo) return -1;
+      // If b has Demo tag and a doesn't, b comes first
+      if (!aHasDemo && bHasDemo) return 1;
+      // Otherwise, maintain original order
+      return 0;
+    });
   }, [problems, search, difficulty, selectedTag]);
 
   // Pagination logic
@@ -60,12 +74,13 @@ const ProblemsTable = ({ problems }) => {
     );
   }, [filteredProblems, currentPage]);
 
-   const handleDelete = (id) => {
+  const handleDelete = (id) => {
     setDeletedProblemId(id);
     setShowDeletedModel(true);
   };
   const handleSureDelete = async () => {
     deleteProblem(deletedProblemId);
+    await getAllProblems();
     setShowDeletedModel(false);
   };
   const handleModalClose = () => setShowDeletedModel(false);
@@ -74,7 +89,6 @@ const ProblemsTable = ({ problems }) => {
     setEditedProblemId(id);
     setIsEditModalOpen(true);
   };
-
 
   const handleCreatePlaylist = async (data) => {
     await createPlaylist(data);
@@ -175,7 +189,11 @@ const ProblemsTable = ({ problems }) => {
                         {(problem.tags || []).map((tag, idx) => (
                           <span
                             key={idx}
-                            className="badge badge-outline badge-warning text-xs font-bold"
+                            className={`badge badge-outline text-xs font-bold ${
+                              tag === "Demo"
+                                ? "badge-success text-success"
+                                : "badge-warning"
+                            }`}
                           >
                             {tag}
                           </span>

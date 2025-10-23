@@ -4,6 +4,7 @@ import {
   getAllSubmission,
   getAllTheSubmissionsForProblem,
   getSubmissionsForProblem,
+  getSuccessRate,
 } from "../controllers/submission.controllers.js";
 
 const submissionRoutes = express.Router();
@@ -21,5 +22,7 @@ submissionRoutes.get(
   authMiddleware,
   getAllTheSubmissionsForProblem
 );
+
+submissionRoutes.get("/success-rate/:problemId", getSuccessRate);
 
 export default submissionRoutes;
