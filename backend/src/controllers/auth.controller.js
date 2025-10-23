@@ -61,12 +61,13 @@ export const logout = async (req, res) => {
   try {
     res.clearCookie("jwt", {
       httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "strict",
+      secure: true, // must match login
+      sameSite: "None", // must match login
+      path: "/", // ensure same path
     });
 
     return res
-      .status(204)
+      .status(200)
       .json({ success: true, message: "Logout successful" });
   } catch (error) {
     console.error("Error logging out:", error);
