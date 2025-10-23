@@ -1,20 +1,642 @@
-import React from "react";
-import CTABanner from "../components/homepage/CTABanner";
-import FeatureShowcase from "../components/homepage/FeatureShowcase";
-import Footer from "../components/homepage/Footer";
-import HeroSection from "../components/homepage/HeroSection";
-import TopicsSection from "../components/homepage/TopicsSection";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { FaBriefcase, FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 
-const HomePage = () => {
+export default function Home() {
+  const [theme, setTheme] = useState("dark");
+
+  // Apply theme to <html> tag
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
   return (
-    <main className="min-h-screen max-h-max bg-black">
-      <HeroSection />
-      <FeatureShowcase />
-      <TopicsSection />
-      <CTABanner />
-      <Footer />
-    </main>
-  );
-};
+    <div className="min-h-screen flex flex-col bg-base-100 text-base-content transition-colors duration-300">
+      <nav className="w-full flex justify-between items-center px-6 sm:px-8 md:px-12 lg:px-20 xl:px-32 py-4 shadow-lg border-b border-base-300 sticky top-0 z-50 backdrop-blur-md bg-base-100/95">
+        <motion.div whileHover={{ scale: 1.05 }}>
+          <Link to="/" className="flex items-center gap-3 cursor-pointer">
+            <img src="/leetlab.svg" className="h-8 w-8" alt="LeetLab Logo" />
+            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              LeetLab
+            </span>
+          </Link>
+        </motion.div>
 
-export default HomePage;
+        <div className="flex items-center gap-4">
+          <motion.button
+            className="btn btn-ghost btn-sm sm:btn-md gap-2"
+            onClick={toggleTheme}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {theme === "light" ? (
+              <>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                  />
+                </svg>
+                Light
+              </>
+            ) : (
+              <>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                  />
+                </svg>
+                Dark
+              </>
+            )}
+          </motion.button>
+          <Link to="/login">
+            <motion.button
+              className="btn btn-outline btn-primary btn-sm sm:btn-md"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Login
+            </motion.button>
+          </Link>
+          <Link to="/signup">
+            <motion.button
+              className="btn btn-primary btn-sm sm:btn-md shadow-lg"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Sign Up
+            </motion.button>
+          </Link>
+        </div>
+      </nav>
+
+      <main className="w-full flex flex-col items-center justify-center text-center px-6 sm:px-8 md:px-12 lg:px-20 xl:px-32 py-20 bg-base-200">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-5xl"
+        >
+          {/* Icon/Logo Badge */}
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6 shadow-lg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-8 w-8 text-primary"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+              />
+            </svg>
+          </div>
+
+          <motion.h1
+            className="text-5xl sm:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent mb-4"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            Practice. Learn. Grow.
+          </motion.h1>
+
+          <motion.div
+            className="h-1 w-44 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-8 mt-6"
+            initial={{ width: 0 }}
+            animate={{ width: 176 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+          ></motion.div>
+        </motion.div>
+
+        <motion.p
+          className="text-lg sm:text-xl max-w-2xl text-base-content/80 leading-relaxed mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          Welcome to <span className="font-bold text-primary">LeetLab</span> — a
+          powerful coding practice platform where you can solve problems, get AI
+          hints, and track your progress in real-time.
+        </motion.p>
+
+        {/* Stats Section */}
+        <motion.div
+          className="flex flex-wrap justify-center gap-8 mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <StatBadge number="50+" label="Problems" />
+          <StatBadge number="10+" label="Users" />
+          <StatBadge number="AI" label="Powered" />
+        </motion.div>
+
+        <motion.div
+          className="flex flex-col sm:flex-row gap-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <Link to="/login">
+            <motion.button
+              className="btn btn-primary btn-lg text-lg px-8 shadow-2xl"
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+              }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+              Get Started
+            </motion.button>
+          </Link>
+        </motion.div>
+      </main>
+
+      {/* Features Section */}
+      <section className="w-full px-6 sm:px-8 md:px-12 lg:px-20 xl:px-32 py-20 bg-base-100">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-12 max-w-6xl mx-auto"
+        >
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-base-content">
+            Why Choose <span className="text-primary">LeetLab</span>?
+          </h2>
+          <p className="text-base-content/70 max-w-2xl mx-auto">
+            Elevate your coding skills with our comprehensive platform designed
+            for developers of all levels
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <FeatureCard
+            icon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-8 w-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                />
+              </svg>
+            }
+            title="Code & Submit"
+            desc="Solve coding challenges with instant feedback and comprehensive test cases to validate your solutions."
+            color="from-blue-500 to-cyan-500"
+          />
+          <FeatureCard
+            icon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-8 w-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
+            }
+            title="Track Progress"
+            desc="Monitor your solved problems, performance stats, and improvement over time with detailed analytics."
+            color="from-green-500 to-emerald-500"
+          />
+          <FeatureCard
+            icon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-8 w-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 17l4-4-4-4m5 8h5a2 2 0 002-2v-4a2 2 0 00-2-2h-5"
+                />
+              </svg>
+            }
+            title="Multi-Language Support"
+            desc="Code in Python, JavaScript, Java with syntax highlighting."
+            color="from-purple-500 to-pink-500"
+          />
+        </div>
+      </section>
+
+      {/* Ready to Level Up Section */}
+      <section className="w-full bg-base-200 py-20 px-6 sm:px-8 md:px-12 lg:px-20 xl:px-32">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-base-content">
+              Ready to Level Up Your Coding Skills?
+            </h2>
+            <p className="text-lg sm:text-xl text-base-content/70 mb-10 max-w-2xl mx-auto leading-relaxed">
+              Join thousands of developers who are already improving their
+              skills with LeetLab. Start solving problems, track your progress,
+              and achieve your coding goals today.
+            </p>
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <Link to="/signup">
+                <motion.button
+                  className="btn btn-primary btn-lg px-10 shadow-2xl text-lg"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                  Start Your Journey Today
+                </motion.button>
+              </Link>
+            </motion.div>
+          </motion.div>
+
+          {/* Additional Stats or Trust Indicators */}
+          <motion.div
+            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+          >
+            <div className="text-center">
+              <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">
+                50+
+              </div>
+              <div className="text-sm text-base-content/60">
+                Coding Problems
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">
+                10+
+              </div>
+              <div className="text-sm text-base-content/60">Active Users</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">
+                50+
+              </div>
+              <div className="text-sm text-base-content/60">
+                Solutions Submitted
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">
+                24/7
+              </div>
+              <div className="text-sm text-base-content/60">AI Support</div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="w-full bg-base-100 border-t border-base-300 mt-auto">
+        <div className="w-full px-6 sm:px-8 md:px-12 lg:px-20 xl:px-32 py-12">
+          {/* Top Section */}
+          <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-8">
+            {/* Left: Brand Section */}
+            <div className="max-w-sm">
+              <Link
+                to="/problems"
+                className="flex items-center gap-3 cursor-pointer"
+              >
+                <img
+                  src="/leetlab.svg"
+                  className="h-8 w-8"
+                  alt="LeetLab Logo"
+                />
+                <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-3">
+                  LeetLab
+                </span>
+              </Link>
+              <p className="text-sm text-base-content/70 leading-relaxed">
+                Your ultimate platform for mastering coding interviews and
+                improving problem-solving skills.
+              </p>
+            </div>
+
+            {/* Right: Links Section */}
+            <div className="flex gap-16">
+              {/* Quick Links */}
+              <div>
+                <h4 className="font-semibold text-base-content mb-4">
+                  Quick Links
+                </h4>
+                <ul className="space-y-2 text-sm text-base-content/70">
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-primary transition-colors"
+                    >
+                      Problems
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-primary transition-colors"
+                    >
+                      Contests
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-primary transition-colors"
+                    >
+                      Leaderboard
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-primary transition-colors"
+                    >
+                      Discussion
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Resources */}
+              <div>
+                <h4 className="font-semibold text-base-content mb-4">
+                  Resources
+                </h4>
+                <ul className="space-y-2 text-sm text-base-content/70">
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-primary transition-colors"
+                    >
+                      Explore Topics
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-primary transition-colors"
+                    >
+                      Interview Prep
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-primary transition-colors"
+                    >
+                      Study Plans
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-primary transition-colors"
+                    >
+                      Code Library
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Company */}
+              <div>
+                <h4 className="font-semibold text-base-content mb-4">
+                  Company
+                </h4>
+                <ul className="space-y-2 text-sm text-base-content/70">
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-primary transition-colors"
+                    >
+                      About Us
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-primary transition-colors"
+                    >
+                      Contact
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-primary transition-colors"
+                    >
+                      Privacy Policy
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-primary transition-colors"
+                    >
+                      Terms of Service
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent my-8"></div>
+
+          {/* Bottom Section */}
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-8">
+            {/* Left: Built by */}
+            <div className="order-2 md:order-1">
+              <p className="text-sm text-base-content/70">
+                Built with <span className="text-red-500">❤️</span> by{" "}
+                <span className="font-semibold text-primary hover:text-primary/80 transition-colors">
+                  Amarnath Kumar
+                </span>
+              </p>
+            </div>
+
+            {/* Center: Copyright */}
+            <div className="order-1 md:order-2">
+              <p className="text-sm text-base-content/70 text-center">
+                © {new Date().getFullYear()}{" "}
+                <span className="font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  LeetLab
+                </span>
+                . All rights reserved.
+              </p>
+            </div>
+
+            {/* Right: Social Links */}
+            <div className="flex gap-3 order-3">
+              <motion.a
+                href="https://amar-portfolio-psi.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-base-200 hover:bg-primary/20 flex items-center justify-center text-base-content/70 hover:text-primary transition-all duration-300"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <FaBriefcase className="h-4 w-4" />
+              </motion.a>
+              <motion.a
+                href="https://github.com/Amarsah15"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-base-200 hover:bg-primary/20 flex items-center justify-center text-base-content/70 hover:text-primary transition-all duration-300"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <FaGithub className="h-4 w-4" />
+              </motion.a>
+              <motion.a
+                href="https://linkedin.com/in/Amarnath15"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-base-200 hover:bg-primary/20 flex items-center justify-center text-base-content/70 hover:text-primary transition-all duration-300"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <FaLinkedin className="h-4 w-4" />
+              </motion.a>
+              <motion.a
+                href="https://instagram.com/_amar_sah_"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-base-200 hover:bg-primary/20 flex items-center justify-center text-base-content/70 hover:text-primary transition-all duration-300"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <FaInstagram className="h-4 w-4" />
+              </motion.a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+function FeatureCard({ icon, title, desc, color }) {
+  return (
+    <motion.div
+      className="group p-8 border border-base-300 rounded-2xl shadow-md hover:shadow-2xl transition-all bg-base-100 relative overflow-hidden"
+      whileHover={{ y: -8 }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.3 }}
+    >
+      {/* Gradient Background on Hover */}
+      <div
+        className={`absolute inset-0 bg-gradient-to-br ${color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+      ></div>
+
+      {/* Icon Container */}
+      <div
+        className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br ${color} rounded-xl mb-4 text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}
+      >
+        {icon}
+      </div>
+
+      <h3 className="text-xl font-bold mb-3 text-base-content group-hover:text-primary transition-colors">
+        {title}
+      </h3>
+      <p className="text-base-content/70 leading-relaxed">{desc}</p>
+    </motion.div>
+  );
+}
+
+function StatBadge({ number, label }) {
+  return (
+    <motion.div
+      className="flex flex-col items-center"
+      whileHover={{ scale: 1.1 }}
+    >
+      <div className="text-3xl sm:text-4xl font-bold text-primary">
+        {number}
+      </div>
+      <div className="text-sm text-base-content/60 font-medium">{label}</div>
+    </motion.div>
+  );
+}

@@ -2,11 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useSubmissionStore } from "../../store/useSubmissionStore";
 import {
   Code,
-  Terminal,
   Clock,
-  HardDrive,
   Check,
-  X,
   ChevronDown,
   ChevronUp,
   Filter,
@@ -200,70 +197,6 @@ const ProfileSubmission = () => {
                           code={submission.sourceCode}
                           language={submission.language.toLowerCase()}
                         />
-                      </div>
-
-                      {/* Input/Output Section */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border-t border-base-300">
-                        <div>
-                          <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-                            <Terminal size={18} />
-                            Input
-                          </h3>
-                          <div className="mockup-code bg-neutral text-neutral-content">
-                            <pre className="p-4">
-                              <code>
-                                {submission.stdin || "No input provided"}
-                              </code>
-                            </pre>
-                          </div>
-                        </div>
-
-                        <div>
-                          <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-                            <Terminal size={18} />
-                            Output
-                          </h3>
-                          <div className="mockup-code bg-neutral text-neutral-content">
-                            <pre className="p-4">
-                              <code>
-                                {Array.isArray(JSON.parse(submission.stdout))
-                                  ? JSON.parse(submission.stdout).join("")
-                                  : submission.stdout || "No output"}
-                              </code>
-                            </pre>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Performance Stats */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 border-t border-base-300">
-                        <div className="stats shadow">
-                          <div className="stat">
-                            <div className="stat-figure text-primary">
-                              <Clock size={24} />
-                            </div>
-                            <div className="stat-title">Execution Time</div>
-                            <div className="stat-value text-lg">
-                              {Array.isArray(JSON.parse(submission.time))
-                                ? JSON.parse(submission.time)[0]
-                                : submission.time || "N/A"}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="stats shadow">
-                          <div className="stat">
-                            <div className="stat-figure text-primary">
-                              <HardDrive size={24} />
-                            </div>
-                            <div className="stat-title">Memory Used</div>
-                            <div className="stat-value text-lg">
-                              {Array.isArray(JSON.parse(submission.memory))
-                                ? JSON.parse(submission.memory)[0]
-                                : submission.memory || "N/A"}
-                            </div>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   )}

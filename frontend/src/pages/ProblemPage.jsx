@@ -61,6 +61,11 @@ const ProblemPage = () => {
   }, [problem, selectedLanguage]);
 
   useEffect(() => {
+    // Reset old submission when problem changes
+    useExecutionStore.setState({ submission: null });
+  }, [id]);
+
+  useEffect(() => {
     if (activeTab === "submissions" && id) {
       getSubmissionForProblem(id);
     }
