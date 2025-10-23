@@ -22,7 +22,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://leetlab-rho.vercel.app",
-      "https://leetlab-azp5.onrender.com",
+      "https://leet-lab-amarnath-kumar.vercel.app",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -41,6 +41,7 @@ app.use("/api/v1/execute-code", executionRoutes);
 app.use("/api/v1/submission", submissionRoutes);
 app.use("/api/v1/playlist", playlistRoutes);
 app.use("/api/v1/health-check", healthcheckRoutes);
+app.use("/health-check", healthcheckRoutes);
 app.use("/api/v1/ai", aiRoutes);
 
 app.get("/", (req, res) => {
