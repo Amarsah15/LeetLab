@@ -7,7 +7,7 @@ import {
   getAllListDetails,
   getPlaylistDetails,
   removeProblemFromPlaylist,
-} from "../controllers/playlist.controllers.js";
+} from "../controllers/playlist.controller.js";
 
 const playlistRoutes = express.Router();
 

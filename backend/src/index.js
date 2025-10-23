@@ -1,14 +1,16 @@
 import express from "express";
 import dotenv from "dotenv";
-import cookieParser from "cookie-parser";
-import authRoutes from "./routes/auth.routes.js";
-import problemRoutes from "./routes/problems.routes.js";
-import executionRoutes from "./routes/executeCode.routes.js";
-import submissionRoutes from "./routes/submission.routes.js";
-import playlistRoutes from "./routes/playlist.routes.js";
 import cors from "cors";
-import healthcheckRoutes from "./routes/healthcheck.routes.js";
-import aiRoutes from "./routes/ai.routes.js";
+import cookieParser from "cookie-parser";
+
+// Importing routes
+import authRoutes from "./routes/auth.route.js";
+import problemRoutes from "./routes/problems.route.js";
+import executionRoutes from "./routes/executeCode.route.js";
+import submissionRoutes from "./routes/submission.route.js";
+import playlistRoutes from "./routes/playlist.route.js";
+import healthcheckRoutes from "./routes/healthcheck.route.js";
+import aiRoutes from "./routes/ai.route.js";
 
 dotenv.config();
 
@@ -51,15 +53,4 @@ app.listen(port, (err) => {
     return;
   }
   console.log("Server started at port for leetlab", process.env.PORT);
-});
-
-// Add error handling
-process.on("uncaughtException", (err) => {
-  console.error("Uncaught Exception:", err);
-  process.exit(1);
-});
-
-process.on("unhandledRejection", (err) => {
-  console.error("Unhandled Rejection:", err);
-  process.exit(1);
 });

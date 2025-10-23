@@ -3,7 +3,7 @@ import {
   analyzeComplexity,
   getHint,
   getImprovementSuggestions,
-} from "../controllers/ai.controllers.js";
+} from "../controllers/ai.controller.js";
 
 const aiRoutes = express.Router();
 

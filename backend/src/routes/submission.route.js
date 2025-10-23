@@ -5,7 +5,7 @@ import {
   getAllTheSubmissionsForProblem,
   getSubmissionsForProblem,
   getSuccessRate,
-} from "../controllers/submission.controllers.js";
+} from "../controllers/submission.controller.js";
 
 const submissionRoutes = express.Router();
 
