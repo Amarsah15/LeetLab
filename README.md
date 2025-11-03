@@ -1,8 +1,4 @@
----
-
-**Please Note:** To run this project, third-party cookies are required. Please enable them if prompted, or adjust your browser's settings to allow them.
-
----
+> **Note:** To run this project, third-party cookies are required. Please enable them if prompted, or adjust your browser's settings to allow them.
 
 # LeetLab
 
@@ -40,17 +36,17 @@ LeetLab is a platform designed to help users practice coding problems, learn alg
 
 ## 📷 Screenshots
 
-![LeetLab Screenshot](![LeetLab Screenshot](/frontend/public/image-5.png))
+![LeetLab Screenshot](/frontend/public/image-5.png)
 
-![LeetLab Screenshot](![LeetLab Screenshot](/frontend/public/image.png))
+![LeetLab Screenshot](/frontend/public/image.png)
 
-![LeetLab Screenshot](![LeetLab Screenshot](/frontend/public/image-1.png))
+![LeetLab Screenshot](/frontend/public/image-1.png)
 
-![LeetLab Screenshot](![LeetLab Screenshot](/frontend/public/image-2.png))
+![LeetLab Screenshot](/frontend/public/image-2.png)
 
-![LeetLab Screenshot](![LeetLab Screenshot](/frontend/public/image-3.png))
+![LeetLab Screenshot](/frontend/public/image-3.png)
 
-![LeetLab Screenshot](![LeetLab Screenshot](/frontend/public/image-4.png))
+![LeetLab Screenshot](/frontend/public/image-4.png)
 
 ## 📖 Table of Contents
 
@@ -246,9 +242,10 @@ GEMINI_API_KEY=your_gemini_api_key
 Made with ❤️ by Amarnath Kumar
 
 **Amarnath Kumar**
+
 - Email: amarnath.kumar152003@gmail.com
 - LinkedIn: [Amarnath Kumar](https://linkedin.com/in/Amarnath15)
-- GitHub: [@Amarsah15](https://github.com/Amarsah15)
+- GitHub: [Amarsah15](https://github.com/Amarsah15)
 - Portfolio: [https://amar-portfolio-psi.vercel.app/](https://amar-portfolio-psi.vercel.app/)
 
 ---
