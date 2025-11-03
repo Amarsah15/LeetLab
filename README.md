@@ -1,6 +1,6 @@
 ---
 
-**Please Note:** _To run this project, third-party cookies are required. Please enable them if prompted, or adjust your browser's settings to allow them._
+**Please Note:** To run this project, third-party cookies are required. Please enable them if prompted, or adjust your browser's settings to allow them.
 
 ---
 
@@ -244,8 +244,8 @@ GEMINI_API_KEY=your_gemini_api_key
 ## ✨ Author
 
 Made with ❤️ by Amarnath Kumar
-**Amarnath Kumar**
 
+**Amarnath Kumar**
 - Email: amarnath.kumar152003@gmail.com
 - LinkedIn: [Amarnath Kumar](https://linkedin.com/in/Amarnath15)
 - GitHub: [@Amarsah15](https://github.com/Amarsah15)
@@ -255,7 +255,7 @@ Made with ❤️ by Amarnath Kumar
 
 <div align="center">
 
-**Made with ❤️ by [Amarnath Kumar]**
+**Made with ❤️ by Amarnath Kumar**
 
 If this project helped you, please ⭐ star the repository!
 
