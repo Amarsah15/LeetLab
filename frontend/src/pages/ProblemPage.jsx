@@ -189,22 +189,6 @@ const ProblemPage = () => {
             No discussions yet
           </div>
         );
-      case "hints":
-        return (
-          <div className="p-4">
-            {problem?.hints ? (
-              <div className="bg-base-200 p-6 rounded-xl">
-                <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white text-lg">
-                  {problem.hints}
-                </span>
-              </div>
-            ) : (
-              <div className="text-center text-base-content/70">
-                No hints available
-              </div>
-            )}
-          </div>
-        );
       default:
         return null;
     }
@@ -298,15 +282,6 @@ const ProblemPage = () => {
                 >
                   <MessageSquare className="w-4 h-4" />
                   Discussion
-                </button>
-                <button
-                  className={`tab gap-2 ${
-                    activeTab === "hints" ? "tab-active" : ""
-                  }`}
-                  onClick={() => setActiveTab("hints")}
-                >
-                  <Lightbulb className="w-4 h-4" />
-                  Hints
                 </button>
               </div>
 

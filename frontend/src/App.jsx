@@ -28,6 +28,9 @@ const App = () => {
         <h1 className="text-gray-500 text-lg">
           Server is starting up, please wait...
         </h1>
+        <p className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-sm text-gray-400">
+          LeetLab © {new Date().getFullYear()} | Amarnath Kumar
+        </p>
       </div>
     );
   }
