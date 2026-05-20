@@ -1,4 +1,5 @@
-import { db } from "../libs/db.js";
+import Problem from "../models/problem.model.js";
+import ProblemSolved from "../models/problemSolved.model.js";
 import {
   getJudge0LanguageId,
   pollBatchResults,
@@ -6,7 +7,6 @@ import {
 } from "../libs/judge0.libs.js";
 
 export const createProblem = async (req, res) => {
-  //get the data from the request body
   const {
     title,
     description,
@@ -18,17 +18,15 @@ export const createProblem = async (req, res) => {
     codeSnippets,
     referenceSolutions,
   } = req.body;
-  //going to check the user is admin or not
+
   if (req.user.role !== "ADMIN") {
     return res.status(403).json({ error: "You are not authorized" });
   }
-  // // loop through each reference solution for different languages
+
   try {
     for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
-      // get the language id from the judge0 library
       const languageId = getJudge0LanguageId(language);
 
-      // check if the language id is valid
       if (!languageId) {
         return res.status(400).json({ error: "Invalid language" });
       }
@@ -41,14 +39,11 @@ export const createProblem = async (req, res) => {
       }));
 
       const submissionsResults = await submitBatch(submissions);
-
       const tokens = submissionsResults.map((res) => res.token);
-
       const results = await pollBatchResults(tokens);
 
       for (let i = 0; i < results.length; i++) {
         const result = results[i];
-
         if (result.status.id !== 3) {
           return res.status(400).json({
             error: `Test case ${i + 1} failed for language ${language}`,
@@ -56,20 +51,17 @@ export const createProblem = async (req, res) => {
         }
       }
 
-      // if all test cases passed, save the problem to the database
-      const newProblem = await db.problem.create({
-        data: {
-          title,
-          description,
-          difficulty,
-          tags,
-          constraints,
-          examples,
-          testCases,
-          codeSnippets,
-          referenceSolutions,
-          userId: req.user.id,
-        },
+      const newProblem = await Problem.create({
+        title,
+        description,
+        difficulty,
+        tags,
+        constraints,
+        examples,
+        testCases,
+        codeSnippets,
+        referenceSolutions,
+        userId: req.user._id,
       });
 
       return res.status(201).json({
@@ -86,24 +78,28 @@ export const createProblem = async (req, res) => {
 
 export const getAllProblems = async (req, res) => {
   try {
-    const problems = await db.problem.findMany({
-      include: {
-        solvedBy: {
-          where: {
-            userId: req.user.id,
-          },
-        },
-      },
-    });
+    // Use lean() so we return plain JS objects (not Mongoose Documents).
+    const problems = await Problem.find().lean();
 
-    if (!problems || problems.length === 0) {
-      return res.status(404).json({ error: "No problems found" });
-    }
+    // Attach solvedBy for the current user
+    const solvedByUser = await ProblemSolved.find({
+      userId: req.user._id,
+    }).lean();
+    const solvedProblemIds = new Set(
+      solvedByUser.map((s) => s.problemId.toString()),
+    );
+
+    const problemsWithSolved = problems.map((p) => ({
+      ...p,
+      solvedBy: solvedProblemIds.has(p._id.toString())
+        ? [{ userId: req.user._id, problemId: p._id }]
+        : [],
+    }));
 
     return res.status(200).json({
       success: true,
       message: "Problems fetched successfully",
-      problems,
+      problems: problemsWithSolved,
     });
   } catch (error) {
     console.error("Error fetching problems:", error);
@@ -117,9 +113,7 @@ export const getProblemById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const problem = await db.problem.findUnique({
-      where: { id },
-    });
+    const problem = await Problem.findById(id);
 
     if (!problem) {
       return res.status(404).json({ error: "Problem not found" });
@@ -139,20 +133,17 @@ export const getProblemById = async (req, res) => {
 };
 
 export const updateProblem = async (req, res) => {
-  // get the problem id from the request params
   const { id } = req.params;
-  // check if the problem id is valid
+
   if (!id) {
     return res.status(400).json({ error: "Invalid problem id" });
   }
-  // check if the problem exists in the database
-  const problem = await db.problem.findUnique({
-    where: { id },
-  });
+
+  const problem = await Problem.findById(id);
   if (!problem) {
     return res.status(404).json({ error: "Problem not found" });
   }
-  //get the data from the request body
+
   const {
     title,
     description,
@@ -164,17 +155,15 @@ export const updateProblem = async (req, res) => {
     codeSnippets,
     referenceSolutions,
   } = req.body;
-  //going to check the user is admin or not
+
   if (req.user.role !== "ADMIN") {
     return res.status(403).json({ error: "You are not authorized" });
   }
 
   try {
     for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
-      // get the language id from the judge0 library
       const languageId = getJudge0LanguageId(language);
 
-      // check if the language id is valid
       if (!languageId) {
         return res.status(400).json({ error: "Invalid language" });
       }
@@ -187,14 +176,11 @@ export const updateProblem = async (req, res) => {
       }));
 
       const submissionsResults = await submitBatch(submissions);
-
       const tokens = submissionsResults.map((res) => res.token);
-
       const results = await pollBatchResults(tokens);
 
       for (let i = 0; i < results.length; i++) {
         const result = results[i];
-
         if (result.status.id !== 3) {
           return res.status(400).json({
             error: `Test case ${i + 1} failed for language ${language}`,
@@ -202,10 +188,9 @@ export const updateProblem = async (req, res) => {
         }
       }
 
-      // if all test cases passed, save the problem to the database
-      const newProblem = await db.problem.update({
-        where: { id },
-        data: {
+      const newProblem = await Problem.findByIdAndUpdate(
+        id,
+        {
           title,
           description,
           difficulty,
@@ -215,9 +200,10 @@ export const updateProblem = async (req, res) => {
           testCases,
           codeSnippets,
           referenceSolutions,
-          userId: req.user.id,
+          userId: req.user._id,
         },
-      });
+        { new: true },
+      );
 
       return res.status(201).json({
         success: true,
@@ -226,7 +212,7 @@ export const updateProblem = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("Error creating problem:", error);
+    console.error("Error updating problem:", error);
     return res
       .status(500)
       .json({ error: "Internal server error in updateProblem" });
@@ -234,28 +220,23 @@ export const updateProblem = async (req, res) => {
 };
 
 export const deleteProblem = async (req, res) => {
-  // get the problem id from the request params
   const { id } = req.params;
-  // check if the problem id is valid
+
   if (!id) {
     return res.status(400).json({ error: "Invalid problem id" });
   }
 
   try {
-    // check if the problem exists in the database
-    const problem = await db.problem.findUnique({
-      where: { id },
-    });
+    const problem = await Problem.findById(id);
     if (!problem) {
       return res.status(404).json({ error: "Problem not found" });
     }
-    //going to check the user is admin or not
+
     if (req.user.role !== "ADMIN") {
       return res.status(403).json({ error: "You are not authorized" });
     }
-    await db.problem.delete({
-      where: { id },
-    });
+
+    await Problem.findByIdAndDelete(id);
 
     return res.status(200).json({
       success: true,
@@ -271,27 +252,20 @@ export const deleteProblem = async (req, res) => {
 
 export const getAllProblemsSolvedByUser = async (req, res) => {
   try {
-    const problems = await db.problem.findMany({
-      where: {
-        solvedBy: {
-          some: {
-            userId: req.user.id,
-          },
-        },
-      },
-      include: {
-        solvedBy: {
-          where: {
-            userId: req.user.id,
-          },
-        },
-      },
-    });
+    const solvedEntries = await ProblemSolved.find({ userId: req.user._id });
+    const solvedProblemIds = solvedEntries.map((s) => s.problemId);
+
+    const problems = await Problem.find({ _id: { $in: solvedProblemIds } });
+
+    const problemsWithSolved = problems.map((p) => ({
+      ...p,
+      solvedBy: [{ userId: req.user._id, problemId: p._id }],
+    }));
 
     res.status(200).json({
       success: true,
       message: "Problems fetched successfully",
-      problems,
+      problems: problemsWithSolved,
     });
   } catch (error) {
     console.error("Error fetching problems solved by user:", error);

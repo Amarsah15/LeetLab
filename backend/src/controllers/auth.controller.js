@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { db } from "../libs/db.js";
-import { UserRole } from "../generated/prisma/index.js";
+import User from "../models/user.model.js";
+import Otp from "../models/otp.model.js";
 import { sendEmail } from "../libs/sendEmail.js";
 import { generateOTP } from "../libs/otpGenerator.js";
 
@@ -13,11 +13,7 @@ export const login = async (req, res) => {
   }
 
   try {
-    const user = await db.user.findUnique({
-      where: {
-        email,
-      },
-    });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(401).json({ error: "User not found" });
@@ -29,14 +25,14 @@ export const login = async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
 
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: true, // ✅ always true in Render (HTTPS)
-      sameSite: "None", // ✅ necessary for cross-origin
+      secure: true,
+      sameSite: "None",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -44,7 +40,7 @@ export const login = async (req, res) => {
       success: true,
       message: "Login successful",
       user: {
-        id: user.id,
+        _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
@@ -61,9 +57,9 @@ export const logout = async (req, res) => {
   try {
     res.clearCookie("jwt", {
       httpOnly: true,
-      secure: true, // must match login
-      sameSite: "None", // must match login
-      path: "/", // ensure same path
+      secure: true,
+      sameSite: "None",
+      path: "/",
     });
 
     return res
@@ -81,7 +77,7 @@ export const check = async (req, res) => {
       success: true,
       message: "User is authenticated",
       user: {
-        id: req.user.id,
+        _id: req.user._id,
         name: req.user.name,
         email: req.user.email,
         role: req.user.role,
@@ -102,29 +98,26 @@ export const requestOtpForRegistration = async (req, res) => {
   }
 
   try {
-    const existingUser = await db.user.findUnique({
-      where: { email },
-    });
+    const existingUser = await User.findOne({ email });
 
     if (existingUser) {
       return res.status(400).json({ error: "User already exists" });
     }
 
     const otp = generateOTP();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-    // Store OTP in the database, overwriting if one already exists for this email
-    await db.otp.upsert({
-      where: { email },
-      update: { otp, expiresAt },
-      create: { email, otp, expiresAt },
-    });
+    await Otp.findOneAndUpdate(
+      { email },
+      { otp, expiresAt },
+      { upsert: true, new: true },
+    );
 
     await sendEmail(
       email,
       "LeetLab Registration OTP",
       `Your OTP for LeetLab registration is: ${otp}. It is valid for 10 minutes.`,
-      `<p>Your OTP for LeetLab registration is: <strong>${otp}</strong>. It is valid for 10 minutes.</p>`
+      `<p>Your OTP for LeetLab registration is: <strong>${otp}</strong>. It is valid for 10 minutes.</p>`,
     );
 
     res.status(200).json({
@@ -145,7 +138,7 @@ export const verifyOtpAndRegister = async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    const storedOtp = await db.otp.findUnique({ where: { email } });
+    const storedOtp = await Otp.findOne({ email });
     if (!storedOtp) {
       return res
         .status(400)
@@ -159,57 +152,45 @@ export const verifyOtpAndRegister = async (req, res) => {
       return res.status(400).json({ error: "Invalid or expired OTP" });
     }
 
-    const existingUser = await db.user.findUnique({ where: { email } });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await db.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        role: UserRole.USER,
-      },
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role: "USER",
     });
 
-    await db.otp.delete({ where: { email } });
+    await Otp.deleteOne({ email });
 
     sendEmail(
       email,
-      "🎉 Welcome to LeetLab — Let’s Get Started!",
-      `Hi ${name},
-
-Your registration was successful! We're thrilled to have you join LeetLab — your personalized space to practice, learn, and grow.
-
-You can log in to your account anytime using the link below:
-${process.env.CLIENT_URL}
-
-Happy coding!
-— The LeetLab Team`,
+      "🎉 Welcome to LeetLab — Let's Get Started!",
+      `Hi ${name},\n\nYour registration was successful! We're thrilled to have you join LeetLab.\n\n${process.env.CLIENT_URL}\n\nHappy coding!\n— The LeetLab Team`,
       `<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
         <h2>🎉 Welcome to LeetLab!</h2>
         <p>Hi ${name},</p>
-        <p>Your registration was successful! We're thrilled to have you join <strong>LeetLab</strong> — your personalized space to practice, learn, and grow.</p>
+        <p>Your registration was successful! We're thrilled to have you join <strong>LeetLab</strong>.</p>
         <p style="margin-top: 20px;">
-          <a href="${process.env.CLIENT_URL}" 
-             style="background-color: #4f46e5; color: #fff; padding: 10px 20px; 
-                    border-radius: 6px; text-decoration: none; font-weight: bold;">
+          <a href="${process.env.CLIENT_URL}" style="background-color: #4f46e5; color: #fff; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold;">
             🔗 Log in to Your Account
           </a>
         </p>
         <p style="margin-top: 30px;">Happy coding!<br>— The LeetLab Team</p>
-      </div>`
+      </div>`,
     ).catch((err) => console.error("Email send failed:", err.message));
 
-    const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
 
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: true, // works on HTTPS (Render, Vercel)
+      secure: true,
       sameSite: "None",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -218,7 +199,7 @@ Happy coding!
       success: true,
       message: "User registered successfully",
       user: {
-        id: newUser.id,
+        _id: newUser._id,
         name: newUser.name,
         email: newUser.email,
         role: newUser.role,
@@ -241,12 +222,9 @@ export const requestPasswordResetOtp = async (req, res) => {
   }
 
   try {
-    const user = await db.user.findUnique({
-      where: { email },
-    });
+    const user = await User.findOne({ email });
 
     if (!user) {
-      // For security, don't reveal if the user exists or not
       return res.status(200).json({
         success: true,
         message: "If an account with that email exists, an OTP has been sent.",
@@ -254,19 +232,19 @@ export const requestPasswordResetOtp = async (req, res) => {
     }
 
     const otp = generateOTP();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-    await db.otp.upsert({
-      where: { email },
-      update: { otp, expiresAt },
-      create: { email, otp, expiresAt },
-    });
+    await Otp.findOneAndUpdate(
+      { email },
+      { otp, expiresAt },
+      { upsert: true, new: true },
+    );
 
     await sendEmail(
       email,
       "LeetLab Password Reset OTP",
       `Your OTP for password reset is: ${otp}. It is valid for 10 minutes.`,
-      `<p>Your OTP for password reset is: <strong>${otp}</strong>. It is valid for 10 minutes.</p>`
+      `<p>Your OTP for password reset is: <strong>${otp}</strong>. It is valid for 10 minutes.</p>`,
     );
 
     res.status(200).json({
@@ -299,9 +277,7 @@ export const resetPasswordWithOtp = async (req, res) => {
   }
 
   try {
-    const storedOtp = await db.otp.findUnique({
-      where: { email },
-    });
+    const storedOtp = await Otp.findOne({ email });
 
     if (
       !storedOtp ||
@@ -311,9 +287,7 @@ export const resetPasswordWithOtp = async (req, res) => {
       return res.status(400).json({ error: "Invalid or expired OTP" });
     }
 
-    const user = await db.user.findUnique({
-      where: { email },
-    });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -327,42 +301,20 @@ export const resetPasswordWithOtp = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    await db.user.update({
-      where: { email },
-      data: { password: hashedPassword },
-    });
+    await User.findOneAndUpdate({ email }, { password: hashedPassword });
 
-    // Delete the OTP after successful password reset
-    await db.otp.delete({ where: { email } });
+    await Otp.deleteOne({ email });
 
     await sendEmail(
       email,
       "🔒 LeetLab Password Reset Successful",
-      `Hi there,
-
-Your LeetLab account password has been reset successfully. If you made this change, you can safely ignore this message.
-
-If you did NOT request a password reset, please secure your account immediately by resetting your password again from the link below:
-${process.env.CLIENT_URL}
-
-Stay secure,
-— The LeetLab Team
-`,
+      `Hi there,\n\nYour LeetLab account password has been reset successfully.\n\n— The LeetLab Team`,
       `<div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
     <h2 style="color: #4f46e5;">🔒 Password Reset Successful</h2>
     <p>Hi there,</p>
     <p>Your <strong>LeetLab</strong> account password has been reset successfully.</p>
-    <p>If you made this change, you can safely ignore this email.</p>
-    <p>If you <strong>did not</strong> request a password reset, please secure your account immediately by resetting your password again:</p>
-    <p style="margin: 20px 0;">
-      <a href="${process.env.CLIENT_URL}"
-         style="background-color: #4f46e5; color: #fff; padding: 10px 20px;
-                border-radius: 6px; text-decoration: none; font-weight: bold;">
-        Reset Password
-      </a>
-    </p>
     <p>Stay secure,<br>— The <strong>LeetLab</strong> Team</p>
-  </div>`
+  </div>`,
     );
 
     res

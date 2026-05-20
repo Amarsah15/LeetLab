@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { connectDB } from "./libs/db.js";
 
 // Importing routes
 import authRoutes from "./routes/auth.route.js";
@@ -48,10 +49,12 @@ app.get("/", (req, res) => {
   res.send("Hello guys welcome to LeetLab! 🔥");
 });
 
-app.listen(port, (err) => {
-  if (err) {
-    console.error("Failed to start server:", err);
-    return;
-  }
-  console.log("Server started at port for leetlab", process.env.PORT);
+connectDB().then(() => {
+  app.listen(port, (err) => {
+    if (err) {
+      console.error("Failed to start server:", err);
+      return;
+    }
+    console.log("Server started at port for leetlab", process.env.PORT);
+  });
 });

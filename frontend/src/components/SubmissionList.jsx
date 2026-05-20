@@ -80,7 +80,7 @@ const SubmissionsList = ({ submissions, isLoading }) => {
 
         return (
           <div
-            key={submission.id}
+            key={submission._id}
             className="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow rounded-lg"
           >
             <div className="card-body p-4">

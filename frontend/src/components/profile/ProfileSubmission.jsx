@@ -30,7 +30,7 @@ const ProfileSubmission = () => {
   const paginatedProblems = useMemo(() => {
     return filteredSubmissions.slice(
       (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage
+      currentPage * itemsPerPage,
     );
   }, [filteredSubmissions, currentPage]);
 
@@ -138,20 +138,20 @@ const ProfileSubmission = () => {
           <div className="space-y-6">
             {paginatedProblems.reverse().map((submission) => (
               <div
-                key={submission.id}
+                key={submission._id}
                 className="card bg-base-100 shadow-xl overflow-hidden transition-all duration-300"
               >
                 <div
                   className="card-body p-0"
                   role="button"
-                  onClick={() => toggleExpand(submission.id)}
+                  onClick={() => toggleExpand(submission._id)}
                 >
                   {/* Submission Header */}
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 cursor-pointer hover:bg-base-200">
                     <div className="flex flex-col md:flex-row md:items-center gap-3 w-full">
                       <div
                         className={`badge badge-lg ${getStatusClass(
-                          submission.status
+                          submission.status,
                         )}`}
                       >
                         {submission.status === "Accepted" ? (
@@ -176,7 +176,7 @@ const ProfileSubmission = () => {
                     </div>
 
                     <div className="flex items-center gap-2 mt-3 md:mt-0">
-                      {expandedSubmission === submission.id ? (
+                      {expandedSubmission === submission._id ? (
                         <ChevronUp size={20} />
                       ) : (
                         <ChevronDown size={20} />
@@ -185,7 +185,7 @@ const ProfileSubmission = () => {
                   </div>
 
                   {/* Expanded Content */}
-                  {expandedSubmission === submission.id && (
+                  {expandedSubmission === submission._id && (
                     <div className="border-t border-base-300">
                       {/* Code Section */}
                       <div className="p-4">

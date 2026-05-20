@@ -16,7 +16,7 @@ const ProfilePage = () => {
   const { getAllProblems, problems } = useProblemStore();
 
   useEffect(() => {
-    getAllSubmissions(), getAllProblems();
+    (getAllSubmissions(), getAllProblems());
   }, [getAllSubmissions, checkAuth, getAllProblems]);
 
   let easy = 0;
@@ -26,7 +26,7 @@ const ProfilePage = () => {
 
   problems.forEach((problem) => {
     const isSolved = problem.solvedBy.some(
-      (user) => user.userId === authUser?.id
+      (user) => user.userId === authUser?._id,
     );
     if (isSolved) {
       solved++;
@@ -58,7 +58,7 @@ const ProfilePage = () => {
           user={{
             username: authUser.name,
             email: authUser.email,
-            id: authUser.id,
+            id: authUser._id,
           }}
         />
         <div className="divider"></div>

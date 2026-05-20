@@ -1,9 +1,11 @@
-import { PrismaClient } from "../generated/prisma/index.js";
+import mongoose from "mongoose";
 
-const globalPrisma = globalThis;
-
-export const db = globalPrisma.prisma || new PrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalPrisma.prisma = db; // Prevents multiple instances of Prisma Client in development
-}
+export const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    console.log(`MongoDB connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    process.exit(1);
+  }
+};

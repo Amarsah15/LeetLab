@@ -33,7 +33,9 @@ const Submission = ({ submission }) => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="card bg-base-200 shadow-lg">
           <div className="card-body p-4">
-            <h3 className="card-title text-sm"><CheckCircle2 className="w-4 h-4" /> Status</h3>
+            <h3 className="card-title text-sm">
+              <CheckCircle2 className="w-4 h-4" /> Status
+            </h3>
             <div
               className={`text-lg font-bold ${
                 submission.status === "Accepted" ? "text-success" : "text-error"
@@ -46,7 +48,9 @@ const Submission = ({ submission }) => {
 
         <div className="card bg-base-200 shadow-lg">
           <div className="card-body p-4">
-            <h3 className="card-title text-sm"><Book className="w-4 h-4" /> Success Rate</h3>
+            <h3 className="card-title text-sm">
+              <Book className="w-4 h-4" /> Success Rate
+            </h3>
             <div className="text-lg font-bold">{successRate.toFixed(1)}%</div>
           </div>
         </div>
@@ -89,7 +93,7 @@ const Submission = ({ submission }) => {
               </thead>
               <tbody>
                 {submission.testCases.map((testCase) => (
-                  <tr key={testCase.id}>
+                  <tr key={testCase._id}>
                     <td>
                       {testCase.passed ? (
                         <div className="flex items-center gap-2 text-success">

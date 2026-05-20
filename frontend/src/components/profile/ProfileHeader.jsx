@@ -87,7 +87,7 @@ const Profile = () => {
                   User ID
                 </div>
                 <div className="pt-2 stat-value text-sm break-all w-[18rem]">
-                  {isHidden ? "********************************" : authUser.id}
+                  {isHidden ? "********************************" : authUser._id}
                 </div>
               </div>
             </div>

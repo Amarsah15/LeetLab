@@ -41,13 +41,13 @@ const ProblemsTable = ({ problems }) => {
   const filteredProblems = useMemo(() => {
     const filtered = (problems || [])
       .filter((problem) =>
-        problem.title.toLowerCase().includes(search.toLowerCase())
+        problem?.title?.toLowerCase().includes(search.toLowerCase()),
       )
       .filter((problem) =>
-        difficulty === "ALL" ? true : problem.difficulty === difficulty
+        difficulty === "ALL" ? true : problem.difficulty === difficulty,
       )
       .filter((problem) =>
-        selectedTag === "ALL" ? true : problem.tags?.includes(selectedTag)
+        selectedTag === "ALL" ? true : problem.tags?.includes(selectedTag),
       );
 
     // Sort: Demo tag problems first
@@ -70,7 +70,7 @@ const ProblemsTable = ({ problems }) => {
   const paginatedProblems = useMemo(() => {
     return filteredProblems.slice(
       (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage
+      currentPage * itemsPerPage,
     );
   }, [filteredProblems, currentPage]);
 
@@ -79,7 +79,7 @@ const ProblemsTable = ({ problems }) => {
     setShowDeletedModel(true);
   };
   const handleSureDelete = async () => {
-    deleteProblem(deletedProblemId);
+    await deleteProblem(deletedProblemId);
     await getAllProblems();
     setShowDeletedModel(false);
   };
@@ -164,10 +164,10 @@ const ProblemsTable = ({ problems }) => {
             {paginatedProblems.length > 0 ? (
               paginatedProblems.map((problem) => {
                 const isSolved = problem.solvedBy.some(
-                  (user) => user.userId === authUser?.id
+                  (user) => user.userId === authUser?._id,
                 );
                 return (
-                  <tr key={problem.id}>
+                  <tr key={problem._id}>
                     <td>
                       <input
                         type="checkbox"
@@ -178,7 +178,7 @@ const ProblemsTable = ({ problems }) => {
                     </td>
                     <td>
                       <Link
-                        to={`/problem/${problem.id}`}
+                        to={`/problem/${problem._id}`}
                         className="font-semibold hover:underline"
                       >
                         {problem.title}
@@ -206,8 +206,8 @@ const ProblemsTable = ({ problems }) => {
                           problem.difficulty === "EASY"
                             ? "badge-success"
                             : problem.difficulty === "MEDIUM"
-                            ? "badge-warning"
-                            : "badge-error"
+                              ? "badge-warning"
+                              : "badge-error"
                         }`}
                       >
                         {problem.difficulty}
@@ -218,7 +218,7 @@ const ProblemsTable = ({ problems }) => {
                         {authUser?.role === "ADMIN" && (
                           <div className="flex gap-2">
                             <button
-                              onClick={() => handleDelete(problem.id)}
+                              onClick={() => handleDelete(problem._id)}
                               className="btn btn-sm btn-error"
                             >
                               <TrashIcon className="w-4 h-4 text-white" />
@@ -255,7 +255,7 @@ const ProblemsTable = ({ problems }) => {
                             )}
                             <button
                               className="btn btn-sm bg-base-200 outline-gray-50"
-                              onClick={() => handleEditProblem(problem.id)}
+                              onClick={() => handleEditProblem(problem._id)}
                             >
                               <PencilIcon className="w-4 h-4" />
                             </button>
@@ -264,7 +264,7 @@ const ProblemsTable = ({ problems }) => {
 
                         <button
                           className="btn btn-sm btn-outline flex gap-2 items-center"
-                          onClick={() => handleAddToPlaylist(problem.id)}
+                          onClick={() => handleAddToPlaylist(problem._id)}
                         >
                           <Bookmark className="w-4 h-4" />
                           <span className="hidden sm:inline">
@@ -324,7 +324,8 @@ const ProblemsTable = ({ problems }) => {
       <EditProblemModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        problemId={editedProblemId} //sending data to backend
+        problemId={editedProblemId}
+        onSubmitSuccess={getAllProblems}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { db } from "../libs/db.js";
+import User from "../models/user.model.js";
 
 export const authMiddleware = async (req, res, next) => {
   try {
@@ -9,7 +9,6 @@ export const authMiddleware = async (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // Verify the token using the secret key
     let decoded;
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -17,18 +16,7 @@ export const authMiddleware = async (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized - Invalid token" });
     }
 
-    const user = await db.user.findUnique({
-      where: {
-        id: decoded.id,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        image: true,
-      },
-    });
+    const user = await User.findById(decoded.id).select("name email role image");
 
     if (!user) {
       return res.status(401).json({ message: "Unauthorized - User not found" });
@@ -42,21 +30,10 @@ export const authMiddleware = async (req, res, next) => {
 
 export const checkAdmin = async (req, res, next) => {
   try {
-    const userId = req.user.id;
-
-    const user = await db.user.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        role: true,
-      },
-    });
+    const user = await User.findById(req.user._id).select("role");
 
     if (!user || user.role !== "ADMIN") {
-      return res
-        .status(403)
-        .json({ message: "Forbidden - You are not a admin" });
+      return res.status(403).json({ message: "Forbidden - You are not a admin" });
     }
 
     next();

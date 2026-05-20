@@ -1,40 +1,37 @@
 > **Note:** To run this project, third-party cookies are required. Please enable them if prompted, or adjust your browser's settings to allow them.
 
-# LeetLab
+<div align="center">
 
-This is a full-stack web application consisting of:
+# 💻 LeetLab
 
-- **Frontend** built with **Vite** + **React**, **Tailwind CSS** and **DaisyUI**
-- **Backend** using **Node.js**, **Express**, and **Prisma** ORM
+**A Modern Competitive Programming Platform**
 
-# Demo
+[![React](https://img.shields.io/badge/React-19.1-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-LTS-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-5.1-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-8.9-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.1-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-You can view the live demo [here](https://leetlab-rho.vercel.app/).
+[Live Demo](https://leetlab-rho.vercel.app/) • [Documentation](#) • [Report Bug](#) • [Features](#-features)
+
+</div>
 
 ---
 
-## 📚 Overview
+## About
 
-LeetLab is a platform designed to help users practice coding problems, learn algorithms, and improve their programming skills. It features a user-friendly interface, problem-solving capabilities, and integration with coding challenge APIs.
+LeetLab is a full-stack competitive programming platform designed to help developers practice coding problems, master algorithms, and track their progress. With an intuitive interface, real-time code execution, and AI-powered assistance, it provides a complete learning experience.
 
-- **AI Powered**: Leverages AI to provide hints and solutions.
-- **Responsive Design**: Built with modern UI/UX principles for a seamless experience on all devices.
-- **Theme Support**: Light and Dark mode for user preference.
-- **Problem Selection**: Users can choose from a wide range of coding problems.
-- **Dynamic Code Editor**: Powered by Monaco Editor, allowing users to write and test code in real-time.
-- **Problem Descriptions**: Detailed problem descriptions, examples, constraints, and hints.
-- **Test Cases**: Predefined test cases for each problem to validate solutions.
-- **Multi-Language Support**: Write solutions in JavaScript, Python, or Java.
-- **Submission Tracking**: View submission history, memory usage, runtime, and status (Accepted, Wrong Answer, etc.).
-- **User Authentication**: Secure user authentication using JWT tokens.
-- **OTP Based Account Creation**: Users can create accounts using OTP verification.
-- **OTP Based Password Reset**: Users can reset their passwords securely using OTP verification.
-- **Admin Panel**: For managing problems and submissions.
-- **Code Execution**: Integration with Judge0 API for executing and validating code submissions.
+### Built with Modern Tech Stack
 
-<!-- 5 Screenshot -->
+- **Frontend**: React 19 + Vite + Tailwind CSS + DaisyUI
+- **Backend**: Node.js + Express 5 + MongoDB
+- **Code Execution**: Judge0 API Integration
+- **AI Features**: Google Generative AI Integration
 
-## 📷 Screenshots
+---
+
+## Screenshots
 
 ![LeetLab Screenshot](/frontend/public/image-5.png)
 
@@ -48,214 +45,316 @@ LeetLab is a platform designed to help users practice coding problems, learn alg
 
 ![LeetLab Screenshot](/frontend/public/image-4.png)
 
-## 📖 Table of Contents
+---
 
-- [🚀 Features](#-features)
-- [🧩 Project Structure](#-project-structure)
-- [🚀 Getting Started](#-getting-started)
-- [🌐 Frontend Setup](#-frontend-setup)
-- [⚙️ Backend Setup](#-backend-setup)
-- [🛠️ Prisma Setup](#-prisma-setup)
-- [📦 Environment Variables](#-environment-variables)
-- [📝 License](#-license)
-- [✨ Author](#-author)
+## Table of Contents
 
-## 🚀 Features
-
-### 1. **Interactive Code Editor**
-
-- Real-time syntax highlighting using the Monaco Editor.
-- Supports JavaScript, Python, and Java.
-
-### 2. **Dynamic Input Parsing**
-
-- Users can submit input dynamically via `readline` or predefined test cases.
-
-### 3. **Problem Details**
-
-- Each problem includes:
-  - Description
-  - Examples with inputs, outputs, and explanations
-  - Constraints
-  - Hints given by AI to assist users in solving problems.
-
-### 4. **Execution and Submission**
-
-- Run code directly in the browser and get instant feedback.
-- View execution results, including runtime, memory usage, and error messages.
-
-### 5. **User Authentication**
-
-- Secure login and registration for tracking user progress and submissions.
-
-### 6. **Admin Panel**
-
-- Admins can add new problems, manage submissions.
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Frontend Setup](#-frontend-setup)
+- [Backend Setup](#-backend-setup)
+- [Environment Variables](#-environment-variables)
+- [API Documentation](#-api-documentation)
+- [License](#-license)
 
 ---
 
-## 🛠️ Tech Stack
+## Features
 
-- **Frontend**: React.js, Tailwind CSS, DaisyUI, Vite
-- **Backend**: Node.js, Express.js
-- **Database**: PostgreSQL ,Prisma ORM
-- **Authentication**: JWT (JSON Web Tokens), OTP (One-Time Password)
-- **Code Execution**: Judge0 API (for running and validating code submissions)
-- **State Management**: Zustand (React state management library)
-- **Version Control**: Git, GitHub
+### Core Features
+
+- **Interactive Code Editor** - Monaco Editor with syntax highlighting (JavaScript, Python, Java)
+- **Real-time Code Execution** - Judge0 API integration for instant feedback
+- **AI-Powered Hints** - Google Generative AI for problem hints and solutions
+- **Comprehensive Problem Library** - Wide range of coding problems with detailed descriptions
+- **Multi-Language Support** - Write solutions in JavaScript, Python, or Java
+- **Test Case Validation** - Predefined test cases for automatic solution verification
+
+### Authentication & Security
+
+- **JWT-based Authentication** - Secure token-based user sessions
+- **OTP Verification** - Email-based OTP for account creation and password reset
+- **Password Hashing** - Bcryptjs for secure password storage
+- **Cookie Management** - Secure HTTP-only cookies for authentication
+
+### User Experience
+
+- **Submission Tracking** - View history with runtime, memory usage, and status
+- **Dark/Light Mode** - Theme support for user preference
+- **Responsive Design** - Seamless experience on desktop, tablet, and mobile
+- **User Profiles** - Track progress, statistics, and activity history
+- **Custom Playlists** - Organize and group problems by difficulty or topic
+
+### Admin Features
+
+- **Admin Panel** - Manage problems and submissions
+- **Problem Management** - Create, edit, and delete coding problems
+- **Submission Management** - Review and manage user submissions
 
 ---
 
-## 🧩 Project Structure
+## Tech Stack
+
+### Frontend
+
+| Technology          | Version  | Purpose           |
+| ------------------- | -------- | ----------------- |
+| **React**           | 19.1.0   | UI Framework      |
+| **Vite**            | 6.3.5    | Build Tool        |
+| **Tailwind CSS**    | 4.1.6    | Styling           |
+| **DaisyUI**         | 5.0.35   | UI Components     |
+| **Monaco Editor**   | 0.52.2   | Code Editor       |
+| **React Router**    | 7.6.0    | Routing           |
+| **Zustand**         | 5.0.4    | State Management  |
+| **Axios**           | 1.9.0    | HTTP Client       |
+| **React Hook Form** | 7.56.3   | Form Management   |
+| **Zod**             | 3.24.4   | Schema Validation |
+| **Framer Motion**   | 12.23.24 | Animations        |
+| **Lucide React**    | 0.509.0  | Icons             |
+
+### Backend
+
+| Technology               | Version | Purpose          |
+| ------------------------ | ------- | ---------------- |
+| **Node.js**              | LTS     | Runtime          |
+| **Express**              | 5.1.0   | Web Framework    |
+| **MongoDB**              | 8.9.0   | Database         |
+| **Mongoose**             | 8.9.0   | ODM              |
+| **Google Generative AI** | 0.24.1  | AI Integration   |
+| **Judge0 API**           | -       | Code Execution   |
+| **JWT**                  | 9.0.2   | Authentication   |
+| **Bcryptjs**             | 3.0.2   | Password Hashing |
+| **Nodemailer**           | 7.0.5   | Email Service    |
+| **OTP Generator**        | 4.0.1   | OTP Generation   |
+
+---
+
+## Project Structure
 
 ```
-root/
-├── backend/
-│   ├── prisma/
+LeetLab/
+├── frontend/                 # React Vite Application
 │   ├── src/
-│   │   ├── controllers/
-│   │   ├── libs/
-│   │   ├── middlewares/
-│   │   ├── routes/
-│   │   └── index.js
-│   ├── .env
-│   └── package.json
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   ├── layout/
-│   │   ├── lib/
-│   │   ├── pages/
-│   │   ├── store/
-│   │   ├── App.jsx
-│   │   ├── index.css
-│   │   └── main.jsx
-│   ├── vite.config.js
-│   ├── vercel.json
-│   ├── index.html
-│   └── package.json
-└── README.md
+│   │   ├── components/      # Reusable UI Components
+│   │   ├── pages/           # Page Components
+│   │   ├── store/           # Zustand State Management
+│   │   ├── lib/             # Utilities & API Clients
+│   │   ├── assets/          # Images & Static Files
+│   │   └── App.jsx          # Root Component
+│   ├── package.json         # Frontend Dependencies
+│   └── vite.config.js       # Vite Configuration
+│
+└── backend/                  # Node.js Express Application
+    ├── src/
+    │   ├── controllers/     # Route Controllers
+    │   ├── models/          # MongoDB Schemas
+    │   ├── routes/          # API Routes
+    │   ├── middlewares/     # Custom Middlewares
+    │   ├── libs/            # Utility Functions
+    │   └── index.js         # Express App Entry
+    ├── package.json         # Backend Dependencies
+    └── .env                 # Environment Variables
 ```
 
 ---
 
-## 🚀 Getting Started
+## Frontend Setup
 
-### 1. Clone and Install
+### Prerequisites
 
-```bash
-git clone https://github.com/Amarsah15/LeetLab.git
-cd backend
-npm install
-cd frontend
-npm install
-```
+- Node.js (v18 or higher)
+- npm or yarn
 
----
+### Installation & Running
 
-## 🌐 Frontend Setup
+1. **Navigate to frontend directory**
 
-### 📁 Directory: `frontend/`
+   ```bash
+   cd frontend
+   ```
 
-**Scripts**:
+2. **Install dependencies**
 
-- `npm run dev` – Start development server
-- `npm run build` – Build for production
+   ```bash
+   npm install
+   ```
 
-**Start Dev Server**:
+3. **Create `.env` file**
 
-```bash
-cd frontend
-npm run dev
-```
+   ```bash
+   VITE_API_BASE_URL=http://localhost:5000
+   ```
 
-Frontend will typically run on: `http://localhost:5173/`
+4. **Start development server**
 
----
+   ```bash
+   npm run dev
+   ```
 
-## ⚙️ Backend Setup
+   > Frontend will run on `http://localhost:5173`
 
-### 📁 Directory: `backend/`
+5. **Build for production**
+   ```bash
+   npm run build
+   ```
 
-**Scripts**:
+### Available Scripts
 
-- `npm run dev` – Run with `nodemon`
-- `npm run start` – Start production server
-- `npm run build` – Install dependencies
-
-**Start Dev Server**:
-
-```bash
-cd backend
-npm run dev
-```
-
-Backend will typically run on: `http://localhost:8000/`
-
-**Note:** Make sure you create a `.env` file with your environment variables.
+- `npm run dev` - Start Vite dev server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
 ---
 
-## 🛠️ Prisma Setup
+## Backend Setup
 
-Ensure your database is set up and run:
+### Prerequisites
 
-```bash
-npx prisma generate
-npx prisma migrate dev
-```
+- Node.js (v18 or higher)
+- MongoDB (Local or Atlas)
+- npm or yarn
+
+### Installation & Running
+
+1. **Navigate to backend directory**
+
+   ```bash
+   cd backend
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Create `.env` file**
+
+   ```bash
+   PORT=5000
+   MONGODB_URI=mongodb://localhost:27017/leetlab
+   JWT_SECRET=your_jwt_secret_key
+   GOOGLE_API_KEY=your_google_api_key
+   JUDGE0_API_KEY=your_judge0_api_key
+   SMTP_EMAIL=your_email@gmail.com
+   SMTP_PASSWORD=your_app_password
+   FRONTEND_URL=http://localhost:5173
+   ```
+
+4. **Start development server**
+
+   ```bash
+   npm run dev
+   ```
+
+   > Backend will run on `http://localhost:5000`
+
+5. **Start production server**
+   ```bash
+   npm start
+   ```
+
+### Available Scripts
+
+- `npm run dev` - Start with Nodemon (auto-reload)
+- `npm run start` - Run production server
+- `npm run build` - Install dependencies
+
+### API Endpoints
+
+| Method          | Endpoint               | Description               |
+| --------------- | ---------------------- | ------------------------- |
+| **Auth**        |                        |                           |
+| POST            | `/api/auth/register`   | User Registration         |
+| POST            | `/api/auth/login`      | User Login                |
+| POST            | `/api/auth/send-otp`   | Send OTP for verification |
+| POST            | `/api/auth/verify-otp` | Verify OTP                |
+| **Problems**    |                        |                           |
+| GET             | `/api/problems`        | Get all problems          |
+| GET             | `/api/problems/:id`    | Get problem details       |
+| POST            | `/api/problems`        | Create problem (Admin)    |
+| PUT             | `/api/problems/:id`    | Update problem (Admin)    |
+| DELETE          | `/api/problems/:id`    | Delete problem (Admin)    |
+| **Execution**   |                        |                           |
+| POST            | `/api/execute`         | Execute code              |
+| **Submissions** |                        |                           |
+| POST            | `/api/submissions`     | Submit solution           |
+| GET             | `/api/submissions`     | Get user submissions      |
+| **Playlists**   |                        |                           |
+| GET             | `/api/playlists`       | Get user playlists        |
+| POST            | `/api/playlists`       | Create playlist           |
+| PUT             | `/api/playlists/:id`   | Update playlist           |
+| **AI**          |                        |                           |
+| POST            | `/api/ai/hint`         | Get AI hint for problem   |
+| POST            | `/api/ai/solution`     | Get AI solution           |
 
 ---
 
-## 📦 Environment Variables
+## Environment Variables
 
-Both frontend and backend may require `.env` files. At a minimum, the backend should define:
+### Frontend (`.env`)
 
 ```env
-PORT=port_number
+VITE_API_BASE_URL=http://localhost:5000
+```
 
-DATABASE_URL=your_database_connection_url
+### Backend (`.env`)
 
-JWT_SECRET=your_jwt_secret
+```env
+# Server
+PORT=5000
 
-JUDGE0_API_URL=judge0_api_url
+# Database
+MONGODB_URI=mongodb://localhost:27017/leetlab
 
-RAPID_API_KEY=your_rapid_api_key
-RAPID_API_HOST=your_rapid_api_host
+# Authentication
+JWT_SECRET=your_very_secure_jwt_secret_key_change_in_production
+JWT_EXPIRE=7d
 
-EMAIL_USER=your_email_address
-EMAIL_PASS=your_email_password
-EMAIL_HOST=your_email_host
-EMAIL_FROM=your_email_from_address
+# Google AI
+GOOGLE_API_KEY=your_google_generative_ai_api_key
 
-CLIENT_URL=your_frontend_url
+# Judge0 Code Execution
+JUDGE0_API_KEY=your_judge0_api_key
+JUDGE0_API_URL=https://judge0-ce.p.rapidapi.com
 
-GEMINI_API_KEY=your_gemini_api_key
+# Email Service (Gmail)
+SMTP_EMAIL=your_gmail@gmail.com
+SMTP_PASSWORD=your_app_specific_password
+
+# CORS
+FRONTEND_URL=http://localhost:5173
+PRODUCTION_URL=https://leetlab-rho.vercel.app
 ```
 
 ---
 
-## ✨ Author
+## License
 
-Made with ❤️ by Amarnath Kumar
+This project is licensed under the ISC License - see the LICENSE file for details.
 
-**Amarnath Kumar**
+---
 
-- Email: amarnath.kumar152003@gmail.com
-- LinkedIn: [Amarnath Kumar](https://linkedin.com/in/Amarnath15)
-- GitHub: [Amarsah15](https://github.com/Amarsah15)
-- Portfolio: [https://amar-portfolio-psi.vercel.app/](https://amar-portfolio-psi.vercel.app/)
+## Author
+
+Made with ❤️ by **Amarnath Kumar**
+
+- **Email**: amarnath.kumar152003@gmail.com
+- **LinkedIn**: [Amarnath Kumar](https://linkedin.com/in/Amarnath15)
+- **GitHub**: [Amarsah15](https://github.com/Amarsah15)
+- **Portfolio**: [https://amar-portfolio-psi.vercel.app/](https://amar-portfolio-psi.vercel.app/)
 
 ---
 
 <div align="center">
 
-**Made with ❤️ by Amarnath Kumar**
-
-If this project helped you, please ⭐ star the repository!
+### If this project helped you, please star the repository!
 
 [Report Bug](https://github.com/Amarsah15/LeetLab/issues) • [Request Feature](https://github.com/Amarsah15/LeetLab/issues)
+
+**Made with ❤️ by Amarnath Kumar**
 
 </div>

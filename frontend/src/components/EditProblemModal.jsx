@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 import Editor from "@monaco-editor/react";
 import { useProblemStore } from "../store/useProblemStore";
 
-const EditProblemModal = ({ isOpen, onClose, problemId }) => {
+const EditProblemModal = ({ isOpen, onClose, problemId, onSubmitSuccess }) => {
   const { problem, getProblemById, updateProblem, isUpdatingProblem } =
     useProblemStore();
   const [editedProblem, setEditedProblem] = useState("");
@@ -11,9 +11,14 @@ const EditProblemModal = ({ isOpen, onClose, problemId }) => {
   useEffect(() => {
     if (isOpen) {
       getProblemById(problemId);
+    }
+  }, [isOpen, problemId, getProblemById]);
+
+  useEffect(() => {
+    if (problem) {
       setEditedProblem(JSON.stringify(problem, null, 2));
     }
-  }, [isOpen, problemId]);
+  }, [problem]);
 
   const handleEditorChange = (value) => {
     setEditedProblem(value);
@@ -23,6 +28,10 @@ const EditProblemModal = ({ isOpen, onClose, problemId }) => {
     try {
       const parsedProblem = JSON.parse(editedProblem); // Convert string back to JSON
       await updateProblem(problemId, parsedProblem); // Send updated JSON to DB
+      if (onSubmitSuccess) {
+        await onSubmitSuccess();
+      }
+      onClose();
     } catch (error) {
       console.error("Invalid JSON format:", error);
       alert("Error: Invalid JSON format. Please check your input.");

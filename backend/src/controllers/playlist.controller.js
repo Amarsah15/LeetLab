@@ -1,18 +1,13 @@
-import { db } from "../libs/db.js";
+import Playlist from "../models/playlist.model.js";
+import ProblemInPlaylist from "../models/problemInPlaylist.model.js";
 
 export const createPlaylist = async (req, res) => {
   try {
     const { name, description } = req.body;
-    const userId = req.user.id;
+    const userId = req.user._id;
 
-    // Create a new playlist
-    const playList = await db.playlist.create({
-      data: {
-        name,
-        description,
-        userId,
-      },
-    });
+    const playList = await Playlist.create({ name, description, userId });
+
     res.status(200).json({
       success: true,
       message: "Playlist created successfully",
@@ -28,23 +23,31 @@ export const createPlaylist = async (req, res) => {
 
 export const getAllListDetails = async (req, res) => {
   try {
-    const playlists = await db.playlist.findMany({
-      where: {
-        userId: req.user.id,
-      },
-      include: {
-        problems: {
-          include: {
-            problem: true, // Include the problem details
-          },
-        }, // Include the problems associated with the playlist
-      },
-    });
+    // Return plain JS objects so frontend doesn't receive Mongoose internals
+    const playlists = await Playlist.find({ userId: req.user._id }).lean();
+
+    // Attach problems for each playlist
+    const playlistIds = playlists.map((p) => p._id);
+    const problemsInPlaylists = await ProblemInPlaylist.find({
+      playlistId: { $in: playlistIds },
+    })
+      .populate("problemId")
+      .lean();
+
+    const playlistsWithProblems = playlists.map((playlist) => ({
+      ...playlist,
+      problems: problemsInPlaylists
+        .filter((pip) => pip.playlistId.toString() === playlist._id.toString())
+        .map((pip) => ({
+          ...pip,
+          problem: pip.problemId,
+        })),
+    }));
 
     res.status(200).json({
       success: true,
       message: "Playlists retrieved successfully",
-      playlists,
+      playlists: playlistsWithProblems,
     });
   } catch (error) {
     console.error("Error retrieving playlists:", error);
@@ -57,28 +60,30 @@ export const getAllListDetails = async (req, res) => {
 export const getPlaylistDetails = async (req, res) => {
   try {
     const { playlistId } = req.params;
-    const playlist = await db.playlist.findUnique({
-      where: {
-        id: playlistId,
-        userId: req.user.id,
-      },
-      include: {
-        problems: {
-          include: {
-            problem: true, // Include the problem details
-          },
-        }, // Include the problems associated with the playlist
-      },
-    });
+
+    const playlist = await Playlist.findOne({
+      _id: playlistId,
+      userId: req.user._id,
+    }).lean();
 
     if (!playlist) {
       return res.status(404).json({ message: "Playlist not found" });
     }
 
+    const problems = await ProblemInPlaylist.find({ playlistId })
+      .populate("problemId")
+      .lean();
+
     res.status(200).json({
       success: true,
       message: "Playlist retrieved successfully",
-      playlist,
+      playlist: {
+        ...playlist,
+        problems: problems.map((pip) => ({
+          ...pip,
+          problem: pip.problemId,
+        })),
+      },
     });
   } catch (error) {
     console.error("Error retrieving playlist:", error);
@@ -97,12 +102,13 @@ export const addProblemToPlaylist = async (req, res) => {
       return res.status(400).json({ message: "Problem IDs are required" });
     }
 
-    // Create records for each problem in the playlist
-    const problemsInPlaylist = await db.problemInPlaylist.createMany({
-      data: problemIds.map((problemId) => ({
-        playlistId, // ✅ match your Prisma field name exactly
-        problemId,
-      })),
+    const docs = problemIds.map((problemId) => ({ playlistId, problemId }));
+    const problemsInPlaylist = await ProblemInPlaylist.insertMany(docs, {
+      ordered: false, // skip duplicates (unique index violations)
+    }).catch((err) => {
+      // If all were duplicates, err.insertedDocs may still be partial — that's fine
+      if (err.code === 11000) return err.insertedDocs ?? [];
+      throw err;
     });
 
     res.status(201).json({
@@ -112,9 +118,9 @@ export const addProblemToPlaylist = async (req, res) => {
     });
   } catch (error) {
     console.error("Error adding problem to playlist:", error);
-    res.status(500).json({
-      message: "Internal server error in addProblemToPlaylist",
-    });
+    res
+      .status(500)
+      .json({ message: "Internal server error in addProblemToPlaylist" });
   }
 };
 
@@ -122,11 +128,10 @@ export const deletePlaylist = async (req, res) => {
   try {
     const { playlistId } = req.params;
 
-    const deletedPlaylist = await db.playlist.delete({
-      where: {
-        id: playlistId,
-      },
-    });
+    const deletedPlaylist = await Playlist.findByIdAndDelete(playlistId).lean();
+
+    // Cascade-delete junction records (MongoDB doesn't do this automatically)
+    await ProblemInPlaylist.deleteMany({ playlistId });
 
     res.status(200).json({
       success: true,
@@ -135,9 +140,9 @@ export const deletePlaylist = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting playlist:", error);
-    res.status(500).json({
-      message: "Internal server error in deletePlaylist",
-    });
+    res
+      .status(500)
+      .json({ message: "Internal server error in deletePlaylist" });
   }
 };
 
@@ -150,13 +155,9 @@ export const removeProblemFromPlaylist = async (req, res) => {
       return res.status(400).json({ message: "Problem IDs are required" });
     }
 
-    const deletedProblem = await db.problemInPlaylist.deleteMany({
-      where: {
-        playlistId,
-        problemId: {
-          in: problemIds,
-        },
-      },
+    const deletedProblem = await ProblemInPlaylist.deleteMany({
+      playlistId,
+      problemId: { $in: problemIds },
     });
 
     res.status(200).json({
@@ -166,8 +167,8 @@ export const removeProblemFromPlaylist = async (req, res) => {
     });
   } catch (error) {
     console.error("Error removing problem from playlist:", error);
-    res.status(500).json({
-      message: "Internal server error in removeProblemFromPlaylist",
-    });
+    res
+      .status(500)
+      .json({ message: "Internal server error in removeProblemFromPlaylist" });
   }
 };

@@ -1,14 +1,10 @@
-import { db } from "../libs/db.js";
+import Submission from "../models/submission.model.js";
 
 export const getAllSubmission = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
 
-    const submissions = await db.submission.findMany({
-      where: {
-        userId: userId,
-      },
-    });
+    const submissions = await Submission.find({ userId });
 
     res.status(200).json({
       success: true,
@@ -23,14 +19,10 @@ export const getAllSubmission = async (req, res) => {
 
 export const getSubmissionsForProblem = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const problemId = req.params.problemId;
-    const submissions = await db.submission.findMany({
-      where: {
-        userId: userId,
-        problemId: problemId,
-      },
-    });
+
+    const submissions = await Submission.find({ userId, problemId });
 
     res.status(200).json({
       success: true,
@@ -46,16 +38,12 @@ export const getSubmissionsForProblem = async (req, res) => {
 export const getAllTheSubmissionsForProblem = async (req, res) => {
   try {
     const problemId = req.params.problemId;
-    const submission = await db.submission.count({
-      where: {
-        problemId: problemId,
-      },
-    });
+    const count = await Submission.countDocuments({ problemId });
 
     res.status(200).json({
       success: true,
       message: "Submissions Fetched successfully",
-      count: submission,
+      count,
     });
   } catch (error) {
     console.error("Fetch Submissions Error:", error);
@@ -67,17 +55,10 @@ export const getSuccessRate = async (req, res) => {
   try {
     const { problemId } = req.params;
 
-    const totalSubmissions = await db.submission.count({
-      where: {
-        problemId: problemId,
-      },
-    });
-
-    const acceptedSubmissions = await db.submission.count({
-      where: {
-        problemId: problemId,
-        status: "Accepted",
-      },
+    const totalSubmissions = await Submission.countDocuments({ problemId });
+    const acceptedSubmissions = await Submission.countDocuments({
+      problemId,
+      status: "Accepted",
     });
 
     const successRate =

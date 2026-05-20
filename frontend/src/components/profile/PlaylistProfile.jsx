@@ -9,13 +9,19 @@ import {
   List,
   Tag,
   ExternalLink,
+  Trash2,
 } from "lucide-react";
 import CreatePlaylistModal from "../CreatePlaylistModal";
 import AddToPlaylistModal from "../AddToPlaylist";
 
 const PlaylistProfile = () => {
-  const { getAllPlaylists, playlists, deletePlaylist, createPlaylist } =
-    usePlaylistStore();
+  const {
+    getAllPlaylists,
+    playlists,
+    deletePlaylist,
+    createPlaylist,
+    removeProblemFromPlaylist,
+  } = usePlaylistStore();
   const [expandedPlaylist, setExpandedPlaylist] = useState(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   useEffect(() => {
@@ -89,12 +95,12 @@ const PlaylistProfile = () => {
         ) : (
           <div className="space-y-6">
             {playlists.map((playlist) => (
-              <div key={playlist.id} className="card bg-base-100 shadow-xl">
+              <div key={playlist._id} className="card bg-base-100 shadow-xl">
                 <div className="card-body p-4">
                   {/* Playlist Header */}
                   <div
                     className="flex justify-between items-center cursor-pointer"
-                    onClick={() => togglePlaylist(playlist.id)}
+                    onClick={() => togglePlaylist(playlist._id)}
                   >
                     <div className="flex items-center gap-3">
                       <div className="avatar placeholder flex items-center justify-center">
@@ -115,7 +121,7 @@ const PlaylistProfile = () => {
                       </div>
                     </div>
                     <button className="btn btn-ghost btn-sm">
-                      {expandedPlaylist === playlist.id ? (
+                      {expandedPlaylist === playlist._id ? (
                         <ChevronUp />
                       ) : (
                         <ChevronDown />
@@ -129,7 +135,7 @@ const PlaylistProfile = () => {
                   </p>
 
                   {/* Expanded Problems List */}
-                  {expandedPlaylist === playlist.id && (
+                  {expandedPlaylist === playlist._id && (
                     <div className="mt-4 pt-4 border-t border-base-300">
                       <h4 className="text-lg font-semibold mb-3">
                         Problems in this playlist
@@ -152,13 +158,13 @@ const PlaylistProfile = () => {
                             </thead>
                             <tbody>
                               {playlist.problems.map((item) => (
-                                <tr key={item.id} className="hover">
+                                <tr key={item._id} className="hover">
                                   <td className="font-medium">
                                     {item.problem.title}
                                   </td>
                                   <td>
                                     {getDifficultyBadge(
-                                      item.problem.difficulty
+                                      item.problem.difficulty,
                                     )}
                                   </td>
                                   <td>
@@ -176,13 +182,28 @@ const PlaylistProfile = () => {
                                     </div>
                                   </td>
                                   <td className="text-right">
-                                    <Link
-                                      to={`/problem/${item.problem.id}`}
-                                      className="btn btn-xs btn-outline btn-primary"
-                                    >
-                                      <ExternalLink size={12} />
-                                      Solve
-                                    </Link>
+                                    <div className="flex gap-2 justify-end">
+                                      <Link
+                                        to={`/problem/${item.problem._id}`}
+                                        className="btn btn-xs btn-outline btn-primary"
+                                      >
+                                        <ExternalLink size={12} />
+                                        Solve
+                                      </Link>
+                                      <button
+                                        onClick={() =>
+                                          removeProblemFromPlaylist(
+                                            playlist._id,
+                                            [item.problem._id],
+                                          )
+                                        }
+                                        className="btn btn-xs btn-outline btn-error"
+                                        title="Remove from playlist"
+                                      >
+                                        <Trash2 size={12} />
+                                        Remove
+                                      </button>
+                                    </div>
                                   </td>
                                 </tr>
                               ))}
@@ -193,7 +214,7 @@ const PlaylistProfile = () => {
 
                       <div className="flex justify-between items-center mt-4">
                         <button
-                          onClick={() => handleDelete(playlist.id)}
+                          onClick={() => handleDelete(playlist._id)}
                           className="btn btn-sm btn-error"
                         >
                           Delete Playlist
