@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -12,6 +12,7 @@ import {
   Mail,
   CheckCircle,
   Send,
+  RefreshCw,
 } from "lucide-react";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { useAuthStore } from "../store/useAuthStore.js";
@@ -26,16 +27,25 @@ const signUpSchema = z.object({
     .regex(/[0-9]/, "Password must contain at least one number")
     .regex(
       /[^a-zA-Z0-9]/,
-      "Password must contain at least one special character"
+      "Password must contain at least one special character",
     ),
   name: z.string().min(3, "Name must be at least 3 characters"),
-  otp: z.string().length(6, "OTP must be 6 characters").optional(),
+  otp: z.string().length(6, "OTP must be 6 digits").optional(),
 });
+
+const OTP_LENGTH = 6;
+const RESEND_COOLDOWN = 60;
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [sendingOtp, setSendingOtp] = useState(false);
+  const [otpDigits, setOtpDigits] = useState(Array(OTP_LENGTH).fill(""));
+  const [otpError, setOtpError] = useState("");
+  const [countdown, setCountdown] = useState(0);
+
+  const inputRefs = useRef([]);
+  const timerRef = useRef(null);
 
   const { signup, signupWithOtp, isSigninUp } = useAuthStore();
 
@@ -45,25 +55,39 @@ const SignUpPage = () => {
     formState: { errors },
     getValues,
     trigger,
+    setValue,
   } = useForm({
     resolver: zodResolver(signUpSchema),
   });
 
+  // Sync assembled OTP into react-hook-form
+  useEffect(() => {
+    setValue("otp", otpDigits.join(""));
+  }, [otpDigits, setValue]);
+
+  // Countdown timer
+  useEffect(() => {
+    if (countdown <= 0) return;
+    timerRef.current = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => clearTimeout(timerRef.current);
+  }, [countdown]);
+
+  const startCooldown = () => setCountdown(RESEND_COOLDOWN);
+
   const handleRequestOtp = async (e) => {
-    e.preventDefault(); // Prevent form submission
-
-    // Validate name, email, and password before sending OTP
+    e?.preventDefault();
     const isValid = await trigger(["name", "email", "password"]);
-
-    if (!isValid) {
-      return;
-    }
+    if (!isValid) return;
 
     setSendingOtp(true);
     try {
       const { name, email, password } = getValues();
       await signupWithOtp({ name, email, password });
       setOtpSent(true);
+      setOtpDigits(Array(OTP_LENGTH).fill(""));
+      setOtpError("");
+      startCooldown();
+      setTimeout(() => inputRefs.current[0]?.focus(), 100);
     } catch (error) {
       console.error("OTP request error", error);
     } finally {
@@ -71,14 +95,78 @@ const SignUpPage = () => {
     }
   };
 
+  const handleResendOtp = async () => {
+    if (countdown > 0) return;
+    setSendingOtp(true);
+    try {
+      const { name, email, password } = getValues();
+      await signupWithOtp({ name, email, password });
+      setOtpDigits(Array(OTP_LENGTH).fill(""));
+      setOtpError("");
+      startCooldown();
+      setTimeout(() => inputRefs.current[0]?.focus(), 100);
+    } catch (error) {
+      console.error("Resend OTP error", error);
+    } finally {
+      setSendingOtp(false);
+    }
+  };
+
+  const handleOtpChange = (index, value) => {
+    // Allow only digits
+    const digit = value.replace(/\D/g, "").slice(-1);
+    const updated = [...otpDigits];
+    updated[index] = digit;
+    setOtpDigits(updated);
+    setOtpError("");
+
+    // Auto-advance
+    if (digit && index < OTP_LENGTH - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === "Backspace") {
+      if (otpDigits[index]) {
+        const updated = [...otpDigits];
+        updated[index] = "";
+        setOtpDigits(updated);
+      } else if (index > 0) {
+        inputRefs.current[index - 1]?.focus();
+      }
+    } else if (e.key === "ArrowLeft" && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    } else if (e.key === "ArrowRight" && index < OTP_LENGTH - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpPaste = (e) => {
+    e.preventDefault();
+    const pasted = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, OTP_LENGTH);
+    if (!pasted) return;
+    const updated = Array(OTP_LENGTH).fill("");
+    pasted.split("").forEach((char, i) => (updated[i] = char));
+    setOtpDigits(updated);
+    setOtpError("");
+    const nextEmpty = updated.findIndex((d) => !d);
+    const focusIndex = nextEmpty === -1 ? OTP_LENGTH - 1 : nextEmpty;
+    inputRefs.current[focusIndex]?.focus();
+  };
+
   const onSubmit = async (data) => {
-    // Only proceed with signup if OTP has been sent
-    if (!otpSent) {
+    if (!otpSent) return;
+    const otp = otpDigits.join("");
+    if (otp.length < OTP_LENGTH) {
+      setOtpError("Please enter all 6 digits");
       return;
     }
-
     try {
-      await signup(data);
+      await signup({ ...data, otp });
     } catch (error) {
       console.error("Signup error", error);
     }
@@ -208,7 +296,7 @@ const SignUpPage = () => {
               )}
             </div>
 
-            {/* Request OTP Button */}
+            {/* Send OTP Button */}
             {!otpSent && (
               <button
                 type="button"
@@ -230,50 +318,81 @@ const SignUpPage = () => {
               </button>
             )}
 
-            {/* OTP Input - Only shown after OTP is sent */}
+            {/* OTP Input - 6 boxes */}
             {otpSent && (
               <div className="form-control animate-in fade-in slide-in-from-top-4 duration-300">
                 <label className="label">
                   <span className="label-text font-medium">Enter OTP</span>
-                  <span className="label-text-alt text-success">
-                    OTP sent to your email
+                  <span className="label-text-alt text-success flex items-center gap-1">
+                    <CheckCircle className="h-3.5 w-3.5" />
+                    Sent to {getValues("email")}
                   </span>
                 </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    {...register("otp")}
-                    className={`input input-bordered w-full text-center text-lg tracking-widest font-semibold ${
-                      errors.otp ? "input-error" : "input-primary"
-                    }`}
-                    placeholder="• • • • • •"
-                    maxLength={6}
-                    autoFocus
-                  />
+
+                {/* 6-digit boxes */}
+                <div className="flex gap-2 justify-between">
+                  {otpDigits.map((digit, index) => (
+                    <input
+                      key={index}
+                      ref={(el) => (inputRefs.current[index] = el)}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handleOtpChange(index, e.target.value)}
+                      onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                      onPaste={index === 0 ? handleOtpPaste : undefined}
+                      className={`input input-bordered w-full max-w-[48px] h-12 text-center text-xl font-bold p-0 ${
+                        otpError ? "input-error" : digit ? "input-primary" : ""
+                      }`}
+                      autoFocus={index === 0}
+                    />
+                  ))}
                 </div>
-                {errors.otp && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.otp.message}
-                  </p>
+
+                {otpError && (
+                  <p className="text-red-500 text-sm mt-1">{otpError}</p>
                 )}
-                <button
-                  type="button"
-                  className="btn btn-link btn-sm mt-2"
-                  onClick={() => {
-                    setOtpSent(false);
-                  }}
-                >
-                  Change email or resend OTP
-                </button>
+
+                {/* Resend row */}
+                <div className="flex items-center justify-between mt-3">
+                  <button
+                    type="button"
+                    className="btn btn-link btn-sm p-0 h-auto text-base-content/50 no-underline hover:no-underline"
+                    onClick={() => {
+                      setOtpSent(false);
+                      setOtpDigits(Array(OTP_LENGTH).fill(""));
+                      setOtpError("");
+                      clearTimeout(timerRef.current);
+                      setCountdown(0);
+                    }}
+                  >
+                    Change email
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-link btn-sm p-0 h-auto gap-1 no-underline hover:no-underline disabled:opacity-40"
+                    onClick={handleResendOtp}
+                    disabled={countdown > 0 || sendingOtp}
+                  >
+                    {sendingOtp ? (
+                      <Loader2 className="animate-spin h-4 w-4" />
+                    ) : (
+                      <RefreshCw className="h-4 w-4" />
+                    )}
+                    {countdown > 0 ? `Resend in ${countdown}s` : "Resend OTP"}
+                  </button>
+                </div>
               </div>
             )}
 
-            {/* Submit Button - Only shown after OTP is sent */}
+            {/* Submit Button */}
             {otpSent && (
               <button
                 type="submit"
                 className="btn btn-primary w-full"
-                disabled={isSigninUp}
+                disabled={isSigninUp || otpDigits.join("").length < OTP_LENGTH}
               >
                 {isSigninUp ? (
                   <>

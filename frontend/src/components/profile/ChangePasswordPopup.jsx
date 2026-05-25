@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
   X,
   Lock,
+  Eye,
+  EyeOff,
   Mail,
   CheckCircle,
   Send,
   Loader2,
   ShieldCheck,
+  RefreshCw,
 } from "lucide-react";
 import { useAuthStore } from "../../store/useAuthStore";
+
+const OTP_LENGTH = 6;
+const RESEND_COOLDOWN = 60;
 
 const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
   const {
@@ -21,37 +27,39 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
     trigger,
     formState: { errors },
   } = useForm();
+
   const navigate = useNavigate();
   const { authUser, logout, requestPasswordResetOtp } = useAuthStore();
 
   const [otpSent, setOtpSent] = useState(false);
   const [sendingOtp, setSendingOtp] = useState(false);
+  const [otpDigits, setOtpDigits] = useState(Array(OTP_LENGTH).fill(""));
+  const [otpError, setOtpError] = useState("");
+  const [countdown, setCountdown] = useState(0);
+  const [showOld, setShowOld] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  const handleForgotPassword = async (e) => {
-    e.preventDefault();
+  const inputRefs = useRef([]);
+  const timerRef = useRef(null);
 
-    // Validate password fields before sending OTP
-    const isValid = await trigger([
-      "oldPassword",
-      "newPassword",
-      "confirmPassword",
-    ]);
+  useEffect(() => {
+    if (countdown <= 0) return;
+    timerRef.current = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => clearTimeout(timerRef.current);
+  }, [countdown]);
 
-    if (!isValid) {
-      return;
-    }
+  const startCooldown = () => setCountdown(RESEND_COOLDOWN);
 
-    // Check if new password and confirm password match
-    const { newPassword, confirmPassword } = getValues();
-    if (newPassword !== confirmPassword) {
-      alert("New password and confirm password do not match!");
-      return;
-    }
-
+  const sendOtp = async () => {
     setSendingOtp(true);
     try {
       await requestPasswordResetOtp(authUser.email);
       setOtpSent(true);
+      setOtpDigits(Array(OTP_LENGTH).fill(""));
+      setOtpError("");
+      startCooldown();
+      setTimeout(() => inputRefs.current[0]?.focus(), 100);
     } catch (error) {
       console.error("OTP request error", error);
     } finally {
@@ -59,14 +67,86 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
     }
   };
 
-  const handleFormSubmit = async (data) => {
-    if (!otpSent) {
+  const handleSendOtp = async (e) => {
+    e.preventDefault();
+    const isValid = await trigger([
+      "oldPassword",
+      "newPassword",
+      "confirmPassword",
+    ]);
+    if (!isValid) return;
+
+    const { newPassword, confirmPassword } = getValues();
+    if (newPassword !== confirmPassword) {
+      alert("New password and confirm password do not match!");
       return;
     }
 
-    await onSubmit(data);
+    await sendOtp();
+  };
+
+  const handleResendOtp = async () => {
+    if (countdown > 0) return;
+    await sendOtp();
+  };
+
+  const handleOtpChange = (index, value) => {
+    const digit = value.replace(/\D/g, "").slice(-1);
+    const updated = [...otpDigits];
+    updated[index] = digit;
+    setOtpDigits(updated);
+    setOtpError("");
+    if (digit && index < OTP_LENGTH - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === "Backspace") {
+      if (otpDigits[index]) {
+        const updated = [...otpDigits];
+        updated[index] = "";
+        setOtpDigits(updated);
+      } else if (index > 0) {
+        inputRefs.current[index - 1]?.focus();
+      }
+    } else if (e.key === "ArrowLeft" && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    } else if (e.key === "ArrowRight" && index < OTP_LENGTH - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpPaste = (e) => {
+    e.preventDefault();
+    const pasted = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, OTP_LENGTH);
+    if (!pasted) return;
+    const updated = Array(OTP_LENGTH).fill("");
+    pasted.split("").forEach((char, i) => (updated[i] = char));
+    setOtpDigits(updated);
+    setOtpError("");
+    const nextEmpty = updated.findIndex((d) => !d);
+    inputRefs.current[nextEmpty === -1 ? OTP_LENGTH - 1 : nextEmpty]?.focus();
+  };
+
+  const handleFormSubmit = async (data) => {
+    if (!otpSent) return;
+
+    const otp = otpDigits.join("");
+    if (otp.length < OTP_LENGTH) {
+      setOtpError("Please enter all 6 digits");
+      return;
+    }
+
+    await onSubmit({ ...data, otp });
     reset();
     setOtpSent(false);
+    setOtpDigits(Array(OTP_LENGTH).fill(""));
+    clearTimeout(timerRef.current);
+    setCountdown(0);
     logout();
     navigate("/login");
     onClose();
@@ -75,8 +155,14 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
   const handleClose = () => {
     reset();
     setOtpSent(false);
+    setOtpDigits(Array(OTP_LENGTH).fill(""));
+    setOtpError("");
+    clearTimeout(timerRef.current);
+    setCountdown(0);
     onClose();
   };
+
+  const otpFilled = otpDigits.join("").length === OTP_LENGTH;
 
   if (!isOpen) return null;
 
@@ -103,7 +189,7 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
           onSubmit={handleSubmit(handleFormSubmit)}
           className="p-6 space-y-5"
         >
-          {/* Email Field (Disabled) */}
+          {/* Email (locked) */}
           <div className="form-control">
             <label className="label">
               <span className="label-text font-medium">Email Address</span>
@@ -122,7 +208,7 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
             </div>
           </div>
 
-          {/* Old Password */}
+          {/* Current Password */}
           <div className="form-control">
             <label className="label">
               <span className="label-text font-medium">Current Password</span>
@@ -132,20 +218,30 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
                 <Lock className="h-5 w-5 text-base-content/40" />
               </div>
               <input
-                type="password"
-                className={`input input-bordered w-full pl-10 ${
-                  otpSent ? "bg-base-200 cursor-not-allowed" : ""
-                }`}
+                type={showOld ? "text" : "password"}
+                className={`input input-bordered w-full pl-10 pr-10 ${otpSent ? "bg-base-200 cursor-not-allowed" : ""}`}
                 placeholder="Enter current password"
                 disabled={otpSent}
                 {...register("oldPassword", {
                   required: "Current password is required",
                 })}
               />
-              {otpSent && (
+              {otpSent ? (
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                   <CheckCircle className="h-5 w-5 text-success" />
                 </div>
+              ) : (
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowOld(!showOld)}
+                >
+                  {showOld ? (
+                    <EyeOff className="h-5 w-5 text-base-content/40" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-base-content/40" />
+                  )}
+                </button>
               )}
             </div>
             {errors.oldPassword && (
@@ -165,20 +261,30 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
                 <Lock className="h-5 w-5 text-base-content/40" />
               </div>
               <input
-                type="password"
-                className={`input input-bordered w-full pl-10 ${
-                  otpSent ? "bg-base-200 cursor-not-allowed" : ""
-                }`}
+                type={showNew ? "text" : "password"}
+                className={`input input-bordered w-full pl-10 pr-10 ${otpSent ? "bg-base-200 cursor-not-allowed" : ""}`}
                 placeholder="Enter new password"
                 disabled={otpSent}
                 {...register("newPassword", {
                   required: "New password is required",
                 })}
               />
-              {otpSent && (
+              {otpSent ? (
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                   <CheckCircle className="h-5 w-5 text-success" />
                 </div>
+              ) : (
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowNew(!showNew)}
+                >
+                  {showNew ? (
+                    <EyeOff className="h-5 w-5 text-base-content/40" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-base-content/40" />
+                  )}
+                </button>
               )}
             </div>
             {errors.newPassword && (
@@ -200,20 +306,30 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
                 <Lock className="h-5 w-5 text-base-content/40" />
               </div>
               <input
-                type="password"
-                className={`input input-bordered w-full pl-10 ${
-                  otpSent ? "bg-base-200 cursor-not-allowed" : ""
-                }`}
+                type={showConfirm ? "text" : "password"}
+                className={`input input-bordered w-full pl-10 pr-10 ${otpSent ? "bg-base-200 cursor-not-allowed" : ""}`}
                 placeholder="Confirm new password"
                 disabled={otpSent}
                 {...register("confirmPassword", {
                   required: "Please confirm your password",
                 })}
               />
-              {otpSent && (
+              {otpSent ? (
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                   <CheckCircle className="h-5 w-5 text-success" />
                 </div>
+              ) : (
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowConfirm(!showConfirm)}
+                >
+                  {showConfirm ? (
+                    <EyeOff className="h-5 w-5 text-base-content/40" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-base-content/40" />
+                  )}
+                </button>
               )}
             </div>
             {errors.confirmPassword && (
@@ -227,7 +343,7 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
           {!otpSent && (
             <button
               type="button"
-              onClick={handleForgotPassword}
+              onClick={handleSendOtp}
               className="btn btn-outline btn-primary w-full"
               disabled={sendingOtp}
             >
@@ -245,38 +361,69 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
             </button>
           )}
 
-          {/* OTP Input - Only shown after OTP is sent */}
+          {/* 6-box OTP */}
           {otpSent && (
             <div className="form-control animate-in fade-in slide-in-from-top-4 duration-300">
               <label className="label">
                 <span className="label-text font-medium">Enter OTP</span>
                 <span className="label-text-alt text-success flex items-center gap-1">
                   <CheckCircle className="w-3 h-3" />
-                  OTP sent to your email
+                  Sent to {authUser.email}
                 </span>
               </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  className="input input-bordered input-primary w-full text-center text-lg tracking-widest font-semibold"
-                  placeholder="• • • • • •"
-                  maxLength={6}
-                  autoFocus
-                  {...register("otp", { required: "OTP is required" })}
-                />
+
+              <div className="flex gap-2 justify-between">
+                {otpDigits.map((digit, index) => (
+                  <input
+                    key={index}
+                    ref={(el) => (inputRefs.current[index] = el)}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleOtpChange(index, e.target.value)}
+                    onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                    onPaste={index === 0 ? handleOtpPaste : undefined}
+                    className={`input input-bordered w-full max-w-[48px] h-12 text-center text-xl font-bold p-0 ${
+                      otpError ? "input-error" : digit ? "input-primary" : ""
+                    }`}
+                    autoFocus={index === 0}
+                  />
+                ))}
               </div>
-              {errors.otp && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.otp.message}
-                </p>
+
+              {otpError && (
+                <p className="text-error text-sm mt-1">{otpError}</p>
               )}
-              <button
-                type="button"
-                className="btn btn-link btn-sm mt-2 self-start"
-                onClick={() => setOtpSent(false)}
-              >
-                Change password or resend OTP
-              </button>
+
+              <div className="flex items-center justify-between mt-3">
+                <button
+                  type="button"
+                  className="btn btn-link btn-sm p-0 h-auto text-base-content/50 no-underline hover:no-underline"
+                  onClick={() => {
+                    setOtpSent(false);
+                    setOtpDigits(Array(OTP_LENGTH).fill(""));
+                    setOtpError("");
+                    clearTimeout(timerRef.current);
+                    setCountdown(0);
+                  }}
+                >
+                  Change password
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-link btn-sm p-0 h-auto gap-1 no-underline hover:no-underline disabled:opacity-40"
+                  onClick={handleResendOtp}
+                  disabled={countdown > 0 || sendingOtp}
+                >
+                  {sendingOtp ? (
+                    <Loader2 className="animate-spin h-4 w-4" />
+                  ) : (
+                    <RefreshCw className="h-4 w-4" />
+                  )}
+                  {countdown > 0 ? `Resend in ${countdown}s` : "Resend OTP"}
+                </button>
+              </div>
             </div>
           )}
 
@@ -289,10 +436,12 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
             >
               Cancel
             </button>
-
-            {/* Submit Button - Only shown after OTP is sent */}
             {otpSent && (
-              <button type="submit" className="btn btn-primary flex-1">
+              <button
+                type="submit"
+                className="btn btn-primary flex-1"
+                disabled={!otpFilled}
+              >
                 <Lock className="w-4 h-4" />
                 Change Password
               </button>
