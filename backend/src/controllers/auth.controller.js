@@ -422,3 +422,4 @@ export const resetPasswordWithOtp = async (req, res) => {
       .json({ error: "Internal server error during password reset" });
   }
 };
+

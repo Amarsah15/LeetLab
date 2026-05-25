@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FaBriefcase, FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 

@@ -1,10 +1,8 @@
-> **Note:** To run this project, third-party cookies are required. Please enable them if prompted, or adjust your browser's settings to allow them.
-
 <div align="center">
 
-# 💻 LeetLab
+# LeetLab
 
-**A Modern Competitive Programming Platform**
+**A modern competitive programming platform**
 
 [![React](https://img.shields.io/badge/React-19.1-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-LTS-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
@@ -12,7 +10,7 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-8.9-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.1-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-[Live Demo](https://leetlab-rho.vercel.app/) • [Documentation](#) • [Report Bug](#) • [Features](#-features)
+[Live Demo](https://leetlab-rho.vercel.app/) | [Report Bug](https://github.com/Amarsah15/LeetLab/issues) | [Request Feature](https://github.com/Amarsah15/LeetLab/issues)
 
 </div>
 
@@ -20,14 +18,15 @@
 
 ## About
 
-LeetLab is a full-stack competitive programming platform designed to help developers practice coding problems, master algorithms, and track their progress. With an intuitive interface, real-time code execution, and AI-powered assistance, it provides a complete learning experience.
+LeetLab is a full-stack competitive programming platform for practicing coding problems, running code against test cases, tracking submissions, organizing playlists, and getting AI-powered guidance while solving problems.
 
-### Built with Modern Tech Stack
+### Built With
 
-- **Frontend**: React 19 + Vite + Tailwind CSS + DaisyUI
-- **Backend**: Node.js + Express 5 + MongoDB
-- **Code Execution**: Judge0 API Integration
-- **AI Features**: Google Generative AI Integration
+- **Frontend:** React 19, Vite, Tailwind CSS, DaisyUI
+- **Backend:** Node.js, Express.js, MongoDB, Mongoose
+- **Code Execution:** Judge0 through RapidAPI
+- **AI:** Google Gemini
+- **Email:** Brevo Transactional Email API
 
 ---
 
@@ -47,51 +46,31 @@ LeetLab is a full-stack competitive programming platform designed to help develo
 
 ---
 
-## Table of Contents
-
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [Frontend Setup](#-frontend-setup)
-- [Backend Setup](#-backend-setup)
-- [Environment Variables](#-environment-variables)
-- [API Documentation](#-api-documentation)
-- [License](#-license)
-
----
-
 ## Features
 
 ### Core Features
 
-- **Interactive Code Editor** - Monaco Editor with syntax highlighting (JavaScript, Python, Java)
-- **Real-time Code Execution** - Judge0 API integration for instant feedback
-- **AI-Powered Hints** - Google Generative AI for problem hints and solutions
-- **Comprehensive Problem Library** - Wide range of coding problems with detailed descriptions
-- **Multi-Language Support** - Write solutions in JavaScript, Python, or Java
-- **Test Case Validation** - Predefined test cases for automatic solution verification
+- **Interactive Code Editor** - Monaco Editor with JavaScript, Python, and Java support
+- **Real-time Code Execution** - Judge0 integration for running and validating code
+- **AI-Powered Help** - Gemini-powered hints, complexity analysis, and improvement suggestions
+- **Problem Library** - Coding problems with descriptions, examples, constraints, and test cases
+- **Submission Tracking** - Runtime, memory usage, status, and submission history
+- **Custom Playlists** - Create playlists and group problems for focused practice
 
 ### Authentication & Security
 
-- **JWT-based Authentication** - Secure token-based user sessions
-- **OTP Verification** - Email-based OTP for account creation and password reset
-- **Password Hashing** - Bcryptjs for secure password storage
-- **Cookie Management** - Secure HTTP-only cookies for authentication
+- **JWT Authentication** - Secure HTTP-only cookie based sessions
+- **Email OTP Verification** - OTP flow for registration and password changes
+- **Brevo Email Delivery** - Transactional emails for OTP, welcome, and password update messages
+- **Password Hashing** - Bcryptjs for password storage
+- **OTP Expiry** - OTP records expire after 10 minutes
 
 ### User Experience
 
-- **Submission Tracking** - View history with runtime, memory usage, and status
-- **Dark/Light Mode** - Theme support for user preference
-- **Responsive Design** - Seamless experience on desktop, tablet, and mobile
-- **User Profiles** - Track progress, statistics, and activity history
-- **Custom Playlists** - Organize and group problems by difficulty or topic
-
-### Admin Features
-
-- **Admin Panel** - Manage problems and submissions
-- **Problem Management** - Create, edit, and delete coding problems
-- **Submission Management** - Review and manage user submissions
+- **Responsive UI** - Works across desktop, tablet, and mobile
+- **Dark/Light Mode** - Theme support through DaisyUI
+- **Profile Dashboard** - User stats, activity graph, submissions, and playlists
+- **Admin Controls** - Admin-only problem creation, editing, and deletion
 
 ---
 
@@ -99,108 +78,163 @@ LeetLab is a full-stack competitive programming platform designed to help develo
 
 ### Frontend
 
-| Technology          | Version  | Purpose           |
-| ------------------- | -------- | ----------------- |
-| **React**           | 19.1.0   | UI Framework      |
-| **Vite**            | 6.3.5    | Build Tool        |
-| **Tailwind CSS**    | 4.1.6    | Styling           |
-| **DaisyUI**         | 5.0.35   | UI Components     |
-| **Monaco Editor**   | 0.52.2   | Code Editor       |
-| **React Router**    | 7.6.0    | Routing           |
-| **Zustand**         | 5.0.4    | State Management  |
-| **Axios**           | 1.9.0    | HTTP Client       |
-| **React Hook Form** | 7.56.3   | Form Management   |
-| **Zod**             | 3.24.4   | Schema Validation |
-| **Framer Motion**   | 12.23.24 | Animations        |
-| **Lucide React**    | 0.509.0  | Icons             |
+| Technology      | Version  | Purpose          |
+| --------------- | -------- | ---------------- |
+| React           | 19.1.0   | UI framework     |
+| Vite            | 6.3.5    | Build tool       |
+| Tailwind CSS    | 4.1.6    | Styling          |
+| DaisyUI         | 5.0.35   | UI components    |
+| Monaco Editor   | 0.52.2   | Code editor      |
+| React Router    | 7.6.0    | Routing          |
+| Zustand         | 5.0.4    | State management |
+| Axios           | 1.9.0    | HTTP client      |
+| React Hook Form | 7.56.3   | Form handling    |
+| Zod             | 3.24.4   | Validation       |
+| Framer Motion   | 12.23.24 | Animations       |
+| Lucide React    | 0.509.0  | Icons            |
 
 ### Backend
 
-| Technology               | Version | Purpose          |
-| ------------------------ | ------- | ---------------- |
-| **Node.js**              | LTS     | Runtime          |
-| **Express**              | 5.1.0   | Web Framework    |
-| **MongoDB**              | 8.9.0   | Database         |
-| **Mongoose**             | 8.9.0   | ODM              |
-| **Google Generative AI** | 0.24.1  | AI Integration   |
-| **Judge0 API**           | -       | Code Execution   |
-| **JWT**                  | 9.0.2   | Authentication   |
-| **Bcryptjs**             | 3.0.2   | Password Hashing |
-| **Nodemailer**           | 7.0.5   | Email Service    |
-| **OTP Generator**        | 4.0.1   | OTP Generation   |
+| Technology           | Version  | Purpose                      |
+| -------------------- | -------- | ---------------------------- |
+| Node.js              | 18+      | Runtime                      |
+| Express              | 5.1.0    | Web framework                |
+| MongoDB              | 8.9.0    | Database                     |
+| Mongoose             | 8.9.0    | ODM                          |
+| Google Generative AI | 0.24.1   | Gemini integration           |
+| Judge0 API           | External | Code execution               |
+| Brevo API            | External | Transactional email delivery |
+| JWT                  | 9.0.2    | Authentication               |
+| Bcryptjs             | 3.0.2    | Password hashing             |
+| OTP Generator        | 4.0.1    | OTP generation               |
 
 ---
 
 ## Project Structure
 
-```
+```text
 LeetLab/
-├── frontend/                 # React Vite Application
+├── frontend/
 │   ├── src/
-│   │   ├── components/      # Reusable UI Components
-│   │   ├── pages/           # Page Components
-│   │   ├── store/           # Zustand State Management
-│   │   ├── lib/             # Utilities & API Clients
-│   │   ├── assets/          # Images & Static Files
-│   │   └── App.jsx          # Root Component
-│   ├── package.json         # Frontend Dependencies
-│   └── vite.config.js       # Vite Configuration
+│   │   ├── components/
+│   │   ├── layout/
+│   │   ├── lib/
+│   │   ├── pages/
+│   │   ├── store/
+│   │   └── App.jsx
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.js
 │
-└── backend/                  # Node.js Express Application
+└── backend/
     ├── src/
-    │   ├── controllers/     # Route Controllers
-    │   ├── models/          # MongoDB Schemas
-    │   ├── routes/          # API Routes
-    │   ├── middlewares/     # Custom Middlewares
-    │   ├── libs/            # Utility Functions
-    │   └── index.js         # Express App Entry
-    ├── package.json         # Backend Dependencies
-    └── .env                 # Environment Variables
+    │   ├── controllers/
+    │   ├── libs/
+    │   ├── middlewares/
+    │   ├── models/
+    │   ├── routes/
+    │   └── index.js
+    ├── package.json
+    └── .env
 ```
 
 ---
 
-## Frontend Setup
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
-- npm or yarn
+- Node.js 18 or higher
+- npm
+- MongoDB local instance or MongoDB Atlas cluster
+- Brevo account with a Transactional Email API key
+- RapidAPI Judge0 credentials
+- Google Gemini API key
 
-### Installation & Running
+---
 
-1. **Navigate to frontend directory**
+## Backend Setup
+
+1. Navigate to the backend directory:
 
    ```bash
-   cd frontend
+   cd backend
    ```
 
-2. **Install dependencies**
+2. Install dependencies:
 
    ```bash
    npm install
    ```
 
-3. **Create `.env` file**
+3. Create a `.env` file:
 
-   ```bash
-   VITE_API_BASE_URL=http://localhost:5000
+   ```env
+   PORT=8000
+   MONGODB_URI=mongodb://localhost:27017/leetlab
+
+   JWT_SECRET=your_very_secure_jwt_secret
+
+   GEMINI_API_KEY=your_gemini_api_key
+
+   JUDGE0_API_URL=https://judge0-ce.p.rapidapi.com
+   RAPID_API_KEY=your_rapidapi_key
+   RAPID_API_HOST=judge0-ce.p.rapidapi.com
+
+   BREVO_API_KEY=your_brevo_transactional_email_api_key
+   EMAIL_FROM=your_verified_sender@example.com
+   CLIENT_URL=http://localhost:5173
    ```
 
-4. **Start development server**
+4. Start the backend:
 
    ```bash
    npm run dev
    ```
 
-   > Frontend will run on `http://localhost:5173`
+   The backend should run on `http://localhost:8000` when `PORT=8000`.
 
-5. **Build for production**
+### Backend Scripts
+
+- `npm run dev` - Start the API with Nodemon
+- `npm start` - Start the API with Node
+- `npm run build` - Install backend dependencies
+
+---
+
+## Frontend Setup
+
+1. Navigate to the frontend directory:
+
    ```bash
-   npm run build
+   cd frontend
    ```
 
-### Available Scripts
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the frontend:
+
+   ```bash
+   npm run dev
+   ```
+
+   The frontend runs on `http://localhost:5173`.
+
+### Frontend API URL
+
+The frontend currently sends API requests to:
+
+```js
+http://localhost:8000/api/v1
+```
+
+This is configured in `frontend/src/lib/axios.js`. If the backend port or deployment URL changes, update the `baseURL` there.
+
+### Frontend Scripts
 
 - `npm run dev` - Start Vite dev server
 - `npm run build` - Build for production
@@ -209,152 +243,155 @@ LeetLab/
 
 ---
 
-## Backend Setup
+## Email Setup
 
-### Prerequisites
+LeetLab uses the **Brevo Transactional Email API** instead of SMTP/Nodemailer.
 
-- Node.js (v18 or higher)
-- MongoDB (Local or Atlas)
-- npm or yarn
+Required backend environment variables:
 
-### Installation & Running
+```env
+BREVO_API_KEY=your_brevo_transactional_email_api_key
+EMAIL_FROM=your_verified_sender@example.com
+CLIENT_URL=http://localhost:5173
+```
 
-1. **Navigate to backend directory**
+Notes:
 
-   ```bash
-   cd backend
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-3. **Create `.env` file**
-
-   ```bash
-   PORT=5000
-   MONGODB_URI=mongodb://localhost:27017/leetlab
-   JWT_SECRET=your_jwt_secret_key
-   GOOGLE_API_KEY=your_google_api_key
-   JUDGE0_API_KEY=your_judge0_api_key
-   SMTP_EMAIL=your_email@gmail.com
-   SMTP_PASSWORD=your_app_password
-   FRONTEND_URL=http://localhost:5173
-   ```
-
-4. **Start development server**
-
-   ```bash
-   npm run dev
-   ```
-
-   > Backend will run on `http://localhost:5000`
-
-5. **Start production server**
-   ```bash
-   npm start
-   ```
-
-### Available Scripts
-
-- `npm run dev` - Start with Nodemon (auto-reload)
-- `npm run start` - Run production server
-- `npm run build` - Install dependencies
-
-### API Endpoints
-
-| Method          | Endpoint               | Description               |
-| --------------- | ---------------------- | ------------------------- |
-| **Auth**        |                        |                           |
-| POST            | `/api/auth/register`   | User Registration         |
-| POST            | `/api/auth/login`      | User Login                |
-| POST            | `/api/auth/send-otp`   | Send OTP for verification |
-| POST            | `/api/auth/verify-otp` | Verify OTP                |
-| **Problems**    |                        |                           |
-| GET             | `/api/problems`        | Get all problems          |
-| GET             | `/api/problems/:id`    | Get problem details       |
-| POST            | `/api/problems`        | Create problem (Admin)    |
-| PUT             | `/api/problems/:id`    | Update problem (Admin)    |
-| DELETE          | `/api/problems/:id`    | Delete problem (Admin)    |
-| **Execution**   |                        |                           |
-| POST            | `/api/execute`         | Execute code              |
-| **Submissions** |                        |                           |
-| POST            | `/api/submissions`     | Submit solution           |
-| GET             | `/api/submissions`     | Get user submissions      |
-| **Playlists**   |                        |                           |
-| GET             | `/api/playlists`       | Get user playlists        |
-| POST            | `/api/playlists`       | Create playlist           |
-| PUT             | `/api/playlists/:id`   | Update playlist           |
-| **AI**          |                        |                           |
-| POST            | `/api/ai/hint`         | Get AI hint for problem   |
-| POST            | `/api/ai/solution`     | Get AI solution           |
+- `EMAIL_FROM` must be a sender verified in Brevo.
+- Registration OTP and password reset OTP emails are valid for 10 minutes.
+- A welcome email is sent after successful registration.
+- A password update confirmation email is sent after a successful password change.
+- `SMTP_EMAIL` and `SMTP_PASSWORD` are no longer used.
 
 ---
 
 ## Environment Variables
 
-### Frontend (`.env`)
+### Backend
 
-```env
-VITE_API_BASE_URL=http://localhost:5000
+| Variable         | Required | Description                                                      |
+| ---------------- | -------- | ---------------------------------------------------------------- |
+| `PORT`           | Yes      | Backend server port. Use `8000` for the current frontend config. |
+| `MONGODB_URI`    | Yes      | MongoDB connection string.                                       |
+| `JWT_SECRET`     | Yes      | Secret used to sign JWT auth cookies.                            |
+| `GEMINI_API_KEY` | Yes      | Google Gemini API key for AI features.                           |
+| `JUDGE0_API_URL` | Yes      | Judge0 API base URL.                                             |
+| `RAPID_API_KEY`  | Yes      | RapidAPI key for Judge0.                                         |
+| `RAPID_API_HOST` | Yes      | RapidAPI host for Judge0.                                        |
+| `BREVO_API_KEY`  | Yes      | Brevo Transactional Email API key.                               |
+| `EMAIL_FROM`     | Yes      | Verified sender email address in Brevo.                          |
+| `CLIENT_URL`     | Yes      | Frontend URL used inside email links.                            |
+
+### Frontend
+
+No frontend `.env` variable is currently required for the API URL because `frontend/src/lib/axios.js` uses a fixed `baseURL`.
+
+---
+
+## API Endpoints
+
+All backend routes are mounted under:
+
+```text
+/api/v1
 ```
 
-### Backend (`.env`)
+### Auth
 
-```env
-# Server
-PORT=5000
+| Method | Endpoint                                  | Description                            |
+| ------ | ----------------------------------------- | -------------------------------------- |
+| POST   | `/api/v1/auth/login`                      | Log in a user                          |
+| POST   | `/api/v1/auth/logout`                     | Log out the authenticated user         |
+| GET    | `/api/v1/auth/check`                      | Check current authenticated user       |
+| POST   | `/api/v1/auth/request-otp-register`       | Send registration OTP                  |
+| POST   | `/api/v1/auth/verify-otp-register`        | Verify OTP and create account          |
+| POST   | `/api/v1/auth/request-password-reset-otp` | Send password reset/change OTP         |
+| POST   | `/api/v1/auth/reset-password-with-otp`    | Change password after OTP verification |
 
-# Database
-MONGODB_URI=mongodb://localhost:27017/leetlab
+### Problems
 
-# Authentication
-JWT_SECRET=your_very_secure_jwt_secret_key_change_in_production
-JWT_EXPIRE=7d
+| Method | Endpoint                               | Description                                    |
+| ------ | -------------------------------------- | ---------------------------------------------- |
+| GET    | `/api/v1/problems/get-all-problems`    | Get all problems                               |
+| GET    | `/api/v1/problems/get-problem/:id`     | Get a problem by ID                            |
+| GET    | `/api/v1/problems/get-sloved-problems` | Get solved problems for the authenticated user |
+| POST   | `/api/v1/problems/create-problem`      | Create a problem, admin only                   |
+| PUT    | `/api/v1/problems/update-problem/:id`  | Update a problem, admin only                   |
+| DELETE | `/api/v1/problems/delete-problem/:id`  | Delete a problem, admin only                   |
 
-# Google AI
-GOOGLE_API_KEY=your_google_generative_ai_api_key
+### Code Execution
 
-# Judge0 Code Execution
-JUDGE0_API_KEY=your_judge0_api_key
-JUDGE0_API_URL=https://judge0-ce.p.rapidapi.com
+| Method | Endpoint               | Description                 |
+| ------ | ---------------------- | --------------------------- |
+| POST   | `/api/v1/execute-code` | Execute code through Judge0 |
 
-# Email Service (Gmail)
-SMTP_EMAIL=your_gmail@gmail.com
-SMTP_PASSWORD=your_app_specific_password
+### Submissions
 
-# CORS
-FRONTEND_URL=http://localhost:5173
-PRODUCTION_URL=https://leetlab-rho.vercel.app
-```
+| Method | Endpoint                                              | Description                          |
+| ------ | ----------------------------------------------------- | ------------------------------------ |
+| GET    | `/api/v1/submission/get-all-submissions`              | Get authenticated user's submissions |
+| GET    | `/api/v1/submission/get-submission/:problemId`        | Get submissions for a problem        |
+| GET    | `/api/v1/submission/get-submissions-count/:problemId` | Get submission count for a problem   |
+| GET    | `/api/v1/submission/success-rate/:problemId`          | Get success rate for a problem       |
+
+### Playlists
+
+| Method | Endpoint                                      | Description                        |
+| ------ | --------------------------------------------- | ---------------------------------- |
+| GET    | `/api/v1/playlist`                            | Get authenticated user's playlists |
+| GET    | `/api/v1/playlist/:playlistId`                | Get playlist details               |
+| POST   | `/api/v1/playlist/create-playlist`            | Create a playlist                  |
+| POST   | `/api/v1/playlist/:playlistId/add-problem`    | Add a problem to a playlist        |
+| DELETE | `/api/v1/playlist/:playlistId`                | Delete a playlist                  |
+| DELETE | `/api/v1/playlist/:playlistId/remove-problem` | Remove a problem from a playlist   |
+
+### AI
+
+| Method | Endpoint                        | Description                            |
+| ------ | ------------------------------- | -------------------------------------- |
+| POST   | `/api/v1/ai/analyze-complexity` | Analyze code time and space complexity |
+| POST   | `/api/v1/ai/get-hint`           | Get an AI hint for a problem           |
+| POST   | `/api/v1/ai/get-improvements`   | Get AI suggestions for improving code  |
+
+### Health Check
+
+| Method | Endpoint               | Description       |
+| ------ | ---------------------- | ----------------- |
+| GET    | `/api/v1/health-check` | API health check  |
+| GET    | `/health-check`        | Root health check |
+
+---
+
+## Deployment Notes
+
+- Update CORS origins in `backend/src/index.js` when adding a new frontend deployment URL.
+- Update `CLIENT_URL` so email buttons point to the deployed frontend.
+- Update `frontend/src/lib/axios.js` so the frontend points to the deployed backend API.
+- Set `secure: true` and `sameSite: "None"` cookies require HTTPS in production.
 
 ---
 
 ## License
 
-This project is licensed under the ISC License - see the LICENSE file for details.
+This project is licensed under the ISC License.
 
 ---
 
 ## Author
 
-Made with ❤️ by **Amarnath Kumar**
+Made by **Amarnath Kumar**
 
-- **Email**: amarnath.kumar152003@gmail.com
-- **LinkedIn**: [Amarnath Kumar](https://linkedin.com/in/Amarnath15)
-- **GitHub**: [Amarsah15](https://github.com/Amarsah15)
-- **Portfolio**: [https://amar-portfolio-psi.vercel.app/](https://amar-portfolio-psi.vercel.app/)
+- **Email:** amarnath.kumar152003@gmail.com
+- **LinkedIn:** [Amarnath Kumar](https://linkedin.com/in/Amarnath15)
+- **GitHub:** [Amarsah15](https://github.com/Amarsah15)
+- **Portfolio:** [amar-portfolio-psi.vercel.app](https://amar-portfolio-psi.vercel.app/)
 
 ---
 
 <div align="center">
 
-### If this project helped you, please star the repository!
+### If this project helped you, please star the repository.
 
-[Report Bug](https://github.com/Amarsah15/LeetLab/issues) • [Request Feature](https://github.com/Amarsah15/LeetLab/issues)
-
-**Made with ❤️ by Amarnath Kumar**
+[Report Bug](https://github.com/Amarsah15/LeetLab/issues) | [Request Feature](https://github.com/Amarsah15/LeetLab/issues)
 
 </div>
