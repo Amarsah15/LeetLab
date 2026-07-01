@@ -41,13 +41,13 @@ const EditProblemModal = ({ isOpen, onClose, problemId, onSubmitSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-base-300 bg-opacity-50">
-      <div className="bg-base-100 rounded-lg shadow-xl w-full md:w-1/2 ">
-        <div className="p-4 md:p-6 flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Update Problem</h2>
-            <button onClick={onClose} className="btn btn-circle btn-ghost">
-              <X className="w-6 h-6" />
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in-up duration-150">
+      <div className="glass-card bg-base-100/95 border border-base-content/10 rounded-2xl shadow-2xl w-full md:w-1/2 transform transition-all duration-300 animate-scale-in">
+        <div className="p-6 flex flex-col gap-5">
+          <div className="flex items-center justify-between border-b border-base-content/5 pb-4">
+            <h2 className="text-xl font-bold">Update Problem</h2>
+            <button onClick={onClose} className="btn btn-circle btn-ghost hover:bg-base-content/10">
+              <X className="w-5 h-5" />
             </button>
           </div>
 
@@ -61,14 +61,14 @@ const EditProblemModal = ({ isOpen, onClose, problemId, onSubmitSuccess }) => {
             />
           )}
 
-          <div className="flex justify-end gap-2">
-            <button onClick={onClose} className="btn btn-outline">
+          <div className="flex justify-end gap-3 pt-4 border-t border-base-content/5">
+            <button onClick={onClose} className="btn btn-ghost btn-sm font-semibold rounded-lg">
               Cancel
             </button>
             <button
               disabled={isUpdatingProblem}
               onClick={handleSubmit}
-              className="btn btn-primary"
+              className="btn btn-primary btn-sm px-5 font-bold rounded-lg shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
             >
               Update
             </button>

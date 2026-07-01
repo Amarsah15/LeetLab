@@ -349,7 +349,7 @@ const ProblemsTable = ({ problems }) => {
       </div>
 
       {/* Table */}
-      <div className="bg-[#12121a] border border-white/5 rounded-2xl overflow-hidden mt-4">
+      <div className="bg-[#12121a]/60 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden mt-4">
         <div className="overflow-x-auto">
           <table className="premium-table w-full">
             <thead>
@@ -358,7 +358,7 @@ const ProblemsTable = ({ problems }) => {
                 <th className="text-left">Title</th>
                 <th className="text-left pl-6 hidden sm:table-cell">Tags</th>
                 <th className="w-28 text-left">Difficulty</th>
-                <th className="w-36 text-left">Actions</th>
+                <th className="w-36 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -430,9 +430,9 @@ const ProblemsTable = ({ problems }) => {
                               : problem.difficulty}
                           </span>
                         </td>
-                        <td>
-                          <div className="flex items-center gap-1.5">
-                            {authUser?.role === "ADMIN" && (
+                         <td className="text-center">
+                          <div className="flex items-center justify-center gap-2">
+                             {authUser?.role === "ADMIN" && (
                               <>
                                 <button
                                   onClick={() => handleDelete(problem._id)}
@@ -528,7 +528,7 @@ const ProblemsTable = ({ problems }) => {
             onClick={handleModalClose}
           >
             <motion.div
-              className="bg-[#12121a] border border-white/5 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl"
+              className="glass-card bg-base-100/95 border border-base-content/10 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
