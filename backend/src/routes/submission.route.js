@@ -14,13 +14,13 @@ submissionRoutes.get("/get-all-submissions", authMiddleware, getAllSubmission);
 submissionRoutes.get(
   "/get-submission/:problemId",
   authMiddleware,
-  getSubmissionsForProblem
+  getSubmissionsForProblem,
 );
 
 submissionRoutes.get(
   "/get-submissions-count/:problemId",
   authMiddleware,
-  getAllTheSubmissionsForProblem
+  getAllTheSubmissionsForProblem,
 );
 
 submissionRoutes.get("/success-rate/:problemId", getSuccessRate);

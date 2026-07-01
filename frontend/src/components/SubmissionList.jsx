@@ -83,40 +83,58 @@ const SubmissionsList = ({ submissions, isLoading }) => {
             key={submission._id}
             className="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow rounded-lg"
           >
-            <div className="card-body p-4">
-              <div className="flex items-center justify-between">
+            <div className="card-body p-4 select-text">
+              <div className="flex flex-wrap items-center justify-between gap-y-3 gap-x-4">
                 {/* Left Section: Status and Language */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2.5">
                   {submission.status === "Accepted" ? (
-                    <div className="flex items-center gap-2 text-success">
-                      <CheckCircle2 className="w-6 h-6" />
-                      <span className="font-semibold">Accepted</span>
+                    <div className="flex items-center gap-1.5 text-success">
+                      <CheckCircle2 className="w-5 h-5" />
+                      <span className="font-bold text-sm">Accepted</span>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2 text-error">
-                      <XCircle className="w-6 h-6" />
-                      <span className="font-semibold">{submission.status}</span>
+                    <div className="flex items-center gap-1.5 text-error">
+                      <XCircle className="w-5 h-5" />
+                      <span className="font-bold text-sm">
+                        {submission.status}
+                      </span>
                     </div>
                   )}
-                  <div className="badge badge-neutral">
+                  <div className="badge badge-sm badge-neutral font-semibold">
                     {submission.language}
                   </div>
                 </div>
 
                 {/* Right Section: Runtime, Memory, and Date */}
-                <div className="flex items-center gap-4 text-base-content/70">
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
+                <div className="flex flex-wrap items-center gap-3 text-xs text-base-content/75">
+                  <div
+                    className="flex items-center gap-1"
+                    title="Average Runtime"
+                  >
+                    <Clock className="w-3.5 h-3.5 text-primary" />
                     <span>{avgTime.toFixed(3)} s</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Memory className="w-4 h-4" />
+                  <div
+                    className="flex items-center gap-1"
+                    title="Average Memory"
+                  >
+                    <Memory className="w-3.5 h-3.5 text-primary" />
                     <span>{avgMemory.toFixed(0)} KB</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
+                  <div
+                    className="flex items-center gap-1"
+                    title="Submission Date"
+                  >
+                    <Calendar className="w-3.5 h-3.5 text-primary" />
                     <span>
-                      {new Date(submission.createdAt).toLocaleDateString()}
+                      {new Date(submission.createdAt).toLocaleDateString(
+                        undefined,
+                        {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        },
+                      )}
                     </span>
                   </div>
                 </div>

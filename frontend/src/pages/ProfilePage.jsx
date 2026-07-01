@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Mail, User, Shield, Image } from "lucide-react";
+import { ArrowLeft, User as UserIcon } from "lucide-react";
 import { useSubmissionStore } from "../store/useSubmissionStore";
 import { useAuthStore } from "../store/useAuthStore";
 import ProfileHeader from "../components/profile/ProfileHeader";
@@ -9,15 +9,33 @@ import { useProblemStore } from "../store/useProblemStore";
 import ProfileSubmission from "../components/profile/ProfileSubmission";
 import PlaylistProfile from "../components/profile/PlaylistProfile";
 import ActivityGraph from "../components/profile/ActivityGraph";
+import ChangePasswordPopup from "../components/profile/ChangePasswordPopup";
+import CreatePlaylistModal from "../components/CreatePlaylistModal";
+import { usePlaylistStore } from "../store/usePlaylistStore";
+import { motion } from "framer-motion";
 
 const ProfilePage = () => {
   const { submissions, getAllSubmissions } = useSubmissionStore();
-  const { authUser, checkAuth } = useAuthStore();
+  const { authUser, checkAuth, changePassword } = useAuthStore();
   const { getAllProblems, problems } = useProblemStore();
+  const { createPlaylist } = usePlaylistStore();
+
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [isCreatePlaylistOpen, setIsCreatePlaylistOpen] = useState(false);
 
   useEffect(() => {
-    (getAllSubmissions(), getAllProblems());
+    getAllSubmissions();
+    getAllProblems();
   }, [getAllSubmissions, checkAuth, getAllProblems]);
+
+  const handleChangePassword = async (data) => {
+    await changePassword(data);
+  };
+
+  const handleCreatePlaylist = async (data) => {
+    await createPlaylist(data);
+    window.location.reload();
+  };
 
   let easy = 0;
   let medium = 0;
@@ -30,58 +48,116 @@ const ProfilePage = () => {
     );
     if (isSolved) {
       solved++;
-      if (problem.difficulty === "EASY") {
-        easy++;
-      }
-      if (problem.difficulty === "MEDIUM") {
-        medium++;
-      }
-      if (problem.difficulty === "HARD") {
-        hard++;
-      }
+      if (problem.difficulty === "EASY") easy++;
+      if (problem.difficulty === "MEDIUM") medium++;
+      if (problem.difficulty === "HARD") hard++;
     }
   });
 
-  return (
-    <div>
-      {/* Header with back button */}
-      <div className="flex flex-row justify-between items-center w-full mb-6">
-        <div className="flex items-center gap-3 mt-5">
-          <Link to={"/"} className="btn btn-circle btn-ghost">
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
-          <h1 className="text-3xl font-bold text-primary ">Profile</h1>
-        </div>
-      </div>
-      <div>
+  const sections = [
+    {
+      id: "header",
+      component: (
         <ProfileHeader
           user={{
             username: authUser.name,
             email: authUser.email,
             id: authUser._id,
           }}
+          onOpenChangePassword={() => setIsChangePasswordOpen(true)}
         />
-        <div className="divider"></div>
+      ),
+    },
+    {
+      id: "stats",
+      component: (
         <StatsCard
           stats={{
             totalSubmited: submissions.length,
-            easy: easy,
-            medium: medium,
-            hard: hard,
+            easy,
+            medium,
+            hard,
             totalSolved: solved,
-            highestStreak: 22,
+            highestStreak: authUser.maxStreak || 0,
             rank: 1350,
             contestRating: 1780,
           }}
         />
-        <div className="divider"></div>
-        <ProfileSubmission />
-        <div className="divider"></div>
-        <PlaylistProfile />
-        <div className="divider"></div>
-        <ActivityGraph submissions={submissions} />
-        <div className="divider"></div>
+      ),
+    },
+    { id: "activity", component: <ActivityGraph submissions={submissions} /> },
+    { id: "submissions", component: <ProfileSubmission /> },
+    {
+      id: "playlists",
+      component: (
+        <PlaylistProfile
+          onOpenCreatePlaylist={() => setIsCreatePlaylistOpen(true)}
+        />
+      ),
+    },
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0f] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full overflow-hidden">
+      {/* Background Decorative Blur Orbs */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[300px] rounded-full bg-purple-900/10 blur-[120px] animate-pulse" />
+      <div
+        className="absolute bottom-0 right-1/4 w-[400px] h-[250px] rounded-full bg-cyan-900/10 blur-[100px] animate-pulse"
+        style={{ animationDelay: "2s" }}
+      />
+
+      <div className="max-w-4xl mx-auto space-y-8">
+        {/* Header Back Navigation */}
+        <div className="flex justify-between items-center border-b border-white/5 pb-8">
+          <div>
+            <Link
+              to="/problems"
+              className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-purple-400 transition-all uppercase tracking-wider mb-2"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Explore Problems
+            </Link>
+            <h1 className="text-4xl md:text-5xl font-black tracking-tight bg-gradient-to-r from-white via-slate-200 to-purple-400 bg-clip-text text-transparent">
+              My Profile
+            </h1>
+            <p className="text-slate-400 mt-2 text-sm">
+              Trace solved coding tasks, heatmaps, and developer analytics.
+            </p>
+          </div>
+          <div className="p-4 bg-purple-500/10 rounded-2xl border border-purple-500/20 text-purple-400 hidden sm:block">
+            <UserIcon className="w-8 h-8 animate-pulse" />
+          </div>
+        </div>
+
+        {/* Content sections */}
+        <div className="space-y-6">
+          {sections.map((section, index) => (
+            <motion.div
+              key={section.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              {section.component}
+              {index < sections.length - 1 && (
+                <div className="gradient-divider my-6" />
+              )}
+            </motion.div>
+          ))}
+        </div>
       </div>
+
+      {/* Render modals at root */}
+      <ChangePasswordPopup
+        isOpen={isChangePasswordOpen}
+        onClose={() => setIsChangePasswordOpen(false)}
+        onSubmit={handleChangePassword}
+      />
+      <CreatePlaylistModal
+        isOpen={isCreatePlaylistOpen}
+        onClose={() => setIsCreatePlaylistOpen(false)}
+        onSubmit={handleCreatePlaylist}
+      />
     </div>
   );
 };

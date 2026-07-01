@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,10 +10,14 @@ import {
   Loader2,
   Lock,
   Mail,
+  User,
   CheckCircle,
   Send,
   RefreshCw,
+  ArrowRight,
+  Shield,
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { useAuthStore } from "../store/useAuthStore.js";
 
@@ -36,6 +40,21 @@ const signUpSchema = z.object({
 const OTP_LENGTH = 6;
 const RESEND_COOLDOWN = 60;
 
+const getPasswordStrength = (password) => {
+  if (!password) return { score: 0, label: "", color: "" };
+  let score = 0;
+  if (password.length >= 6) score++;
+  if (/[a-z]/.test(password)) score++;
+  if (/[A-Z]/.test(password)) score++;
+  if (/[0-9]/.test(password)) score++;
+  if (/[^a-zA-Z0-9]/.test(password)) score++;
+
+  if (score <= 2) return { score, label: "Weak", color: "bg-error" };
+  if (score <= 3) return { score, label: "Fair", color: "bg-warning" };
+  if (score <= 4) return { score, label: "Good", color: "bg-info" };
+  return { score, label: "Strong", color: "bg-success" };
+};
+
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
@@ -43,9 +62,11 @@ const SignUpPage = () => {
   const [otpDigits, setOtpDigits] = useState(Array(OTP_LENGTH).fill(""));
   const [otpError, setOtpError] = useState("");
   const [countdown, setCountdown] = useState(0);
+  const [shakeForm, setShakeForm] = useState(false);
 
   const inputRefs = useRef([]);
   const timerRef = useRef(null);
+  const nameRef = useRef(null);
 
   const { signup, signupWithOtp, isSigninUp } = useAuthStore();
 
@@ -56,11 +77,24 @@ const SignUpPage = () => {
     getValues,
     trigger,
     setValue,
+    watch,
   } = useForm({
     resolver: zodResolver(signUpSchema),
+    mode: "onTouched",
   });
 
-  // Sync assembled OTP into react-hook-form
+  const watchedPassword = watch("password", "");
+  const strength = useMemo(
+    () => getPasswordStrength(watchedPassword),
+    [watchedPassword],
+  );
+
+  // Auto-focus name field
+  useEffect(() => {
+    nameRef.current?.focus();
+  }, []);
+
+  // Sync OTP into form
   useEffect(() => {
     setValue("otp", otpDigits.join(""));
   }, [otpDigits, setValue]);
@@ -72,12 +106,24 @@ const SignUpPage = () => {
     return () => clearTimeout(timerRef.current);
   }, [countdown]);
 
+  // OTP auto-submit
+  useEffect(() => {
+    const otp = otpDigits.join("");
+    if (otp.length === OTP_LENGTH && otpSent) {
+      handleSubmit(onSubmit)();
+    }
+  }, [otpDigits]);
+
   const startCooldown = () => setCountdown(RESEND_COOLDOWN);
 
   const handleRequestOtp = async (e) => {
     e?.preventDefault();
     const isValid = await trigger(["name", "email", "password"]);
-    if (!isValid) return;
+    if (!isValid) {
+      setShakeForm(true);
+      setTimeout(() => setShakeForm(false), 600);
+      return;
+    }
 
     setSendingOtp(true);
     try {
@@ -113,14 +159,12 @@ const SignUpPage = () => {
   };
 
   const handleOtpChange = (index, value) => {
-    // Allow only digits
     const digit = value.replace(/\D/g, "").slice(-1);
     const updated = [...otpDigits];
     updated[index] = digit;
     setOtpDigits(updated);
     setOtpError("");
 
-    // Auto-advance
     if (digit && index < OTP_LENGTH - 1) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -172,257 +216,368 @@ const SignUpPage = () => {
     }
   };
 
+  const { ref: nameRegRef, ...nameRegRest } = register("name");
+
   return (
     <div className="h-screen grid lg:grid-cols-2">
       {/* Left Side - Form */}
-      <div className="flex flex-col justify-center items-center p-6 sm:p-12">
-        <div className="w-full max-w-md space-y-8">
+      <div className="flex flex-col justify-center items-center p-6 sm:p-12 overflow-y-auto relative">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] rounded-full" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-secondary/5 blur-[80px] rounded-full" />
+
+        <motion.div
+          className={`w-full max-w-md space-y-6 relative z-10 ${shakeForm ? "animate-shake" : ""}`}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           {/* Logo */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-6">
             <div className="flex flex-col items-center gap-2 group">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 <Code className="w-6 h-6 text-primary" />
               </div>
-              <h1 className="text-2xl font-bold mt-2">Welcome</h1>
-              <p className="text-base-content/60">Sign Up to your account</p>
+              <h1 className="text-2xl font-bold mt-2">Create Account</h1>
+              <p className="text-base-content/40 text-sm">
+                Start your coding journey
+              </p>
+            </div>
+          </div>
+
+          {/* Step indicator */}
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <div
+              className={`flex items-center gap-1.5 text-xs font-medium ${otpSent ? "text-success" : "text-primary"}`}
+            >
+              <div
+                className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${otpSent ? "bg-success/20 text-success" : "bg-primary/20 text-primary"}`}
+              >
+                {otpSent ? <CheckCircle className="w-3.5 h-3.5" /> : "1"}
+              </div>
+              Details
+            </div>
+            <div
+              className={`w-8 h-px ${otpSent ? "bg-success/50" : "bg-base-content/10"}`}
+            />
+            <div
+              className={`flex items-center gap-1.5 text-xs font-medium ${otpSent ? "text-primary" : "text-base-content/30"}`}
+            >
+              <div
+                className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${otpSent ? "bg-primary/20 text-primary" : "bg-base-content/5 text-base-content/30"}`}
+              >
+                2
+              </div>
+              Verify
             </div>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Name */}
             <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Name</span>
+              <label className="label pb-1">
+                <span className="text-sm font-medium text-base-content/70">
+                  Name
+                </span>
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Code className="h-5 w-5 text-base-content/40" />
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <User className="h-4 w-4 text-base-content/30" />
                 </div>
                 <input
                   type="text"
-                  {...register("name")}
+                  {...nameRegRest}
+                  ref={(e) => {
+                    nameRegRef(e);
+                    nameRef.current = e;
+                  }}
                   disabled={otpSent}
-                  className={`input input-bordered w-full pl-10 ${
-                    errors.name ? "input-error" : ""
-                  } ${otpSent ? "bg-base-200 cursor-not-allowed" : ""}`}
+                  className={`input w-full pl-10 glass-input ${errors.name ? "!border-error" : ""} ${otpSent ? "opacity-60" : ""}`}
                   placeholder="John Doe"
                 />
                 {otpSent && (
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <CheckCircle className="h-5 w-5 text-success" />
+                  <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center">
+                    <CheckCircle className="h-4 w-4 text-success" />
                   </div>
                 )}
               </div>
               {errors.name && (
-                <p className="text-red-500 text-sm mt-1">
+                <motion.p
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-error text-xs mt-1.5 font-medium"
+                >
                   {errors.name.message}
-                </p>
+                </motion.p>
               )}
             </div>
 
             {/* Email */}
             <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Email</span>
+              <label className="label pb-1">
+                <span className="text-sm font-medium text-base-content/70">
+                  Email
+                </span>
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-base-content/40" />
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <Mail className="h-4 w-4 text-base-content/30" />
                 </div>
                 <input
                   type="email"
                   {...register("email")}
                   disabled={otpSent}
-                  className={`input input-bordered w-full pl-10 ${
-                    errors.email ? "input-error" : ""
-                  } ${otpSent ? "bg-base-200 cursor-not-allowed" : ""}`}
+                  className={`input w-full pl-10 glass-input ${errors.email ? "!border-error" : ""} ${otpSent ? "opacity-60" : ""}`}
                   placeholder="you@example.com"
                 />
                 {otpSent && (
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <CheckCircle className="h-5 w-5 text-success" />
+                  <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center">
+                    <CheckCircle className="h-4 w-4 text-success" />
                   </div>
                 )}
               </div>
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
+                <motion.p
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-error text-xs mt-1.5 font-medium"
+                >
                   {errors.email.message}
-                </p>
+                </motion.p>
               )}
             </div>
 
             {/* Password */}
             <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Password</span>
+              <label className="label pb-1">
+                <span className="text-sm font-medium text-base-content/70">
+                  Password
+                </span>
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-base-content/40" />
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <Lock className="h-4 w-4 text-base-content/30" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
                   disabled={otpSent}
-                  className={`input input-bordered w-full pl-10 pr-10 ${
-                    errors.password ? "input-error" : ""
-                  } ${otpSent ? "bg-base-200 cursor-not-allowed" : ""}`}
+                  className={`input w-full pl-10 pr-10 glass-input ${errors.password ? "!border-error" : ""} ${otpSent ? "opacity-60" : ""}`}
                   placeholder="••••••••"
                 />
                 {!otpSent && (
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-base-content/30 hover:text-base-content/60 transition-colors"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5 text-base-content/40" />
+                      <EyeOff className="h-4 w-4" />
                     ) : (
-                      <Eye className="h-5 w-5 text-base-content/40" />
+                      <Eye className="h-4 w-4" />
                     )}
                   </button>
                 )}
                 {otpSent && (
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <CheckCircle className="h-5 w-5 text-success" />
+                  <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center">
+                    <CheckCircle className="h-4 w-4 text-success" />
                   </div>
                 )}
               </div>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
+                <motion.p
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-error text-xs mt-1.5 font-medium"
+                >
                   {errors.password.message}
-                </p>
+                </motion.p>
+              )}
+
+              {/* Password strength bar */}
+              {!otpSent && watchedPassword && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  className="mt-2"
+                >
+                  <div className="flex gap-1 mb-1">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <div
+                        key={i}
+                        className={`strength-bar flex-1 ${i <= strength.score ? strength.color : "bg-base-content/10"}`}
+                      />
+                    ))}
+                  </div>
+                  <p
+                    className={`text-xs font-medium ${strength.color.replace("bg-", "text-")}`}
+                  >
+                    {strength.label}
+                  </p>
+                </motion.div>
               )}
             </div>
 
             {/* Send OTP Button */}
             {!otpSent && (
-              <button
+              <motion.button
                 type="button"
-                className="btn btn-outline btn-primary w-full"
+                className="btn btn-outline btn-primary w-full gap-2 font-semibold"
                 onClick={handleRequestOtp}
                 disabled={sendingOtp}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
               >
                 {sendingOtp ? (
                   <>
-                    <Loader2 className="animate-spin h-5 w-5" />
+                    <Loader2 className="animate-spin h-4 w-4" />
                     Sending OTP...
                   </>
                 ) : (
                   <>
-                    <Send className="h-5 w-5" />
+                    <Send className="h-4 w-4" />
                     Send OTP
                   </>
                 )}
-              </button>
+              </motion.button>
             )}
 
-            {/* OTP Input - 6 boxes */}
-            {otpSent && (
-              <div className="form-control animate-in fade-in slide-in-from-top-4 duration-300">
-                <label className="label">
-                  <span className="label-text font-medium">Enter OTP</span>
-                  <span className="label-text-alt text-success flex items-center gap-1">
-                    <CheckCircle className="h-3.5 w-3.5" />
-                    Sent to {getValues("email")}
-                  </span>
-                </label>
+            {/* OTP Input */}
+            <AnimatePresence>
+              {otpSent && (
+                <motion.div
+                  className="form-control"
+                  initial={{ opacity: 0, y: 10, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: "auto" }}
+                  exit={{ opacity: 0, y: -10, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <label className="label pb-1">
+                    <span className="text-sm font-medium text-base-content/70">
+                      Enter OTP
+                    </span>
+                    <span className="text-xs text-success flex items-center gap-1 font-medium">
+                      <CheckCircle className="h-3 w-3" />
+                      Sent to {getValues("email")}
+                    </span>
+                  </label>
 
-                {/* 6-digit boxes */}
-                <div className="flex gap-2 justify-between">
-                  {otpDigits.map((digit, index) => (
-                    <input
-                      key={index}
-                      ref={(el) => (inputRefs.current[index] = el)}
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={1}
-                      value={digit}
-                      onChange={(e) => handleOtpChange(index, e.target.value)}
-                      onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                      onPaste={index === 0 ? handleOtpPaste : undefined}
-                      className={`input input-bordered w-full max-w-[48px] h-12 text-center text-xl font-bold p-0 ${
-                        otpError ? "input-error" : digit ? "input-primary" : ""
-                      }`}
-                      autoFocus={index === 0}
-                    />
-                  ))}
-                </div>
+                  {/* OTP boxes */}
+                  <div className="flex gap-2 justify-between">
+                    {otpDigits.map((digit, index) => (
+                      <input
+                        key={index}
+                        ref={(el) => (inputRefs.current[index] = el)}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={digit}
+                        onChange={(e) => handleOtpChange(index, e.target.value)}
+                        onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                        onPaste={index === 0 ? handleOtpPaste : undefined}
+                        className={`input w-full max-w-[48px] h-12 text-center text-xl font-bold p-0 glass-input ${
+                          otpError
+                            ? "!border-error"
+                            : digit
+                              ? "!border-primary"
+                              : ""
+                        }`}
+                        autoFocus={index === 0}
+                      />
+                    ))}
+                  </div>
 
-                {otpError && (
-                  <p className="text-red-500 text-sm mt-1">{otpError}</p>
-                )}
+                  {otpError && (
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="text-error text-xs mt-1.5 font-medium"
+                    >
+                      {otpError}
+                    </motion.p>
+                  )}
 
-                {/* Resend row */}
-                <div className="flex items-center justify-between mt-3">
-                  <button
-                    type="button"
-                    className="btn btn-link btn-sm p-0 h-auto text-base-content/50 no-underline hover:no-underline"
-                    onClick={() => {
-                      setOtpSent(false);
-                      setOtpDigits(Array(OTP_LENGTH).fill(""));
-                      setOtpError("");
-                      clearTimeout(timerRef.current);
-                      setCountdown(0);
-                    }}
-                  >
-                    Change email
-                  </button>
-
-                  <button
-                    type="button"
-                    className="btn btn-link btn-sm p-0 h-auto gap-1 no-underline hover:no-underline disabled:opacity-40"
-                    onClick={handleResendOtp}
-                    disabled={countdown > 0 || sendingOtp}
-                  >
-                    {sendingOtp ? (
-                      <Loader2 className="animate-spin h-4 w-4" />
-                    ) : (
-                      <RefreshCw className="h-4 w-4" />
-                    )}
-                    {countdown > 0 ? `Resend in ${countdown}s` : "Resend OTP"}
-                  </button>
-                </div>
-              </div>
-            )}
+                  {/* Resend / change email */}
+                  <div className="flex items-center justify-between mt-3">
+                    <button
+                      type="button"
+                      className="text-xs text-base-content/40 hover:text-base-content/60 transition-colors font-medium"
+                      onClick={() => {
+                        if (window.confirm("Go back to edit your details?")) {
+                          setOtpSent(false);
+                          setOtpDigits(Array(OTP_LENGTH).fill(""));
+                          setOtpError("");
+                          clearTimeout(timerRef.current);
+                          setCountdown(0);
+                        }
+                      }}
+                    >
+                      Change details
+                    </button>
+                    <button
+                      type="button"
+                      className="text-xs text-primary hover:text-primary/80 transition-colors font-medium flex items-center gap-1 disabled:opacity-40"
+                      onClick={handleResendOtp}
+                      disabled={countdown > 0 || sendingOtp}
+                    >
+                      {sendingOtp ? (
+                        <Loader2 className="animate-spin h-3 w-3" />
+                      ) : (
+                        <RefreshCw className="h-3 w-3" />
+                      )}
+                      {countdown > 0 ? `Resend in ${countdown}s` : "Resend OTP"}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Submit Button */}
             {otpSent && (
-              <button
+              <motion.button
                 type="submit"
-                className="btn btn-primary w-full"
+                className="btn-gradient btn w-full gap-2 font-semibold"
                 disabled={isSigninUp || otpDigits.join("").length < OTP_LENGTH}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
               >
                 {isSigninUp ? (
                   <>
-                    <Loader2 className="animate-spin h-5 w-5" />
+                    <Loader2 className="animate-spin h-4 w-4" />
                     Creating Account...
                   </>
                 ) : (
-                  "Verify & Sign Up"
+                  <>
+                    <Shield className="w-4 h-4" />
+                    Verify & Sign Up
+                  </>
                 )}
-              </button>
+              </motion.button>
             )}
           </form>
 
           {/* Footer */}
           <div className="text-center">
-            <p className="text-base-content/60">
+            <p className="text-base-content/40 text-sm">
               Already have an account?{" "}
-              <Link to="/login" className="link link-primary">
+              <Link
+                to="/login"
+                className="text-primary font-semibold hover:text-primary/80 transition-colors"
+              >
                 Sign in
               </Link>
             </p>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Right Side - Image/Pattern */}
+      {/* Right Side */}
       <AuthImagePattern
-        title={"Welcome to our platform!"}
+        title={"Welcome to LeetLab!"}
         subtitle={
-          "Sign up to access our platform and start using our services."
+          "Sign up to start solving problems and tracking your progress."
         }
       />
     </div>

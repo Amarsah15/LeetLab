@@ -13,6 +13,9 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     image: { type: String, default: null },
     role: { type: String, enum: ["USER", "ADMIN"], default: "USER" },
+    currentStreak: { type: Number, default: 0 },
+    maxStreak: { type: Number, default: 0 },
+    lastActiveDate: { type: Date, default: null },
   },
   {
     timestamps: true,

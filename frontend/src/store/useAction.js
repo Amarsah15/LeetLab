@@ -12,7 +12,7 @@ export const useActions = create((set) => ({
       toast.success(res.data.message);
     } catch (error) {
       console.log("Error deleting problem", error);
-      toast.error("Error deleting problem");
+      toast.error(error.response?.data?.error || "Error deleting problem");
     } finally {
       set({ isDeletingProblem: false });
     }

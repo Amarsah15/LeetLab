@@ -167,10 +167,10 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-base-100 rounded-2xl shadow-2xl w-full max-w-md transform transition-all">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in-up duration-150">
+      <div className="glass-card bg-base-100/95 border border-base-content/10 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto custom-scrollbar flex flex-col transform transition-all duration-300 animate-scale-in">
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-base-300">
+        <div className="flex justify-between items-center p-6 border-b border-base-content/5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
               <ShieldCheck className="w-5 h-5 text-primary" />
@@ -179,7 +179,7 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
           </div>
           <button
             onClick={handleClose}
-            className="btn btn-ghost btn-sm btn-circle hover:bg-base-200"
+            className="btn btn-ghost btn-sm btn-circle hover:bg-base-content/10"
           >
             <X className="w-5 h-5" />
           </button>
@@ -187,20 +187,22 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
 
         <form
           onSubmit={handleSubmit(handleFormSubmit)}
-          className="p-6 space-y-5"
+          className="p-6 space-y-5 flex-1"
         >
           {/* Email (locked) */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-medium">Email Address</span>
+              <span className="label-text font-medium text-xs text-base-content/60">
+                Email Address
+              </span>
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-base-content/40" />
+                <Mail className="h-4 w-4 text-base-content/40" />
               </div>
               <input
                 type="text"
-                className="input input-bordered w-full pl-10 bg-base-200 cursor-not-allowed"
+                className="input input-bordered glass-input w-full pl-10 bg-base-200/50 cursor-not-allowed text-sm"
                 defaultValue={authUser.email}
                 disabled
                 {...register("email")}
@@ -211,15 +213,17 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
           {/* Current Password */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-medium">Current Password</span>
+              <span className="label-text font-medium text-xs text-base-content/60">
+                Current Password
+              </span>
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-base-content/40" />
+                <Lock className="h-4 w-4 text-base-content/40" />
               </div>
               <input
                 type={showOld ? "text" : "password"}
-                className={`input input-bordered w-full pl-10 pr-10 ${otpSent ? "bg-base-200 cursor-not-allowed" : ""}`}
+                className={`input input-bordered glass-input w-full pl-10 pr-10 text-sm ${otpSent ? "bg-base-200/50 cursor-not-allowed" : ""}`}
                 placeholder="Enter current password"
                 disabled={otpSent}
                 {...register("oldPassword", {
@@ -228,7 +232,7 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
               />
               {otpSent ? (
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <CheckCircle className="h-5 w-5 text-success" />
+                  <CheckCircle className="h-4 w-4 text-success" />
                 </div>
               ) : (
                 <button
@@ -237,15 +241,15 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
                   onClick={() => setShowOld(!showOld)}
                 >
                   {showOld ? (
-                    <EyeOff className="h-5 w-5 text-base-content/40" />
+                    <EyeOff className="h-4 w-4 text-base-content/40" />
                   ) : (
-                    <Eye className="h-5 w-5 text-base-content/40" />
+                    <Eye className="h-4 w-4 text-base-content/40" />
                   )}
                 </button>
               )}
             </div>
             {errors.oldPassword && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="text-red-500 text-xs mt-1">
                 {errors.oldPassword.message}
               </p>
             )}
@@ -254,15 +258,17 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
           {/* New Password */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-medium">New Password</span>
+              <span className="label-text font-medium text-xs text-base-content/60">
+                New Password
+              </span>
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-base-content/40" />
+                <Lock className="h-4 w-4 text-base-content/40" />
               </div>
               <input
                 type={showNew ? "text" : "password"}
-                className={`input input-bordered w-full pl-10 pr-10 ${otpSent ? "bg-base-200 cursor-not-allowed" : ""}`}
+                className={`input input-bordered glass-input w-full pl-10 pr-10 text-sm ${otpSent ? "bg-base-200/50 cursor-not-allowed" : ""}`}
                 placeholder="Enter new password"
                 disabled={otpSent}
                 {...register("newPassword", {
@@ -271,7 +277,7 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
               />
               {otpSent ? (
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <CheckCircle className="h-5 w-5 text-success" />
+                  <CheckCircle className="h-4 w-4 text-success" />
                 </div>
               ) : (
                 <button
@@ -280,15 +286,15 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
                   onClick={() => setShowNew(!showNew)}
                 >
                   {showNew ? (
-                    <EyeOff className="h-5 w-5 text-base-content/40" />
+                    <EyeOff className="h-4 w-4 text-base-content/40" />
                   ) : (
-                    <Eye className="h-5 w-5 text-base-content/40" />
+                    <Eye className="h-4 w-4 text-base-content/40" />
                   )}
                 </button>
               )}
             </div>
             {errors.newPassword && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="text-red-500 text-xs mt-1">
                 {errors.newPassword.message}
               </p>
             )}
@@ -297,17 +303,17 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
           {/* Confirm Password */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-medium">
+              <span className="label-text font-medium text-xs text-base-content/60">
                 Confirm New Password
               </span>
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-base-content/40" />
+                <Lock className="h-4 w-4 text-base-content/40" />
               </div>
               <input
                 type={showConfirm ? "text" : "password"}
-                className={`input input-bordered w-full pl-10 pr-10 ${otpSent ? "bg-base-200 cursor-not-allowed" : ""}`}
+                className={`input input-bordered glass-input w-full pl-10 pr-10 text-sm ${otpSent ? "bg-base-200/50 cursor-not-allowed" : ""}`}
                 placeholder="Confirm new password"
                 disabled={otpSent}
                 {...register("confirmPassword", {
@@ -316,7 +322,7 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
               />
               {otpSent ? (
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <CheckCircle className="h-5 w-5 text-success" />
+                  <CheckCircle className="h-4 w-4 text-success" />
                 </div>
               ) : (
                 <button
@@ -325,15 +331,15 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
                   onClick={() => setShowConfirm(!showConfirm)}
                 >
                   {showConfirm ? (
-                    <EyeOff className="h-5 w-5 text-base-content/40" />
+                    <EyeOff className="h-4 w-4 text-base-content/40" />
                   ) : (
-                    <Eye className="h-5 w-5 text-base-content/40" />
+                    <Eye className="h-4 w-4 text-base-content/40" />
                   )}
                 </button>
               )}
             </div>
             {errors.confirmPassword && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="text-red-500 text-xs mt-1">
                 {errors.confirmPassword.message}
               </p>
             )}
@@ -344,17 +350,17 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
             <button
               type="button"
               onClick={handleSendOtp}
-              className="btn btn-outline btn-primary w-full"
+              className="btn btn-gradient w-full py-2.5 rounded-lg text-sm flex items-center justify-center gap-2"
               disabled={sendingOtp}
             >
               {sendingOtp ? (
                 <>
-                  <Loader2 className="animate-spin h-5 w-5" />
+                  <Loader2 className="animate-spin h-4 w-4" />
                   Sending OTP...
                 </>
               ) : (
                 <>
-                  <Send className="h-5 w-5" />
+                  <Send className="h-4 w-4" />
                   Send OTP to Email
                 </>
               )}
@@ -365,9 +371,11 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
           {otpSent && (
             <div className="form-control animate-in fade-in slide-in-from-top-4 duration-300">
               <label className="label">
-                <span className="label-text font-medium">Enter OTP</span>
-                <span className="label-text-alt text-success flex items-center gap-1">
-                  <CheckCircle className="w-3 h-3" />
+                <span className="label-text font-medium text-xs text-base-content/60">
+                  Enter OTP
+                </span>
+                <span className="label-text-alt text-success text-xs flex items-center gap-1">
+                  <CheckCircle className="w-3.5 h-3.5" />
                   Sent to {authUser.email}
                 </span>
               </label>
@@ -384,7 +392,7 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
                     onPaste={index === 0 ? handleOtpPaste : undefined}
-                    className={`input input-bordered w-full max-w-[48px] h-12 text-center text-xl font-bold p-0 ${
+                    className={`input input-bordered glass-input w-full max-w-[48px] h-12 text-center text-xl font-bold p-0 rounded-lg ${
                       otpError ? "input-error" : digit ? "input-primary" : ""
                     }`}
                     autoFocus={index === 0}
@@ -393,10 +401,10 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
               </div>
 
               {otpError && (
-                <p className="text-error text-sm mt-1">{otpError}</p>
+                <p className="text-error text-xs mt-1">{otpError}</p>
               )}
 
-              <div className="flex items-center justify-between mt-3">
+              <div className="flex items-center justify-between mt-3 text-xs">
                 <button
                   type="button"
                   className="btn btn-link btn-sm p-0 h-auto text-base-content/50 no-underline hover:no-underline"
@@ -408,7 +416,7 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
                     setCountdown(0);
                   }}
                 >
-                  Change password
+                  Change details
                 </button>
                 <button
                   type="button"
@@ -417,9 +425,9 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
                   disabled={countdown > 0 || sendingOtp}
                 >
                   {sendingOtp ? (
-                    <Loader2 className="animate-spin h-4 w-4" />
+                    <Loader2 className="animate-spin h-3.5 w-3.5" />
                   ) : (
-                    <RefreshCw className="h-4 w-4" />
+                    <RefreshCw className="h-3.5 w-3.5" />
                   )}
                   {countdown > 0 ? `Resend in ${countdown}s` : "Resend OTP"}
                 </button>
@@ -428,31 +436,24 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-3 pt-4 border-t border-base-300">
-            <button
-              type="button"
-              onClick={handleClose}
-              className="btn btn-ghost flex-1"
-            >
-              Cancel
-            </button>
-            {otpSent && (
+          {otpSent && (
+            <div className="pt-4 border-t border-base-content/5">
               <button
                 type="submit"
-                className="btn btn-primary flex-1"
+                className="btn btn-gradient w-full py-2.5 text-sm flex items-center justify-center gap-2 rounded-lg"
                 disabled={!otpFilled}
               >
                 <Lock className="w-4 h-4" />
                 Change Password
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </form>
 
         {/* Info Box */}
-        <div className="px-6 pb-6">
-          <div className="bg-info/10 border border-info/20 rounded-lg p-3">
-            <p className="text-sm">
+        <div className="px-6 pb-6 mt-1">
+          <div className="bg-primary/5 border border-primary/10 rounded-xl p-3">
+            <p className="text-xs text-base-content/60 leading-relaxed">
               💡 After changing your password, you'll be logged out and need to
               sign in with your new password.
             </p>

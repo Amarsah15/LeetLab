@@ -11,6 +11,7 @@ const testCaseResultSchema = new mongoose.Schema(
     passed: { type: Boolean, required: true },
     stdout: { type: String, default: null },
     expected: { type: String, required: true },
+    input: { type: String, default: null },
     stderr: { type: String, default: null },
     compileOutput: { type: String, default: null },
     status: { type: String, required: true },

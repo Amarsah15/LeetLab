@@ -7,6 +7,7 @@ export const getJudge0LanguageId = (language) => {
     JAVA: 62,
     PYTHON: 71,
     JAVASCRIPT: 63,
+    CPP: 54,
   };
 
   return languageMap[language.toUpperCase()];
@@ -45,7 +46,7 @@ export const pollBatchResults = async (tokens) => {
     });
     const results = data.submissions;
     const isAllDone = results.every(
-      (r) => r.status.id !== 1 && r.status.id !== 2
+      (r) => r.status.id !== 1 && r.status.id !== 2,
     );
 
     if (isAllDone) return results;
@@ -59,6 +60,7 @@ export function getLanguageName(languageId) {
     63: "JavaScript",
     71: "Python",
     62: "Java",
+    54: "C++",
   };
 
   return LANGUAGE_NAMES[languageId] || "Unknown";

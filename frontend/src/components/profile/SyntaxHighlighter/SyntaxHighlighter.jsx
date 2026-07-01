@@ -147,27 +147,27 @@ const SyntaxHighlighter = ({
     // Highlight multi-line comments first (to avoid conflicts with single-line)
     highlighted = highlighted.replace(
       /\/\*[\s\S]*?\*\//g,
-      '<span class="text-gray-500 italic">$&</span>'
+      '<span class="text-gray-500 italic">$&</span>',
     );
 
     // Highlight single-line comments
     highlighted = highlighted.replace(
       /\/\/(.*)$/gm,
-      '<span class="text-gray-500 italic">//$1</span>'
+      '<span class="text-gray-500 italic">//$1</span>',
     );
     highlighted = highlighted.replace(
       /^(\s*)#(.*)$/gm,
-      '<span class="text-gray-500 italic">$1#$2</span>'
+      '<span class="text-gray-500 italic">$1#$2</span>',
     );
 
     // Highlight strings (avoiding already highlighted content)
     highlighted = highlighted.replace(
       /"([^"]*)"(?![^<]*<\/span>)/g,
-      '<span class="text-yellow-400">"$1"</span>'
+      '<span class="text-yellow-400">"$1"</span>',
     );
     highlighted = highlighted.replace(
       /'([^']*)'(?![^<]*<\/span>)/g,
-      "<span class=\"text-yellow-400\">'$1'</span>"
+      "<span class=\"text-yellow-400\">'$1'</span>",
     );
 
     // Highlight keywords (avoiding already highlighted content)
@@ -176,7 +176,7 @@ const SyntaxHighlighter = ({
         const regex = new RegExp(`\\b${keyword}\\b(?![^<]*</span>)`, "g");
         highlighted = highlighted.replace(
           regex,
-          `<span class="text-blue-400 font-semibold">${keyword}</span>`
+          `<span class="text-blue-400 font-semibold">${keyword}</span>`,
         );
       });
     }
@@ -187,7 +187,7 @@ const SyntaxHighlighter = ({
         const regex = new RegExp(`\\b${type}\\b(?![^<]*</span>)`, "g");
         highlighted = highlighted.replace(
           regex,
-          `<span class="text-green-400 font-semibold">${type}</span>`
+          `<span class="text-green-400 font-semibold">${type}</span>`,
         );
       });
     }
@@ -195,7 +195,7 @@ const SyntaxHighlighter = ({
     // Highlight numbers (avoiding already highlighted content)
     highlighted = highlighted.replace(
       /\b(\d+)\b(?![^<]*<\/span>)/g,
-      '<span class="text-purple-400">$1</span>'
+      '<span class="text-purple-400">$1</span>',
     );
 
     return highlighted;

@@ -6,7 +6,7 @@ export const useAuthStore = create((set) => ({
   authUser: null,
   isSigninUp: false,
   isLoggingIn: false,
-  isCheckingAuth: false,
+  isCheckingAuth: true,
 
   checkAuth: async () => {
     set({ isCheckingAuth: true });
@@ -31,7 +31,7 @@ export const useAuthStore = create((set) => ({
       toast.success(res.data.message);
     } catch (error) {
       console.log("Error signing up", error);
-      toast.error("Error signing up");
+      toast.error(error.response?.data?.error || "Error signing up");
     } finally {
       set({ isSigninUp: false });
     }
@@ -46,7 +46,7 @@ export const useAuthStore = create((set) => ({
       toast.success(res.data.message);
     } catch (error) {
       console.log("Error signing up", error);
-      toast.error("Error signing up");
+      toast.error(error.response?.data?.error || "Error signing up");
     } finally {
       set({ isSigninUp: false });
     }
@@ -61,7 +61,7 @@ export const useAuthStore = create((set) => ({
       toast.success(res.data.message);
     } catch (error) {
       console.log("Error logging in", error);
-      toast.error("Error logging in");
+      toast.error(error.response?.data?.error || "Error logging in");
     } finally {
       set({ isLoggingIn: false });
     }
@@ -75,11 +75,10 @@ export const useAuthStore = create((set) => ({
       toast.success("Logout successful");
     } catch (error) {
       console.log("Error logging out", error);
-      toast.error("Error logging out");
-      toast.error("Please allow cookies in your browser settings");
+      toast.error(error.response?.data?.error || "Error logging out");
     }
   },
-  
+
   changePassword: async (data) => {
     try {
       set({ isPasswordReset: true });
@@ -88,14 +87,14 @@ export const useAuthStore = create((set) => ({
         data,
         {
           withCredentials: true,
-        }
+        },
       );
 
       toast.success(res.data.message);
       set({ resetSuccessfully: true });
     } catch (error) {
       console.log("Error forgot password", error);
-      toast.error("Error forgot password");
+      toast.error(error.response?.data?.error || "Error changing password");
     } finally {
       set({ isPasswordReset: false });
     }
@@ -105,12 +104,52 @@ export const useAuthStore = create((set) => ({
     try {
       const response = await axiosInstance.post(
         "/auth/request-password-reset-otp",
-        { email }
+        { email },
       );
       toast.success(response.data.message);
     } catch (error) {
       console.log("Error requesting password reset OTP", error);
-      toast.error("Error requesting password reset OTP");
+      toast.error(
+        error.response?.data?.error || "Error requesting password reset OTP",
+      );
+    }
+  },
+
+  uploadProfileImage: async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const res = await axiosInstance.put("/user/profile-image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      set({ authUser: res.data.user });
+      toast.success("Profile image updated successfully");
+      return res.data.user;
+    } catch (error) {
+      console.log("Error uploading profile image:", error);
+      toast.error(
+        error.response?.data?.error || "Failed to upload profile image",
+      );
+      return null;
+    }
+  },
+
+  removeProfileImage: async () => {
+    try {
+      const res = await axiosInstance.delete("/user/profile-image");
+      set({ authUser: res.data.user });
+      toast.success("Profile image removed");
+      return res.data.user;
+    } catch (error) {
+      console.log("Error removing profile image:", error);
+      toast.error(
+        error.response?.data?.error || "Failed to remove profile image",
+      );
+      return null;
     }
   },
 }));

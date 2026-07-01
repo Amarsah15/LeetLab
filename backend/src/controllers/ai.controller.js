@@ -1,14 +1,52 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+const getModel = (req) => {
+  const key = req?.headers?.["x-gemini-key"] || process.env.GEMINI_API_KEY;
+  const genAI = new GoogleGenerativeAI(key);
+  return genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
+};
 
 // Helper function to call Gemini AI
-async function generateContent(prompt) {
+async function generateContent(prompt, req) {
+  const model = getModel(req);
   const result = await model.generateContent(prompt);
   const response = await result.response;
   return response.text();
 }
+
+// Error handling helper
+const handleGenerativeError = (error, req, res, actionName) => {
+  const hasCustomKey = !!req.headers?.["x-gemini-key"];
+
+  // Rate limit / Quota exceeded / Blocked
+  if (
+    error.status === 429 ||
+    error.message?.includes("429") ||
+    error.message?.includes("quota") ||
+    error.message?.includes("exhausted") ||
+    error.status === 403
+  ) {
+    const errMsg = hasCustomKey
+      ? "AI service rate limit reached on your custom Gemini API key. Please wait a few seconds before trying again."
+      : "AI service rate limit reached. Please configure your own Gemini API key or try again in a few seconds.";
+    return res.status(429).json({ error: errMsg });
+  }
+
+  // Model not found
+  if (
+    error.status === 404 ||
+    error.message?.includes("not found") ||
+    error.message?.includes("NotFound")
+  ) {
+    const errMsg = hasCustomKey
+      ? "The Gemini model was not found using your custom API key. Please verify your API key has correct access permissions."
+      : "Default Gemini model not found. Please contact support or configure your own Gemini key.";
+    return res.status(404).json({ error: errMsg });
+  }
+
+  console.error(`Error during ${actionName}:`, error);
+  res.status(500).json({ error: `Failed to ${actionName}` });
+};
 
 export const analyzeComplexity = async (req, res) => {
   try {
@@ -28,11 +66,10 @@ Format your response as:
 **Time Complexity:** O(n) - [brief explanation]
 **Space Complexity:** O(1) - [brief explanation]
 `;
-    const text = await generateContent(prompt);
+    const text = await generateContent(prompt, req);
     res.json({ analysis: text });
   } catch (error) {
-    console.error("Analyze complexity error:", error);
-    res.status(500).json({ error: "Failed to analyze complexity" });
+    handleGenerativeError(error, req, res, "analyze complexity");
   }
 };
 
@@ -42,7 +79,7 @@ export const getHint = async (req, res) => {
     const hintPrompts = {
       1: "Give a very subtle hint about the approach or data structure to use. Don't reveal the solution.",
       2: "Provide a moderate hint with the general algorithm or pattern. Still don't give the exact solution.",
-      3: "Give a detailed hint with pseudocode or step-by-step approach, but without actual code implementation."
+      3: "Give a detailed hint with pseudocode or step-by-step approach, but without actual code implementation.",
     };
     const prompt = `
 Problem Description:
@@ -54,11 +91,10 @@ ${hintPrompts[hintLevel]}
 
 Keep the hint concise (2-3 sentences max) and educational. Focus on helping the user think, not solving it for them.
 `;
-    const text = await generateContent(prompt);
+    const text = await generateContent(prompt, req);
     res.json({ hint: text });
   } catch (error) {
-    console.error("Get hint error:", error);
-    res.status(500).json({ error: "Failed to get hint" });
+    handleGenerativeError(error, req, res, "get hint");
   }
 };
 
@@ -82,10 +118,9 @@ Provide constructive feedback on:
 DO NOT provide the complete solution. Guide them to improve their own code.
 Keep feedback concise and actionable.
 `;
-    const text = await generateContent(prompt);
+    const text = await generateContent(prompt, req);
     res.json({ improvements: text });
   } catch (error) {
-    console.error("Get improvements error:", error);
-    res.status(500).json({ error: "Failed to get improvements" });
+    handleGenerativeError(error, req, res, "get improvements");
   }
 };

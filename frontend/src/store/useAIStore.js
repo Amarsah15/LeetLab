@@ -12,17 +12,23 @@ export const useAIStore = create((set) => ({
   // Analyze Complexity
   analyzeComplexity: async (code, language) => {
     set({ isAnalyzingComplexity: true, result: "" });
+    const customKey = localStorage.getItem("custom_gemini_key");
+    const headers = customKey ? { "X-Gemini-Key": customKey } : {};
     try {
-      const res = await axiosInstance.post("/ai/analyze-complexity", {
-        code,
-        language,
-      });
+      const res = await axiosInstance.post(
+        "/ai/analyze-complexity",
+        {
+          code,
+          language,
+        },
+        { headers },
+      );
       set({ result: res.data.analysis });
       toast.success("Complexity analysis completed");
     } catch (error) {
       console.log("Error analyzing complexity", error);
       toast.error(
-        error.response?.data?.error || "Failed to analyze complexity"
+        error.response?.data?.error || "Failed to analyze complexity",
       );
     } finally {
       set({ isAnalyzingComplexity: false });
@@ -32,12 +38,18 @@ export const useAIStore = create((set) => ({
   // Get Hint
   getHint: async (problemDescription, userCode = "", hintLevel = 1) => {
     set({ isGettingHint: true, result: "" });
+    const customKey = localStorage.getItem("custom_gemini_key");
+    const headers = customKey ? { "X-Gemini-Key": customKey } : {};
     try {
-      const res = await axiosInstance.post("/ai/get-hint", {
-        problemDescription,
-        userCode,
-        hintLevel,
-      });
+      const res = await axiosInstance.post(
+        "/ai/get-hint",
+        {
+          problemDescription,
+          userCode,
+          hintLevel,
+        },
+        { headers },
+      );
       set({ result: res.data.hint });
       toast.success(`Level ${hintLevel} hint received`);
     } catch (error) {
@@ -51,12 +63,18 @@ export const useAIStore = create((set) => ({
   // Get Improvement Suggestions
   getImprovementSuggestions: async (code, problemDescription, language) => {
     set({ isGettingImprovements: true, result: "" });
+    const customKey = localStorage.getItem("custom_gemini_key");
+    const headers = customKey ? { "X-Gemini-Key": customKey } : {};
     try {
-      const res = await axiosInstance.post("/ai/get-improvements", {
-        code,
-        problemDescription,
-        language,
-      });
+      const res = await axiosInstance.post(
+        "/ai/get-improvements",
+        {
+          code,
+          problemDescription,
+          language,
+        },
+        { headers },
+      );
       set({ result: res.data.improvements });
       toast.success("Improvement suggestions received");
     } catch (error) {

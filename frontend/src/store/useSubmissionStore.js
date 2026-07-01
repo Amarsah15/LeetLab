@@ -19,8 +19,9 @@ export const useSubmissionStore = create((set) => ({
       res.data.message;
     } catch (error) {
       console.log("Error getting all submissions", error);
-      toast.error("Error getting all submissions");
-      toast.error("Please allow cookies in your browser settings");
+      toast.error(
+        error.response?.data?.error || "Error getting all submissions",
+      );
     } finally {
       set({ isLoading: false });
     }
@@ -29,14 +30,16 @@ export const useSubmissionStore = create((set) => ({
   getSubmissionForProblem: async (problemId) => {
     try {
       const res = await axiosInstance.get(
-        `/submission/get-submission/${problemId}`
+        `/submission/get-submission/${problemId}`,
       );
 
       set({ submission: res.data.submissions });
     } catch (error) {
       console.log("Error getting submissions for problem", error);
 
-      toast.error("Error getting submissions for problem");
+      toast.error(
+        error.response?.data?.error || "Error getting submissions for problem",
+      );
     } finally {
       set({ isLoading: false });
     }
@@ -45,20 +48,23 @@ export const useSubmissionStore = create((set) => ({
   getSubmissionCountForProblem: async (problemId) => {
     try {
       const res = await axiosInstance.get(
-        `/submission/get-submissions-count/${problemId}`
+        `/submission/get-submissions-count/${problemId}`,
       );
 
       set({ submissionCount: res.data.count });
     } catch (error) {
       console.log("Error getting submission count for problem", error);
-      toast.error("Error getting submission count for problem");
+      toast.error(
+        error.response?.data?.error ||
+          "Error getting submission count for problem",
+      );
     }
   },
 
   getSuccessRate: async (problemId) => {
     try {
       const res = await axiosInstance.get(
-        `/submission/success-rate/${problemId}`
+        `/submission/success-rate/${problemId}`,
       );
       set({
         submissionCount: res.data.totalSubmissions,
@@ -66,7 +72,9 @@ export const useSubmissionStore = create((set) => ({
       });
     } catch (error) {
       console.error("Error fetching success rate:", error);
-      toast.error("Failed to fetch success rate");
+      toast.error(
+        error.response?.data?.error || "Failed to fetch success rate",
+      );
     }
   },
 }));

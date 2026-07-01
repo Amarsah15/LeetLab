@@ -38,8 +38,7 @@ export const usePlaylistStore = create((set, get) => ({
       set({ playlists: response.data.playlists });
     } catch (error) {
       console.error("Error fetching playlists:", error);
-      toast.error("Failed to fetch playlists");
-      toast.error("Please allow cookies in your browser settings");
+      toast.error(error.response?.data?.error || "Failed to fetch playlists");
     } finally {
       set({ isLoading: false });
     }
@@ -52,7 +51,9 @@ export const usePlaylistStore = create((set, get) => ({
       set({ currentPlaylist: response.data.playList });
     } catch (error) {
       console.error("Error fetching playlist details:", error);
-      toast.error("Failed to fetch playlist details");
+      toast.error(
+        error.response?.data?.error || "Failed to fetch playlist details",
+      );
     } finally {
       set({ isLoading: false });
     }
@@ -73,7 +74,9 @@ export const usePlaylistStore = create((set, get) => ({
       }
     } catch (error) {
       console.error("Error adding problem to playlist:", error);
-      toast.error("Failed to add problem to playlist");
+      toast.error(
+        error.response?.data?.error || "Failed to add problem to playlist",
+      );
     } finally {
       set({ isLoading: false });
     }
@@ -92,7 +95,9 @@ export const usePlaylistStore = create((set, get) => ({
       await get().getAllPlaylists();
     } catch (error) {
       console.error("Error removing problem from playlist:", error);
-      toast.error("Failed to remove problem from playlist");
+      toast.error(
+        error.response?.data?.error || "Failed to remove problem from playlist",
+      );
     } finally {
       set({ isLoading: false });
     }
@@ -110,7 +115,7 @@ export const usePlaylistStore = create((set, get) => ({
       toast.success("Playlist deleted successfully");
     } catch (error) {
       console.error("Error deleting playlist:", error);
-      toast.error("Failed to delete playlist");
+      toast.error(error.response?.data?.error || "Failed to delete playlist");
     } finally {
       set({ isLoading: false });
     }
