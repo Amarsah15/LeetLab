@@ -357,8 +357,8 @@ const ProblemsTable = ({ problems }) => {
                 <th className="w-16 text-pl-4">Status</th>
                 <th className="text-left">Title</th>
                 <th className="text-left pl-6 hidden sm:table-cell">Tags</th>
-                <th className="w-28 text-left ">Difficulty</th>
-                <th className="w-36 text-center">Actions</th>
+                <th className="w-28 text-left">Difficulty</th>
+                <th className="w-36 text-left">Actions</th>
               </tr>
             </thead>
             <tbody>
