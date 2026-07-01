@@ -67,7 +67,7 @@ const AddToPlaylistModal = ({ isOpen, onClose, problemId }) => {
             <button
               type="button"
               onClick={onClose}
-              className="h-11 px-5 text-[15px] font-semibold text-slate-350 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+              className="h-11 px-5 text-[15px] font-semibold text-slate-350 hover:text-white hover:bg-white/5 rounded-xl transition-all cursor-pointer"
             >
               Cancel
             </button>
