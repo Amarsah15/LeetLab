@@ -133,7 +133,7 @@ const Navbar = () => {
         )}
 
         {/* User Avatar & Dropdown */}
-        {authUser && (
+        {authUser ? (
           <div className="relative" ref={dropdownRef}>
             <motion.button
               onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -182,7 +182,7 @@ const Navbar = () => {
                     onClick={() => setDropdownOpen(false)}
                     className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-semibold text-base-content/85 hover:text-base-content hover:bg-base-content/5 transition-colors"
                   >
-                    <User className="w-4 h-4 text-purple-450" />
+                    <User className="w-4 h-4 text-purple-455" />
                     My Profile
                   </Link>
 
@@ -239,6 +239,27 @@ const Navbar = () => {
                 </motion.div>
               )}
             </AnimatePresence>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link to="/login">
+              <motion.button
+                className="btn btn-ghost btn-sm text-sm font-medium text-base-content/80 hover:text-base-content"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                Login
+              </motion.button>
+            </Link>
+            <Link to="/signup">
+              <motion.button
+                className="btn-gradient btn btn-sm text-sm px-5"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                Sign Up
+              </motion.button>
+            </Link>
           </div>
         )}
       </div>

@@ -58,12 +58,32 @@ const LoginPage = () => {
   const { ref: emailRegRef, ...emailRegRest } = register("email");
 
   return (
-    <div className="h-screen grid lg:grid-cols-2">
+    <div className="min-h-[calc(100vh-76px)] lg:h-[calc(100vh-76px)] grid lg:grid-cols-2 relative overflow-hidden bg-[#0a0a0f]">
+      {/* Orbs */}
+      <div className="absolute top-10 left-10 w-96 h-96 bg-purple-900/30 rounded-full blur-3xl z-0 animate-pulse" />
+      <div
+        className="absolute bottom-10 right-10 w-96 h-96 bg-cyan-900/25 rounded-full blur-3xl z-0 animate-pulse"
+        style={{ animationDelay: "2s" }}
+      />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-violet-950/20 rounded-full blur-3xl z-0" />
+      {/* Dot grid texture */}
+      <div
+        className="absolute inset-0 z-0 opacity-[0.22]"
+        style={{
+          backgroundImage: `radial-gradient(circle, rgba(124,58,237,0.5) 1px, transparent 1px)`,
+          backgroundSize: "28px 28px",
+        }}
+      />
+      {/* Diagonal shimmer */}
+      <div
+        className="absolute inset-0 z-0 opacity-[0.05]"
+        style={{
+          backgroundImage: `repeating-linear-gradient(45deg, rgba(124,58,237,0.8) 0px, rgba(124,58,237,0.8) 1px, transparent 0px, transparent 50%)`,
+          backgroundSize: "60px 60px",
+        }}
+      />
       {/* Left Side - Form */}
-      <div className="flex flex-col justify-center items-center p-6 sm:p-12 relative overflow-hidden">
-        {/* Subtle bg gradient */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] rounded-full" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-secondary/5 blur-[80px] rounded-full" />
+      <div className="flex flex-col justify-center items-center p-6 sm:p-12 relative z-10">
 
         <motion.div
           className={`w-full max-w-md space-y-8 relative z-10 ${shakeForm ? "animate-shake" : ""}`}
@@ -189,11 +209,12 @@ const LoginPage = () => {
           </form>
 
           {/* Footer */}
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-3">
             <Link
               to="/forgot-password"
-              className="text-base-content/40 text-sm hover:text-primary transition-colors block"
+              className="group inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
             >
+              <Lock className="w-3.5 h-3.5 opacity-70 group-hover:opacity-100 transition-opacity" />
               Forgot your password?
             </Link>
             <p className="text-base-content/40 text-sm">

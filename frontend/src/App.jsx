@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AnimatePresence, motion } from "framer-motion";
 import HomePage from "./pages/HomePage";
@@ -17,6 +17,7 @@ import LeaderboardPage from "./pages/LeaderboardPage";
 import PlaylistsPage from "./pages/PlaylistsPage";
 import AdminPage from "./pages/AdminPage";
 import ForgotPassword from "./components/ForgotPassword";
+import Navbar from "./components/Navbar";
 
 const pageVariants = {
   initial: { opacity: 0, y: 8 },
@@ -35,6 +36,15 @@ const PageWrapper = ({ children }) => (
   </motion.div>
 );
 
+const AuthLayout = () => (
+  <div className="min-h-screen flex flex-col bg-[#0a0a0f]">
+    <Navbar />
+    <main className="flex-1 flex flex-col">
+      <Outlet />
+    </main>
+  </div>
+);
+
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
   const location = useLocation();
@@ -42,6 +52,29 @@ const App = () => {
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  // Dynamic page title based on route
+  useEffect(() => {
+    const path = location.pathname;
+    const titleMap = {
+      "/": "LeetLab - Master Coding Interviews",
+      "/home": "LeetLab - Master Coding Interviews",
+      "/login": "Login - LeetLab",
+      "/signup": "Sign Up - LeetLab",
+      "/forgot-password": "Forgot Password - LeetLab",
+      "/problems": "Problems - LeetLab",
+      "/leaderboard": "Leaderboard - LeetLab",
+      "/playlists": "Playlists - LeetLab",
+      "/profile": "Profile - LeetLab",
+      "/add-problem": "Add Problem - LeetLab",
+      "/admin": "Admin Dashboard - LeetLab",
+    };
+
+    // Problem page title is set inside ProblemPage.jsx once the problem loads
+    if (!path.startsWith("/problem/")) {
+      document.title = titleMap[path] ?? "LeetLab";
+    }
+  }, [location.pathname]);
 
   if (isCheckingAuth) {
     return (
@@ -75,7 +108,7 @@ const App = () => {
         </div>
 
         <p className="absolute bottom-6 text-xs text-base-content/30 font-medium">
-          © {new Date().getFullYear()} LeetLab — Amarnath Kumar
+          © {new Date().getFullYear()} LeetLab - Amarnath Kumar
         </p>
       </div>
     );
@@ -138,31 +171,34 @@ const App = () => {
             }
           />
 
-          {/* Auth routes */}
-          <Route
-            path="/login"
-            element={
-              !authUser ? (
-                <PageWrapper>
-                  <LoginPage />
-                </PageWrapper>
-              ) : (
-                <Navigate to="/problems" replace />
-              )
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              !authUser ? (
-                <PageWrapper>
-                  <SignUpPage />
-                </PageWrapper>
-              ) : (
-                <Navigate to="/problems" replace />
-              )
-            }
-          />
+          {/* Auth Layout wrapped routes */}
+          <Route element={<AuthLayout />}>
+            <Route
+              path="/login"
+              element={
+                !authUser ? (
+                  <PageWrapper>
+                    <LoginPage />
+                  </PageWrapper>
+                ) : (
+                  <Navigate to="/problems" replace />
+                )
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                !authUser ? (
+                  <PageWrapper>
+                    <SignUpPage />
+                  </PageWrapper>
+                ) : (
+                  <Navigate to="/problems" replace />
+                )
+              }
+            />
+          </Route>
+
           <Route
             path="/forgot-password"
             element={
@@ -235,22 +271,22 @@ const App = () => {
             </Route>
           ) : (
             <>
-              <Route path="/problems" element={<Navigate to="/" replace />} />
+              <Route path="/problems" element={<Navigate to="/login" replace />} />
               <Route
                 path="/leaderboard"
-                element={<Navigate to="/" replace />}
+                element={<Navigate to="/login" replace />}
               />
-              <Route path="/playlists" element={<Navigate to="/" replace />} />
-              <Route path="/profile" element={<Navigate to="/" replace />} />
+              <Route path="/playlists" element={<Navigate to="/login" replace />} />
+              <Route path="/profile" element={<Navigate to="/login" replace />} />
               <Route
                 path="/problem/:id"
-                element={<Navigate to="/" replace />}
+                element={<Navigate to="/login" replace />}
               />
               <Route
                 path="/add-problem"
-                element={<Navigate to="/" replace />}
+                element={<Navigate to="/login" replace />}
               />
-              <Route path="/admin" element={<Navigate to="/" replace />} />
+              <Route path="/admin" element={<Navigate to="/login" replace />} />
             </>
           )}
 

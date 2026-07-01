@@ -317,6 +317,8 @@ const ProblemPage = () => {
 
   useEffect(() => {
     if (problem) {
+      document.title = `${problem.title} — LeetLab`;
+
       const savedDraft = localStorage.getItem(
         `leetlab_draft_${id}_${selectedLanguage}`,
       );
@@ -332,6 +334,11 @@ const ProblemPage = () => {
           .map((tc) => ({ input: tc.input, output: tc.output })),
       );
     }
+
+    return () => {
+      // Reset title when leaving the problem page
+      document.title = "LeetLab";
+    };
   }, [problem, selectedLanguage, id]);
 
   useEffect(() => {

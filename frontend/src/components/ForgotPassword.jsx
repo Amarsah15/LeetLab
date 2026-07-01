@@ -86,30 +86,24 @@ const ForgotPassword = () => {
     }
   };
 
-  const handleOtpChange = (index, value) => {
-    const digit = value.replace(/\D/g, "").slice(-1);
+  const handleOtpChange = (e, index) => {
+    const value = e.target.value;
+    if (isNaN(value)) return;
     const updated = [...otpDigits];
-    updated[index] = digit;
+    updated[index] = value.substring(value.length - 1);
     setOtpDigits(updated);
     setOtpError("");
-    if (digit && index < OTP_LENGTH - 1) {
+    if (value && index < OTP_LENGTH - 1) {
       inputRefs.current[index + 1]?.focus();
     }
   };
 
-  const handleOtpKeyDown = (index, e) => {
-    if (e.key === "Backspace") {
-      if (otpDigits[index]) {
-        const updated = [...otpDigits];
-        updated[index] = "";
-        setOtpDigits(updated);
-      } else if (index > 0) {
-        inputRefs.current[index - 1]?.focus();
-      }
-    } else if (e.key === "ArrowLeft" && index > 0) {
+  const handleOtpKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !otpDigits[index] && index > 0) {
+      const updated = [...otpDigits];
+      updated[index - 1] = "";
+      setOtpDigits(updated);
       inputRefs.current[index - 1]?.focus();
-    } else if (e.key === "ArrowRight" && index < OTP_LENGTH - 1) {
-      inputRefs.current[index + 1]?.focus();
     }
   };
 
@@ -125,7 +119,8 @@ const ForgotPassword = () => {
     setOtpDigits(updated);
     setOtpError("");
     const nextEmpty = updated.findIndex((d) => !d);
-    inputRefs.current[nextEmpty === -1 ? OTP_LENGTH - 1 : nextEmpty]?.focus();
+    const focusIndex = nextEmpty === -1 ? OTP_LENGTH - 1 : nextEmpty;
+    inputRefs.current[focusIndex]?.focus();
   };
 
   const handleResetPassword = async (e) => {
@@ -160,9 +155,32 @@ const ForgotPassword = () => {
   const otpFilled = otpDigits.join("").length === OTP_LENGTH;
 
   return (
-    <div className="h-screen grid lg:grid-cols-2">
+    <div className="h-screen grid lg:grid-cols-2 relative overflow-hidden bg-[#0a0a0f]">
+      {/* Orbs */}
+      <div className="absolute top-10 left-10 w-96 h-96 bg-purple-900/30 rounded-full blur-3xl z-0 animate-pulse" />
+      <div
+        className="absolute bottom-10 right-10 w-96 h-96 bg-cyan-900/25 rounded-full blur-3xl z-0 animate-pulse"
+        style={{ animationDelay: "2s" }}
+      />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-violet-950/20 rounded-full blur-3xl z-0" />
+      {/* Dot grid texture */}
+      <div
+        className="absolute inset-0 z-0 opacity-[0.22]"
+        style={{
+          backgroundImage: `radial-gradient(circle, rgba(124,58,237,0.5) 1px, transparent 1px)`,
+          backgroundSize: "28px 28px",
+        }}
+      />
+      {/* Diagonal shimmer */}
+      <div
+        className="absolute inset-0 z-0 opacity-[0.05]"
+        style={{
+          backgroundImage: `repeating-linear-gradient(45deg, rgba(124,58,237,0.8) 0px, rgba(124,58,237,0.8) 1px, transparent 0px, transparent 50%)`,
+          backgroundSize: "60px 60px",
+        }}
+      />
       {/* Left Side - Form */}
-      <div className="flex flex-col justify-center items-center p-6 sm:p-12">
+      <div className="flex flex-col justify-center items-center p-6 sm:p-12 relative z-10">
         <div className="w-full max-w-md space-y-8">
           {/* Logo */}
           <div className="text-center mb-8">
