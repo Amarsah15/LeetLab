@@ -73,7 +73,7 @@ const AddToPlaylistModal = ({ isOpen, onClose, problemId }) => {
             </button>
             <button
               type="submit"
-              className="h-11 px-6 font-bold rounded-xl flex items-center gap-1.5 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all text-[15px] bg-primary hover:bg-primary/90 text-white disabled:opacity-100 disabled:bg-white/5 disabled:text-white/20 disabled:border-white/5 cursor-not-allowed"
+              className="h-11 px-6 font-bold rounded-xl flex items-center gap-1.5 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all text-[15px] bg-primary hover:bg-primary/90 text-white disabled:opacity-100 disabled:bg-white/5 disabled:text-white/20 disabled:border-white/5 cursor-pointer"
               disabled={!selectedPlaylist || isLoading}
             >
               {isLoading ? (
