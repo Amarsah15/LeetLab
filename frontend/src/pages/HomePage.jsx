@@ -579,12 +579,12 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/10 to-transparent blur-sm" />
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between md:items-end items-center gap-6 max-w-[90rem] mx-auto">
-            <p className="text-lg text-base-content/40 order-2 md:order-1 font-medium">
+          <div className="flex flex-col md:flex-row justify-between md:items-end items-center gap-6 max-w-[90rem] mx-auto mb-1">
+            <p className="text-sm text-base-content/40 order-2 md:order-1 font-medium">
               Built with <span className="text-rose-500 animate-pulse text-xl">❤️</span> by{" "}
               <span className="font-semibold text-primary/80 hover:text-primary transition-colors cursor-default">Amarnath Kumar</span>
             </p>
-            <p className="text-lg text-base-content/40 order-1 md:order-2 font-medium">
+            <p className="text-sm text-base-content/40 order-1 md:order-2 font-medium">
               © {new Date().getFullYear()}{" "}
               <span className="font-bold gradient-text">LeetLab</span>. All rights reserved.
             </p>
@@ -600,7 +600,7 @@ export default function Home() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-xl bg-base-content/5 border border-base-content/5 hover:border-primary/30 flex items-center justify-center text-base-content/40 hover:text-primary hover:bg-primary/5 transition-all shadow-sm"
+                  className="w-7 h-7 rounded-xl bg-base-content/5 border border-base-content/5 hover:border-primary/30 flex items-center justify-center text-base-content/40 hover:text-primary hover:bg-primary/5 transition-all shadow-sm"
                   whileHover={{ scale: 1.08 }}
                   whileTap={{ scale: 0.95 }}
                 >
