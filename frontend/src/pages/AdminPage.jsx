@@ -33,7 +33,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#080711] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative overflow-hidden">
+    <div className="min-h-screen bg-midnight text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative overflow-hidden">
       {/* Header Container */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 border-b border-base-content/10 pb-8">
         <div>

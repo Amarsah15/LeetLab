@@ -76,7 +76,7 @@ const LeaderboardPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#080711] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full overflow-hidden">
+    <div className="min-h-screen bg-midnight text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full overflow-hidden">
       <div className="max-w-4xl mx-auto space-y-10">
         {/* Header Back Navigation */}
         <div className="flex justify-between items-center border-b border-white/5 pb-8">
@@ -274,7 +274,7 @@ function PodiumCard({
 
 function SkeletonLeaderboard() {
   return (
-    <div className="min-h-screen bg-[#080711] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full flex flex-col items-center">
+    <div className="min-h-screen bg-midnight text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full flex flex-col items-center">
       <div className="w-full max-w-4xl space-y-10 animate-pulse">
         <div className="border-b border-white/5 pb-8">
           <div className="h-4 w-32 bg-white/5 rounded mb-2" />

@@ -98,7 +98,7 @@ const ProfilePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#080711] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full overflow-hidden">
+    <div className="min-h-screen bg-midnight text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full overflow-hidden">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header Back Navigation */}
         <div className="flex justify-between items-center border-b border-white/5 pb-8">

@@ -60,7 +60,19 @@
 }
 
 * {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+code, pre, .font-mono {
+  font-family: 'JetBrains Mono', monospace !important;
+  letter-spacing: normal;
+}
+
+.bg-midnight {
+  background-color: #0b0a16 !important;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px) !important;
+  background-size: 24px 24px !important;
 }
 
 /* ============================================
@@ -567,24 +579,24 @@
    ============================================ */
 
 .badge-glow-easy {
-  background: rgba(16, 185, 129, 0.15) !important;
-  color: #10b981 !important;
-  border: 1px solid rgba(16, 185, 129, 0.3) !important;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.15);
+  background: rgba(16, 185, 129, 0.05) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.15) !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.05);
 }
 
 .badge-glow-medium {
-  background: rgba(245, 158, 11, 0.15) !important;
-  color: #f59e0b !important;
-  border: 1px solid rgba(245, 158, 11, 0.3) !important;
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.15);
+  background: rgba(245, 158, 11, 0.05) !important;
+  color: #fbbf24 !important;
+  border: 1px solid rgba(245, 158, 11, 0.15) !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.05);
 }
 
 .badge-glow-hard {
-  background: rgba(244, 63, 94, 0.15) !important;
+  background: rgba(244, 63, 94, 0.05) !important;
   color: #f43f5e !important;
-  border: 1px solid rgba(244, 63, 94, 0.3) !important;
-  box-shadow: 0 0 8px rgba(244, 63, 94, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.15) !important;
+  box-shadow: 0 0 10px rgba(244, 63, 94, 0.05);
 }
 
 /* ============================================

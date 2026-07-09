@@ -449,7 +449,7 @@ const ProblemPage = () => {
 
   if (isProblemLoading || !problem) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#eef1f5] dark:bg-[#080711]">
+      <div className="flex items-center justify-center h-screen bg-[#eef1f5] dark:bg-midnight">
         <div className="flex flex-col items-center gap-4">
           <span className="loading loading-spinner loading-lg text-purple-500"></span>
           <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
@@ -711,18 +711,9 @@ const ProblemPage = () => {
   const modKeyLabel = isMac ? "\u2318" : "Ctrl";
 
   return (
-    <div className="h-[calc(100vh-64px)] bg-[#080711] text-slate-100 w-full flex flex-col overflow-hidden relative">
+    <div className="h-[calc(100vh-64px)] bg-midnight text-slate-100 w-full flex flex-col overflow-hidden relative">
       {/* Mobile/Desktop Navigation Header */}
-      <div className="flex items-center justify-between px-4 py-2 shrink-0 bg-[#080711] z-30">
-        <Link
-          to="/problems"
-          className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-400 hover:text-purple-400 transition-all duration-200 uppercase tracking-wider"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Explore Problems</span>
-          <span className="sm:hidden">Back</span>
-        </Link>
-
+      <div className="flex items-center justify-between px-4 py-1 shrink-0 bg-midnight z-30">
         {/* Mobile View Switch Tabs */}
         {!isLargeScreen && (
           <div className="flex bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 p-0.5 rounded-lg select-none">
