@@ -6,12 +6,13 @@ import { motion } from "framer-motion";
 import {
   Code,
   Trophy,
-  Activity,
   Flame,
   CheckCircle,
   Sparkles,
   ArrowRight,
   ShieldAlert,
+  Brain,
+  Crown,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -149,7 +150,7 @@ const ProblemsPage = () => {
               <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-xl group-hover:bg-amber-500/10 transition-all duration-300" />
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 rounded-xl bg-amber-500/10 text-amber-500 dark:text-amber-400">
-                  <Activity className="w-5 h-5" />
+                  <Brain className="w-5 h-5" />
                 </div>
               </div>
               <p className="text-xs font-semibold tracking-wider text-slate-400 uppercase">
@@ -171,7 +172,7 @@ const ProblemsPage = () => {
               <div className="absolute top-0 right-0 w-24 h-24 bg-rose-500/5 rounded-full blur-xl group-hover:bg-rose-500/10 transition-all duration-300" />
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 rounded-xl bg-rose-500/10 text-rose-500 dark:text-rose-400">
-                  <Flame className="w-5 h-5" />
+                  <Crown className="w-5 h-5" />
                 </div>
               </div>
               <p className="text-xs font-semibold tracking-wider text-slate-400 uppercase">
