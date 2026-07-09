@@ -76,14 +76,7 @@ const LeaderboardPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full overflow-hidden">
-      {/* Background Decorative Blur Orbs */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[300px] rounded-full bg-purple-900/10 blur-[120px] animate-pulse" />
-      <div
-        className="absolute bottom-0 right-1/4 w-[400px] h-[250px] rounded-full bg-cyan-900/10 blur-[100px] animate-pulse"
-        style={{ animationDelay: "2s" }}
-      />
-
+    <div className="min-h-screen bg-[#080711] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full overflow-hidden">
       <div className="max-w-4xl mx-auto space-y-10">
         {/* Header Back Navigation */}
         <div className="flex justify-between items-center border-b border-white/5 pb-8">
@@ -115,7 +108,7 @@ const LeaderboardPage = () => {
               entry={leaderboard[1]}
               rank={2}
               height="h-28"
-              color="from-slate-200/50 via-slate-100/30 to-[#f8fafc] dark:from-slate-800/40 dark:via-slate-900/40 dark:to-[#12121a]"
+              color="from-slate-200/50 via-slate-100/30 to-[#f8fafc] dark:from-slate-800/40 dark:via-slate-900/40 dark:to-[#161622]"
               borderColor="border-slate-300/30 dark:border-slate-700/40"
               authUserId={authUser?._id}
             />
@@ -124,7 +117,7 @@ const LeaderboardPage = () => {
               entry={leaderboard[0]}
               rank={1}
               height="h-36"
-              color="from-yellow-200/50 via-yellow-100/30 to-[#f8fafc] dark:from-yellow-950/20 dark:via-yellow-900/10 dark:to-[#12121a]"
+              color="from-yellow-200/50 via-yellow-100/30 to-[#f8fafc] dark:from-yellow-950/20 dark:via-yellow-900/10 dark:to-[#161622]"
               borderColor="border-yellow-400/30 dark:border-yellow-500/30"
               crown
               authUserId={authUser?._id}
@@ -134,7 +127,7 @@ const LeaderboardPage = () => {
               entry={leaderboard[2]}
               rank={3}
               height="h-24"
-              color="from-amber-200/50 via-amber-100/30 to-[#f8fafc] dark:from-amber-950/20 dark:via-amber-900/10 dark:to-[#12121a]"
+              color="from-amber-200/50 via-amber-100/30 to-[#f8fafc] dark:from-amber-950/20 dark:via-amber-900/10 dark:to-[#161622]"
               borderColor="border-amber-500/20 dark:border-amber-700/30"
               authUserId={authUser?._id}
             />
@@ -144,7 +137,7 @@ const LeaderboardPage = () => {
         {/* Rankings Table */}
         <div className="w-full">
           {leaderboard.length === 0 ? (
-            <div className="p-12 text-center bg-[#12121a] border border-white/5 rounded-2xl shadow-xl">
+            <div className="p-12 text-center bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 rounded-2xl shadow-xl">
               <Trophy className="w-14 h-14 text-slate-600 mx-auto mb-4" />
               <h3 className="text-lg font-bold mb-2">No rankings yet</h3>
               <p className="text-xs text-slate-400">
@@ -153,7 +146,7 @@ const LeaderboardPage = () => {
               </p>
             </div>
           ) : (
-            <div className="bg-[#12121a] border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+            <div className="bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
               <table className="w-full text-slate-200 text-xs">
                 <thead>
                   <tr className="border-b border-white/5 text-slate-400 uppercase tracking-wider text-[10px] font-semibold bg-white/5">
@@ -281,7 +274,7 @@ function PodiumCard({
 
 function SkeletonLeaderboard() {
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full flex flex-col items-center">
+    <div className="min-h-screen bg-[#080711] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full flex flex-col items-center">
       <div className="w-full max-w-4xl space-y-10 animate-pulse">
         <div className="border-b border-white/5 pb-8">
           <div className="h-4 w-32 bg-white/5 rounded mb-2" />
@@ -294,7 +287,7 @@ function SkeletonLeaderboard() {
           <div className="w-24 h-20 bg-white/5 rounded-t-2xl border border-white/5" />
         </div>
 
-        <div className="bg-[#12121a] border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+        <div className="bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
           <div className="flex justify-between p-4 border-b border-white/5">
             <div className="h-4 w-12 bg-white/5 rounded" />
             <div className="h-4 w-32 bg-white/5 rounded" />

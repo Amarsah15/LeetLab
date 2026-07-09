@@ -51,7 +51,7 @@ const StatsCard = ({ stats }) => {
         {statItems.map((item, index) => (
           <motion.div
             key={item.label}
-            className={`bg-[#12121a] border border-white/5 rounded-2xl p-4 sm:p-5 shadow-lg ${item.glowColor}`}
+            className={`bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 rounded-2xl p-4 sm:p-5 shadow-lg ${item.glowColor}`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}

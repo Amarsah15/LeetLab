@@ -77,7 +77,7 @@ const PlaylistProfile = ({ onOpenCreatePlaylist }) => {
       </div>
 
       {playlists.length === 0 ? (
-        <div className="bg-[#12121a] border border-white/5 p-8 text-center rounded-2xl shadow-xl">
+        <div className="bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 p-8 text-center rounded-2xl shadow-xl">
           <h3 className="text-base font-semibold text-base-content/70 mb-1">
             No playlists found
           </h3>
@@ -96,7 +96,7 @@ const PlaylistProfile = ({ onOpenCreatePlaylist }) => {
           {playlists.map((playlist) => (
             <div
               key={playlist._id}
-              className="bg-[#12121a] border border-white/5 rounded-2xl overflow-hidden shadow-xl"
+              className="bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 rounded-2xl overflow-hidden shadow-xl"
             >
               <div className="p-4">
                 {/* Playlist Header */}

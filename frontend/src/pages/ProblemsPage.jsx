@@ -54,14 +54,7 @@ const ProblemsPage = () => {
     problems.length > 0 ? Math.round((solvedCount / problems.length) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full overflow-hidden">
-      {/* Background radial gradient orbs */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[300px] rounded-full bg-purple-900/10 blur-[120px] animate-pulse" />
-      <div
-        className="absolute top-24 right-1/4 w-[400px] h-[250px] rounded-full bg-cyan-900/10 blur-[100px] animate-pulse"
-        style={{ animationDelay: "2s" }}
-      />
-
+    <div className="min-h-screen bg-[#080711] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full overflow-hidden">
       <div className="max-w-6xl mx-auto space-y-10">
         {/* Welcome Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-base-content/10 pb-8">
@@ -81,7 +74,7 @@ const ProblemsPage = () => {
 
           {/* User Streak Overlay Card */}
           {authUser && (
-            <div className="flex items-center gap-4 bg-[#12121a]/60 backdrop-blur-md border border-white/5 px-6 py-3.5 rounded-2xl shadow-xl relative overflow-hidden group">
+            <div className="flex items-center gap-4 bg-gradient-to-br from-[#16142c]/60 to-[#0d0c1b]/60 backdrop-blur-md border border-white/5 px-6 py-3.5 rounded-2xl shadow-xl relative overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="p-3 rounded-xl bg-orange-500/10 text-orange-400">
                 <Flame className="w-6 h-6 animate-pulse" />
@@ -102,7 +95,7 @@ const ProblemsPage = () => {
         {!isProblemsLoading && problems.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Card 1: Total Progress */}
-            <div className="relative group overflow-hidden rounded-2xl bg-[#12121a]/60 backdrop-blur-md border border-white/5 p-6 hover:border-purple-500/30 transition-all duration-300 shadow-2xl">
+            <div className="relative group overflow-hidden rounded-2xl bg-gradient-to-br from-[#16142c]/60 to-[#0d0c1b]/60 backdrop-blur-md border border-white/5 p-6 hover:border-purple-500/30 transition-all duration-300 shadow-2xl">
               <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-xl group-hover:bg-purple-500/10 transition-all duration-300" />
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 rounded-xl bg-purple-500/10 text-purple-500 dark:text-purple-400">
@@ -130,7 +123,7 @@ const ProblemsPage = () => {
             </div>
 
             {/* Card 2: Easy Problems */}
-            <div className="relative group overflow-hidden rounded-2xl bg-[#12121a]/60 backdrop-blur-md border border-white/5 p-6 hover:border-emerald-500/30 transition-all duration-300 shadow-2xl">
+            <div className="relative group overflow-hidden rounded-2xl bg-gradient-to-br from-[#16142c]/60 to-[#0d0c1b]/60 backdrop-blur-md border border-white/5 p-6 hover:border-emerald-500/30 transition-all duration-300 shadow-2xl">
               <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-xl group-hover:bg-emerald-500/10 transition-all duration-300" />
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-500 dark:text-emerald-400">
@@ -152,7 +145,7 @@ const ProblemsPage = () => {
             </div>
 
             {/* Card 3: Medium Problems */}
-            <div className="relative group overflow-hidden rounded-2xl bg-[#12121a]/60 backdrop-blur-md border border-white/5 p-6 hover:border-amber-500/30 transition-all duration-300 shadow-2xl">
+            <div className="relative group overflow-hidden rounded-2xl bg-gradient-to-br from-[#16142c]/60 to-[#0d0c1b]/60 backdrop-blur-md border border-white/5 p-6 hover:border-amber-500/30 transition-all duration-300 shadow-2xl">
               <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-xl group-hover:bg-amber-500/10 transition-all duration-300" />
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 rounded-xl bg-amber-500/10 text-amber-500 dark:text-amber-400">
@@ -174,7 +167,7 @@ const ProblemsPage = () => {
             </div>
 
             {/* Card 4: Hard Problems */}
-            <div className="relative group overflow-hidden rounded-2xl bg-[#12121a]/60 backdrop-blur-md border border-white/5 p-6 hover:border-rose-500/30 transition-all duration-300 shadow-2xl">
+            <div className="relative group overflow-hidden rounded-2xl bg-gradient-to-br from-[#16142c]/60 to-[#0d0c1b]/60 backdrop-blur-md border border-white/5 p-6 hover:border-rose-500/30 transition-all duration-300 shadow-2xl">
               <div className="absolute top-0 right-0 w-24 h-24 bg-rose-500/5 rounded-full blur-xl group-hover:bg-rose-500/10 transition-all duration-300" />
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 rounded-xl bg-rose-500/10 text-rose-500 dark:text-rose-400">
@@ -199,7 +192,7 @@ const ProblemsPage = () => {
 
         {/* Daily Challenge Special Banner */}
         {!isDailyProblemLoading && dailyProblem && (
-          <div className="relative group overflow-hidden rounded-2xl bg-[#12121a]/60 backdrop-blur-md border border-white/5 p-6 shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="relative group overflow-hidden rounded-2xl bg-gradient-to-br from-[#16142c]/60 to-[#0d0c1b]/60 backdrop-blur-md border border-white/5 p-6 shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-2xl -z-10 group-hover:bg-purple-500/10 transition-all" />
             <div className="space-y-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-500/10 border border-purple-500/20 text-purple-400">
@@ -235,7 +228,7 @@ const ProblemsPage = () => {
               className="relative overflow-hidden rounded-xl p-px group/btn hover:scale-[1.02] transition-transform self-stretch md:self-auto flex items-center justify-center"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-xl" />
-              <div className="relative px-6 py-3.5 bg-[#12121a] rounded-xl text-xs font-bold tracking-wider uppercase text-white flex items-center gap-2 group-hover/btn:bg-transparent transition-colors">
+              <div className="relative px-6 py-3.5 bg-gradient-to-br from-[#16142c] to-[#0d0c1b] rounded-xl text-xs font-bold tracking-wider uppercase text-white flex items-center gap-2 group-hover/btn:bg-transparent transition-colors">
                 Solve Challenge
                 <ArrowRight className="w-4 h-4" />
               </div>
@@ -249,7 +242,7 @@ const ProblemsPage = () => {
         ) : problems.length > 0 ? (
           <ProblemTable problems={problems} />
         ) : (
-          <div className="text-center py-20 bg-[#12121a] rounded-2xl border border-white/5 shadow-xl">
+          <div className="text-center py-20 bg-gradient-to-br from-[#16142c] to-[#0d0c1b] rounded-2xl border border-white/5 shadow-xl">
             <ShieldAlert className="w-12 h-12 text-slate-500 mx-auto mb-4" />
             <h3 className="font-bold text-lg mb-2 text-white">
               No problems loaded

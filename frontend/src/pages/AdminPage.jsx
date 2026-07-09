@@ -33,14 +33,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative overflow-hidden">
-      {/* Background Decorative Orbs */}
-      <div className="absolute top-10 left-10 w-96 h-96 bg-purple-900/10 rounded-full blur-3xl -z-10 animate-pulse" />
-      <div
-        className="absolute bottom-10 right-10 w-96 h-96 bg-cyan-900/10 rounded-full blur-3xl -z-10 animate-pulse"
-        style={{ animationDelay: "2s" }}
-      />
-
+    <div className="min-h-screen bg-[#080711] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative overflow-hidden">
       {/* Header Container */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 border-b border-base-content/10 pb-8">
         <div>
@@ -62,7 +55,7 @@ export default function AdminPage() {
           className="relative group overflow-hidden rounded-xl p-px transition-all hover:scale-[1.02]"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-500 rounded-xl transition-all group-hover:opacity-100" />
-          <div className="relative px-6 py-3 bg-[#12121a] rounded-xl text-sm font-semibold tracking-wide text-white transition-colors group-hover:bg-transparent">
+          <div className="relative px-6 py-3 bg-gradient-to-br from-[#16142c] to-[#0d0c1b] rounded-xl text-sm font-semibold tracking-wide text-white transition-colors group-hover:bg-transparent">
             {isLoading ? "Refreshing Metrics..." : "Refresh Console"}
           </div>
         </button>
@@ -82,13 +75,13 @@ export default function AdminPage() {
             {[1, 2, 3].map((n) => (
               <div
                 key={n}
-                className="h-32 bg-[#12121a] border border-white/5 rounded-2xl"
+                className="h-32 bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 rounded-2xl"
               />
             ))}
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 h-96 bg-[#12121a] border border-white/5 rounded-2xl" />
-            <div className="h-96 bg-[#12121a] border border-white/5 rounded-2xl" />
+            <div className="lg:col-span-2 h-96 bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 rounded-2xl" />
+            <div className="h-96 bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 rounded-2xl" />
           </div>
         </div>
       ) : analytics ? (
@@ -96,7 +89,7 @@ export default function AdminPage() {
           {/* Card Overview Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Users Card */}
-            <div className="relative group overflow-hidden rounded-2xl bg-[#12121a] border border-white/5 p-6 hover:border-purple-500/30 transition-all duration-300 shadow-2xl">
+            <div className="relative group overflow-hidden rounded-2xl bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 p-6 hover:border-purple-500/30 transition-all duration-300 shadow-2xl">
               <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-xl group-hover:bg-purple-500/10 transition-all duration-300" />
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 rounded-xl bg-purple-500/10 text-purple-500 dark:text-purple-400">
@@ -115,7 +108,7 @@ export default function AdminPage() {
             </div>
 
             {/* Problems Card */}
-            <div className="relative group overflow-hidden rounded-2xl bg-[#12121a] border border-white/5 p-6 hover:border-cyan-500/30 transition-all duration-300 shadow-2xl">
+            <div className="relative group overflow-hidden rounded-2xl bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 p-6 hover:border-cyan-500/30 transition-all duration-300 shadow-2xl">
               <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-xl group-hover:bg-cyan-500/10 transition-all duration-300" />
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 rounded-xl bg-cyan-500/10 text-cyan-500 dark:text-cyan-400">
@@ -134,7 +127,7 @@ export default function AdminPage() {
             </div>
 
             {/* Submissions Card */}
-            <div className="relative group overflow-hidden rounded-2xl bg-[#12121a] border border-white/5 p-6 hover:border-rose-500/30 transition-all duration-300 shadow-2xl">
+            <div className="relative group overflow-hidden rounded-2xl bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 p-6 hover:border-rose-500/30 transition-all duration-300 shadow-2xl">
               <div className="absolute top-0 right-0 w-24 h-24 bg-rose-500/5 rounded-full blur-xl group-hover:bg-rose-500/10 transition-all duration-300" />
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 rounded-xl bg-rose-500/10 text-rose-500 dark:text-rose-400">
@@ -156,7 +149,7 @@ export default function AdminPage() {
           {/* Interactive Sections Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Daily Submissions Chart */}
-            <div className="lg:col-span-2 rounded-2xl bg-[#12121a] border border-white/5 p-6 shadow-xl flex flex-col justify-between">
+            <div className="lg:col-span-2 rounded-2xl bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 p-6 shadow-xl flex flex-col justify-between">
               <div>
                 <div className="flex justify-between items-start mb-6">
                   <div>
@@ -219,7 +212,7 @@ export default function AdminPage() {
             </div>
 
             {/* Language & Outcomes Section */}
-            <div className="rounded-2xl bg-[#12121a] border border-white/5 p-6 shadow-xl space-y-6">
+            <div className="rounded-2xl bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 p-6 shadow-xl space-y-6">
               <div>
                 <h3 className="text-lg font-bold text-white flex items-center gap-2">
                   <Cpu className="w-5 h-5 text-cyan-500 dark:text-cyan-400" />
@@ -290,7 +283,7 @@ export default function AdminPage() {
           {/* User & System Status Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Active Users List */}
-            <div className="lg:col-span-2 rounded-2xl bg-[#12121a] border border-white/5 p-6 shadow-xl">
+            <div className="lg:col-span-2 rounded-2xl bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 p-6 shadow-xl">
               <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                 <Users className="w-5 h-5 text-purple-500 dark:text-purple-400" />
                 Active Developers
@@ -357,7 +350,7 @@ export default function AdminPage() {
             </div>
 
             {/* System Status Panel */}
-            <div className="rounded-2xl bg-[#12121a] border border-white/5 p-6 shadow-xl flex flex-col justify-between">
+            <div className="rounded-2xl bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 p-6 shadow-xl flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
                   <Database className="w-5 h-5 text-purple-500 dark:text-purple-400" />
@@ -433,7 +426,7 @@ export default function AdminPage() {
           </div>
         </div>
       ) : (
-        <div className="text-center py-20 bg-[#12121a] rounded-2xl border border-white/5 shadow-xl">
+        <div className="text-center py-20 bg-gradient-to-br from-[#16142c] to-[#0d0c1b] rounded-2xl border border-white/5 shadow-xl">
           <AlertCircle className="w-12 h-12 text-slate-500 mx-auto mb-4" />
           <p className="text-slate-400 font-semibold">
             No analytics database records loaded.

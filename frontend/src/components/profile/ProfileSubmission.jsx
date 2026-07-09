@@ -81,7 +81,7 @@ const ProfileSubmission = () => {
         My Submissions
       </h2>
 
-      <div className="bg-[#12121a] border border-white/5 rounded-2xl p-6 shadow-xl">
+      <div className="bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 rounded-2xl p-6 shadow-xl">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <div className="dropdown mt-1">
             <div

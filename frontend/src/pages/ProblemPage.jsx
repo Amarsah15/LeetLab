@@ -449,7 +449,7 @@ const ProblemPage = () => {
 
   if (isProblemLoading || !problem) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#eef1f5] dark:bg-[#0a0a0f]">
+      <div className="flex items-center justify-center h-screen bg-[#eef1f5] dark:bg-[#080711]">
         <div className="flex flex-col items-center gap-4">
           <span className="loading loading-spinner loading-lg text-purple-500"></span>
           <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
@@ -711,9 +711,9 @@ const ProblemPage = () => {
   const modKeyLabel = isMac ? "\u2318" : "Ctrl";
 
   return (
-    <div className="h-[calc(100vh-64px)] bg-[#0a0a0f] text-slate-100 w-full flex flex-col overflow-hidden relative">
+    <div className="h-[calc(100vh-64px)] bg-[#080711] text-slate-100 w-full flex flex-col overflow-hidden relative">
       {/* Mobile/Desktop Navigation Header */}
-      <div className="flex items-center justify-between px-4 py-2 shrink-0 bg-[#0a0a0f] z-30">
+      <div className="flex items-center justify-between px-4 py-2 shrink-0 bg-[#080711] z-30">
         <Link
           to="/problems"
           className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-400 hover:text-purple-400 transition-all duration-200 uppercase tracking-wider"
@@ -725,7 +725,7 @@ const ProblemPage = () => {
 
         {/* Mobile View Switch Tabs */}
         {!isLargeScreen && (
-          <div className="flex bg-[#12121a] border border-white/5 p-0.5 rounded-lg select-none">
+          <div className="flex bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 p-0.5 rounded-lg select-none">
             <button
               className={`text-xs font-black px-3.5 py-1.5 rounded-md transition-all cursor-pointer ${mobileTab === "info" ? "bg-purple-600 text-white shadow-md" : "text-slate-400 hover:text-slate-200"}`}
               onClick={() => setMobileTab("info")}
@@ -753,7 +753,7 @@ const ProblemPage = () => {
           {/* ═══════════ LEFT PANEL ═══════════ */}
           <div
             style={isLargeScreen ? { width: `${leftWidth}%` } : {}}
-            className={`${!isLargeScreen && mobileTab !== "info" ? "hidden" : "flex"} w-full flex-1 min-h-0 lg:flex-none lg:h-full overflow-hidden flex flex-col rounded-xl bg-[#12121a] border border-white/5 ${isResizing ? "pointer-events-none" : ""}`}
+            className={`${!isLargeScreen && mobileTab !== "info" ? "hidden" : "flex"} w-full flex-1 min-h-0 lg:flex-none lg:h-full overflow-hidden flex flex-col rounded-xl bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 ${isResizing ? "pointer-events-none" : ""}`}
           >
             {/* Clean tab bar */}
             <div className="flex items-center gap-0 px-2 pt-2 pb-0 border-b border-base-content/5 shrink-0 overflow-x-auto">
@@ -803,7 +803,7 @@ const ProblemPage = () => {
             className={`${!isLargeScreen && mobileTab !== "code" ? "hidden" : "flex"} w-full flex-1 min-h-0 lg:h-full overflow-hidden flex flex-col gap-1.5 ${isResizing || isVResizing ? "pointer-events-none" : ""}`}
           >
             <div
-              className="flex flex-col rounded-xl bg-[#12121a] border border-white/5 overflow-hidden"
+              className="flex flex-col rounded-xl bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 overflow-hidden"
               style={{ flex: 1, minHeight: 0 }}
             >
               {/* Editor toolbar */}
@@ -820,7 +820,7 @@ const ProblemPage = () => {
                         <option
                           key={lang}
                           value={lang}
-                          className="bg-[#12121a] text-white font-semibold"
+                          className="bg-gradient-to-br from-[#16142c] to-[#0d0c1b] text-white font-semibold"
                         >
                           {lang === "JAVASCRIPT"
                             ? "JavaScript"
@@ -866,7 +866,7 @@ const ProblemPage = () => {
                       <Settings className="w-3.5 h-3.5" />
                     </button>
                     {showSettings && (
-                      <div className="absolute right-0 top-9 z-50 w-52 bg-[#12121a] rounded-xl shadow-2xl border border-white/10 p-4 space-y-4">
+                      <div className="absolute right-0 top-9 z-50 w-52 bg-gradient-to-br from-[#16142c] to-[#0d0c1b] rounded-xl shadow-2xl border border-white/10 p-4 space-y-4">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-xs font-bold text-base-content/60">
                             Editor Settings
@@ -1058,7 +1058,7 @@ const ProblemPage = () => {
             {/* ─── Console Card ─── */}
             {showConsole && (
               <div
-                className="flex flex-col rounded-xl bg-[#12121a] border border-white/5 overflow-hidden"
+                className="flex flex-col rounded-xl bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 overflow-hidden"
                 style={{ height: `${consoleHeight}%` }}
               >
                 {/* Console tabs */}

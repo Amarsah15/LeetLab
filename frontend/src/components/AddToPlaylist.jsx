@@ -26,7 +26,7 @@ const AddToPlaylistModal = ({ isOpen, onClose, problemId }) => {
 
   return (
     <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4 animate-fade-in-up duration-150">
-      <div className="bg-[#12121a] border border-white/10 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 animate-scale-in">
+      <div className="bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/10 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 animate-scale-in">
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-white/5">
           <div className="flex items-center gap-3">
@@ -52,9 +52,9 @@ const AddToPlaylistModal = ({ isOpen, onClose, problemId }) => {
                 onChange={(e) => setSelectedPlaylist(e.target.value)}
                 disabled={isLoading}
               >
-                <option value="" className="bg-[#12121a] text-white">Select a playlist</option>
+                <option value="" className="bg-gradient-to-br from-[#16142c] to-[#0d0c1b] text-white">Select a playlist</option>
                 {playlists.map((playlist) => (
-                  <option key={playlist._id} value={playlist._id} className="bg-[#12121a] text-white">
+                  <option key={playlist._id} value={playlist._id} className="bg-gradient-to-br from-[#16142c] to-[#0d0c1b] text-white">
                     {playlist.name}
                   </option>
                 ))}

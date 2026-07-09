@@ -17,13 +17,6 @@ const Layout = () => {
 
   return (
     <div className="relative min-h-screen">
-      {/* Ambient background orbs */}
-      <div className="ambient-bg">
-        <div className="ambient-orb w-96 h-96 bg-primary/30 -top-20 -right-20 animate-mesh" />
-        <div className="ambient-orb w-72 h-72 bg-secondary/20 top-1/2 -left-16 animate-mesh delay-1000" />
-        <div className="ambient-orb w-56 h-56 bg-accent/10 bottom-20 right-1/4 animate-mesh delay-2000" />
-      </div>
-
       {/* Desktop navbar */}
       <Navbar />
 

@@ -537,7 +537,7 @@ export default function Home() {
       <footer className="w-full relative overflow-hidden bg-gradient-to-b from-[#0a0a0f] to-[#050508] border-t border-purple-500/10 mt-auto select-none">
         {/* Ambient Glows */}
         <div className="absolute bottom-[-100px] left-[-100px] w-80 h-80 bg-purple-900/15 rounded-full blur-[100px] pointer-events-none z-0" />
-        <div className="absolute bottom-[-100px] right-[-100px] w-80 h-80 bg-cyan-900/10 rounded-full blur-[100px] pointer-events-none z-0" />
+        <div className="absolute bottom-[-100px] right-[-100px] w-80 h-80 bg-purple-950/5 rounded-full blur-[100px] pointer-events-none z-0" />
 
         <div className="w-full px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 pt-8 pb-3 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-start gap-12 sm:gap-16 mb-6 max-w-[90rem] mx-auto">

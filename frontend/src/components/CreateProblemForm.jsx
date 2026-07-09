@@ -594,7 +594,7 @@ const CreateProblemForm = () => {
 
   return (
     <div className="min-h-screen px-4 sm:px-6 pb-12 relative w-full pt-6">
-      <div className="bg-[#12121a] border border-white/5 rounded-2xl max-w-5xl mx-auto shadow-2xl relative overflow-hidden mt-1">
+      <div className="bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/5 rounded-2xl max-w-5xl mx-auto shadow-2xl relative overflow-hidden mt-1">
         <div className="p-6 md:p-8">
           {/* Sample Problem Pre-Loader controls */}
           <div className="flex flex-col items-center justify-between gap-4 mb-8 pb-6 border-b border-base-content/5">

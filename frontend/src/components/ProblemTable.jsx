@@ -72,7 +72,7 @@ const CustomSelect = ({ label, value, options, onChange }) => {
       </button>
 
       {isOpen && (
-        <div className="absolute top-[calc(100%+4px)] left-0 w-full bg-[#12121a] border border-white/10 shadow-2xl rounded-xl py-1.5 max-h-60 overflow-y-auto z-[60] custom-scrollbar animate-scale-in">
+        <div className="absolute top-[calc(100%+4px)] left-0 w-full bg-gradient-to-br from-[#16142c] to-[#0d0c1b] border border-white/10 shadow-2xl rounded-xl py-1.5 max-h-60 overflow-y-auto z-[60] custom-scrollbar animate-scale-in">
           <button
             type="button"
             onClick={() => {
@@ -349,7 +349,7 @@ const ProblemsTable = ({ problems }) => {
       </div>
 
       {/* Table */}
-      <div className="bg-[#12121a]/60 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden mt-4">
+      <div className="bg-gradient-to-br from-[#16142c]/60 to-[#0d0c1b]/60 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden mt-4">
         <div className="overflow-x-auto">
           <table className="premium-table w-full">
             <thead>

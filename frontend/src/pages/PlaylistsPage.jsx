@@ -6,14 +6,7 @@ import { motion } from "framer-motion";
 
 const PlaylistsPage = () => {
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full overflow-hidden">
-      {/* Background Decorative Blur Orbs */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[300px] rounded-full bg-purple-900/10 blur-[120px] animate-pulse" />
-      <div
-        className="absolute bottom-0 right-1/4 w-[400px] h-[250px] rounded-full bg-cyan-900/10 blur-[100px] animate-pulse"
-        style={{ animationDelay: "2s" }}
-      />
-
+    <div className="min-h-screen bg-[#080711] text-slate-100 py-10 px-4 md:px-10 lg:px-20 relative w-full overflow-hidden">
       <div className="max-w-4xl mx-auto space-y-10">
         {/* Header Back Navigation */}
         <div className="flex justify-between items-center border-b border-white/5 pb-8">
