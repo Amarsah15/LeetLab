@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/((?!leetlab/assets/).*)",
-      "destination": "/leetlab/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
