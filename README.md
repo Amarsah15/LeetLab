@@ -16,7 +16,7 @@ Practice coding problems • Execute code in real-time • Track your progress �
 
 <br />
 
-[🌐 Live Demo](https://leetlab-rho.vercel.app/) · [🐛 Report Bug](https://github.com/Amarsah15/LeetLab/issues) · [✨ Request Feature](https://github.com/Amarsah15/LeetLab/issues)
+[🌐 Live Demo](https://leetlab.amarnathkumar.dev/) · [🐛 Report Bug](https://github.com/Amarsah15/LeetLab/issues) · [✨ Request Feature](https://github.com/Amarsah15/LeetLab/issues)
 
 </div>
 
