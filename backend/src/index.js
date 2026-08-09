@@ -34,13 +34,21 @@ const port = process.env.PORT;
 // Security headers
 app.use(helmet());
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://leetlab.amarnathkumar.dev",
+  "http://leetlab.amarnathkumar.dev",
+  "https://leetlab-rho.vercel.app",
+  "https://leet-lab-amarnath-kumar.vercel.app",
+];
+
+if (process.env.CLIENT_URL && !allowedOrigins.includes(process.env.CLIENT_URL)) {
+  allowedOrigins.push(process.env.CLIENT_URL);
+}
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://leetlab-rho.vercel.app",
-      "https://leet-lab-amarnath-kumar.vercel.app",
-    ],
+    origin: allowedOrigins,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     exposedHeaders: ["Set-Cookie"],
